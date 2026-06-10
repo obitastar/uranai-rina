@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { FortuneResult, YearlyFortune } from "@/lib/shichusuimei";
+import type { FortuneResult, YearlyFortune, GogyoBalance } from "@/lib/shichusuimei";
 import { kanshiName } from "@/lib/shichusuimei";
 import { SlideViewer } from "@/components/SlideViewer";
 import { PillarChart } from "@/components/PillarChart";
@@ -65,16 +65,35 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
           </div>
         </div>
 
-        {/* ===== スライド2: 本質 ===== */}
+        {/* ===== スライド2: 本質（リッチ版） ===== */}
         <SlideContent
           iconType="essence"
           title="本質"
-          subtitle={`日主: ${result.nicchu}`}
+          subtitle={`${result.nisshuDetail.symbol}の人 ── ${result.nisshuDetail.catchphrase}`}
           accentColor={SECTION_COLORS.essence.primary}
           content={result.readings.essence}
           extra={
-            <div className="mt-5 flex justify-center">
-              <ZodiacCharacter shi={fourPillars.day.shi} size="xl" />
+            <div className="space-y-4 mt-4">
+              {/* キーワード */}
+              <div className="flex justify-center gap-2 flex-wrap">
+                {result.nisshuDetail.keywords.map(kw => (
+                  <span key={kw} className="px-3 py-1 rounded-full text-[0.7rem] tracking-wider border border-purple-400/30 text-purple-300/80 bg-purple-500/10">
+                    {kw}
+                  </span>
+                ))}
+              </div>
+              {/* 十二運メッセージ */}
+              <div className="ornament-border rounded-xl bg-navy-900/30 p-4">
+                <p className="text-[0.65rem] text-gold-500/50 tracking-widest mb-2 text-center">
+                  {result.juniunDay} ── {result.juniunDayDetail.catchphrase}
+                </p>
+                <p className="text-navy-200/70 text-[0.82rem] leading-[1.9] tracking-wide">
+                  {result.juniunDayDetail.message}
+                </p>
+              </div>
+              <div className="flex justify-center">
+                <ZodiacCharacter shi={fourPillars.day.shi} size="xl" />
+              </div>
             </div>
           }
         />
@@ -88,33 +107,58 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
           content={result.readings.love}
         />
 
-        {/* ===== スライド4: 仕事運 ===== */}
+        {/* ===== スライド4: 仕事運（通変星の才能・注意点付き） ===== */}
         <SlideContent
           iconType="work"
           title="仕事運"
-          subtitle={result.tpiMonth}
+          subtitle={`${result.tpiMonth} ── ${result.tsuhenseiDetail.catchphrase}`}
           accentColor={SECTION_COLORS.work.primary}
           content={result.readings.work}
-        />
-
-        {/* ===== スライド5: 今年の運勢 ===== */}
-        <SlideContent
-          iconType="yearly"
-          title={`${currentYear}年の運勢`}
-          subtitle={`流年: ${kanshiName(result.currentYearKanshi)} / ${result.currentYearTsuhensei}`}
-          accentColor={SECTION_COLORS.yearly.primary}
-          content={result.readings.yearly}
           extra={
-            <div className="mt-5 flex justify-center">
-              <ZodiacCharacter shi={result.currentYearKanshi.shi} size="xl" />
+            <div className="mt-4 space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="ornament-border rounded-xl bg-navy-900/30 p-3">
+                  <p className="text-[0.6rem] text-emerald-400/70 tracking-widest mb-1.5 text-center">才能</p>
+                  <p className="text-navy-200/70 text-[0.78rem] leading-[1.8]">{result.tsuhenseiDetail.talent}</p>
+                </div>
+                <div className="ornament-border rounded-xl bg-navy-900/30 p-3">
+                  <p className="text-[0.6rem] text-amber-400/70 tracking-widest mb-1.5 text-center">注意点</p>
+                  <p className="text-navy-200/70 text-[0.78rem] leading-[1.8]">{result.tsuhenseiDetail.caution}</p>
+                </div>
+              </div>
             </div>
           }
         />
 
-        {/* ===== スライド6: 10年運勢 ===== */}
+        {/* ===== スライド5: 五行バランス ===== */}
+        <GogyoSlide gogyoBalance={result.gogyoBalance} gogyoReading={result.gogyoReading} />
+
+        {/* ===== スライド6: 今年の運勢（ラッキーアクション付き） ===== */}
+        <SlideContent
+          iconType="yearly"
+          title={`${currentYear}年の運勢`}
+          subtitle={`${result.nenunDetail.title} ── ${kanshiName(result.currentYearKanshi)} / ${result.currentYearTsuhensei}`}
+          accentColor={SECTION_COLORS.yearly.primary}
+          content={result.readings.yearly}
+          extra={
+            <div className="space-y-4 mt-4">
+              <div className="ornament-border rounded-xl bg-navy-900/30 p-4">
+                <p className="text-[0.65rem] text-emerald-400/60 tracking-widest mb-2 text-center">おすすめの過ごし方</p>
+                <p className="text-navy-100/80 text-[0.88rem] leading-[2] tracking-wide text-center">
+                  {result.nenunDetail.luckyAction}
+                </p>
+              </div>
+              <div className="flex justify-center">
+                <ZodiacCharacter shi={result.currentYearKanshi.shi} size="xl" />
+              </div>
+            </div>
+          }
+        />
+
+        {/* ===== スライド7: 10年運勢 ===== */}
         <DecadeSlide tenYearFortune={result.tenYearFortune} />
 
-        {/* ===== スライド7: 締め ===== */}
+        {/* ===== スライド8: 締め ===== */}
         <div className="flex flex-col items-center justify-center h-full px-6">
           <div className="text-center space-y-8 max-w-sm">
             <div className="animate-fade-in-scale">
@@ -168,7 +212,7 @@ function SlideContent({
   content,
   extra,
 }: {
-  iconType: 'essence' | 'love' | 'work' | 'yearly' | 'decade';
+  iconType: 'essence' | 'love' | 'work' | 'yearly' | 'decade' | 'gogyo';
   title: string;
   subtitle: string;
   accentColor: string;
@@ -182,11 +226,11 @@ function SlideContent({
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center h-full px-6 py-10 overflow-y-auto">
-      <div className={`w-full max-w-lg space-y-5 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+    <div className="flex flex-col items-center justify-start h-full px-6 py-8 overflow-y-auto">
+      <div className={`w-full max-w-lg space-y-4 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         {/* アイコン */}
         <div className="text-center">
-          <SectionIcon type={iconType} size={72} />
+          <SectionIcon type={iconType} size={60} />
         </div>
 
         {/* タイトル */}
@@ -194,7 +238,7 @@ function SlideContent({
           <h2 className="text-3xl font-black text-gold-gradient-animated tracking-[0.3em]">
             {title}
           </h2>
-          <p className="text-xs tracking-widest" style={{ color: `${accentColor}99` }}>
+          <p className="text-[0.7rem] tracking-widest leading-relaxed" style={{ color: `${accentColor}99` }}>
             {subtitle}
           </p>
           <div className="w-16 h-[1px] mx-auto animate-glow-line" />
@@ -210,14 +254,91 @@ function SlideContent({
               animation: 'glowLine 3s ease-in-out infinite',
             }}
           />
-          <div className="p-6 max-h-[45vh] overflow-y-auto">
-            <p className="text-navy-100/90 leading-[2.1] text-[0.92rem] tracking-wide">
+          <div className="p-5 max-h-[35vh] overflow-y-auto">
+            <p className="text-navy-100/90 leading-[2.1] text-[0.88rem] tracking-wide">
               {content}
             </p>
           </div>
         </div>
 
         {extra}
+      </div>
+    </div>
+  );
+}
+
+// 五行の色
+const GOGYO_COLORS: Record<string, { bg: string; text: string; bar: string }> = {
+  '木': { bg: 'bg-green-500/15', text: 'text-green-400', bar: 'bg-green-400' },
+  '火': { bg: 'bg-red-500/15', text: 'text-red-400', bar: 'bg-red-400' },
+  '土': { bg: 'bg-yellow-500/15', text: 'text-yellow-400', bar: 'bg-yellow-400' },
+  '金': { bg: 'bg-slate-300/15', text: 'text-slate-300', bar: 'bg-slate-300' },
+  '水': { bg: 'bg-blue-500/15', text: 'text-blue-400', bar: 'bg-blue-400' },
+};
+
+// 五行バランスのスライド
+function GogyoSlide({ gogyoBalance, gogyoReading }: { gogyoBalance: GogyoBalance[]; gogyoReading: string }) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 100);
+    return () => clearTimeout(t);
+  }, []);
+
+  const maxCount = Math.max(...gogyoBalance.map(g => g.count), 1);
+  const accentColor = SECTION_COLORS.gogyo.primary;
+
+  return (
+    <div className="flex flex-col items-center justify-center h-full px-6 py-8 overflow-y-auto">
+      <div className={`w-full max-w-lg space-y-5 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className="text-center">
+          <SectionIcon type="gogyo" size={60} />
+        </div>
+        <div className="text-center space-y-2">
+          <h2 className="text-3xl font-black text-gold-gradient-animated tracking-[0.3em]">
+            五行バランス
+          </h2>
+          <p className="text-[0.7rem] tracking-widest" style={{ color: `${accentColor}99` }}>
+            木 ・ 火 ・ 土 ・ 金 ・ 水
+          </p>
+          <div className="w-16 h-[1px] mx-auto animate-glow-line" />
+        </div>
+
+        {/* バーチャート */}
+        <div className="ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md p-5 space-y-4">
+          {gogyoBalance.map(({ gogyo, count }) => {
+            const colors = GOGYO_COLORS[gogyo];
+            const pct = maxCount > 0 ? (count / maxCount) * 100 : 0;
+            return (
+              <div key={gogyo} className="flex items-center gap-3">
+                <span className={`w-8 text-center text-lg font-bold ${colors.text}`}>{gogyo}</span>
+                <div className="flex-1 h-6 rounded-full bg-navy-800/60 overflow-hidden">
+                  <div
+                    className={`h-full rounded-full ${colors.bar} transition-all duration-1000`}
+                    style={{ width: `${pct}%`, opacity: 0.7 }}
+                  />
+                </div>
+                <span className="w-6 text-center text-sm text-navy-300/80 font-medium">{count}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* 鑑定文 */}
+        <div className="ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md overflow-hidden">
+          <div
+            className="h-[2px] w-full"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${accentColor}60, transparent)`,
+              backgroundSize: '200% 100%',
+              animation: 'glowLine 3s ease-in-out infinite',
+            }}
+          />
+          <div className="p-5">
+            <p className="text-navy-100/90 leading-[2.1] text-[0.88rem] tracking-wide">
+              {gogyoReading}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -247,7 +368,6 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
   return (
     <div className="flex flex-col items-center justify-start h-full px-6 py-8 overflow-y-auto">
       <div className={`w-full max-w-lg space-y-4 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-        {/* ヘッダー */}
         <div className="text-center">
           <SectionIcon type="decade" size={60} />
         </div>
@@ -261,7 +381,6 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
           <div className="w-16 h-[1px] mx-auto animate-glow-line" />
         </div>
 
-        {/* 年表 */}
         <div className="space-y-2 pb-4">
           {tenYearFortune.map((yf, idx) => {
             const colors = fortuneColor(yf.juniunsei);
@@ -273,20 +392,14 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
                 key={yf.year}
                 onClick={() => setExpanded(isExpanded ? null : idx)}
                 className={`w-full text-left transition-all duration-300 rounded-xl border ${colors.border} ${colors.bg} backdrop-blur-sm ${isCurrentYear ? 'ring-1 ring-gold-500/30' : ''}`}
-                style={{ animationDelay: `${idx * 80}ms` }}
               >
                 <div className="flex items-center gap-3 px-4 py-3">
-                  {/* 年 */}
                   <div className="flex-shrink-0 w-14 text-center">
                     <span className={`text-sm font-bold ${isCurrentYear ? 'text-gold-400' : 'text-navy-200/80'}`}>
                       {yf.year}
                     </span>
                   </div>
-
-                  {/* 運勢ドット */}
                   <div className={`flex-shrink-0 w-2 h-2 rounded-full ${colors.dot}`} />
-
-                  {/* 干支・通変星 */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="text-navy-100/90 text-sm font-medium">
@@ -300,14 +413,10 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
                       </span>
                     </div>
                   </div>
-
-                  {/* 展開矢印 */}
                   <div className={`flex-shrink-0 text-navy-500 text-xs transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
                     ▼
                   </div>
                 </div>
-
-                {/* 展開時の鑑定文 */}
                 <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
                   <div className="px-4 pb-3 pt-1 border-t border-navy-700/30">
                     <p className="text-navy-200/80 text-[0.82rem] leading-[1.9] tracking-wide">

@@ -1,8 +1,67 @@
-import type { FortuneInput, FortuneResult, FourPillars, YearlyFortune } from './types';
+import type { FortuneInput, FortuneResult, FourPillars, YearlyFortune, GogyoBalance, Gogyo } from './types';
+import { GOGYO } from './types';
 import { getYearPillar, getMonthPillar, getDayPillar, getHourPillar, getSetsuMonth } from './calendar';
 import { getTsuhensei, getJuniunsei, getZokanTsuhensei } from './stars';
 import { getKanshi } from './kanshi';
+import { kanGogyo, shiGogyo } from './gogyo';
 import { getReadings, getTenYearReading } from './readings';
+import { NISSHU } from './data-nisshu';
+import { TSUHENSEI as TSUHENSEI_DATA } from './data-tsuhensei';
+import { JUNIUNSEI as JUNIUNSEI_DATA, GOGYO_BALANCE, NENUN } from './data-interpretation';
+
+// 通変星のグループ判定
+function tsuhenseiGroup(star: string): string {
+  if (star === '比肩' || star === '劫財') return '比劫';
+  if (star === '食神' || star === '傷官') return '食傷';
+  if (star === '偏財' || star === '正財') return '財';
+  if (star === '偏官' || star === '正官') return '官殺';
+  return '印';
+}
+
+/**
+ * 五行バランスを計算（天干4つ + 地支4つ）
+ */
+function calculateGogyoBalance(fourPillars: FourPillars): GogyoBalance[] {
+  const counts: Record<Gogyo, number> = { '木': 0, '火': 0, '土': 0, '金': 0, '水': 0 };
+
+  // 天干の五行
+  counts[kanGogyo(fourPillars.year.kan)]++;
+  counts[kanGogyo(fourPillars.month.kan)]++;
+  counts[kanGogyo(fourPillars.day.kan)]++;
+  if (fourPillars.hour) counts[kanGogyo(fourPillars.hour.kan)]++;
+
+  // 地支の五行
+  counts[shiGogyo(fourPillars.year.shi)]++;
+  counts[shiGogyo(fourPillars.month.shi)]++;
+  counts[shiGogyo(fourPillars.day.shi)]++;
+  if (fourPillars.hour) counts[shiGogyo(fourPillars.hour.shi)]++;
+
+  return GOGYO.map(g => ({ gogyo: g, count: counts[g] }));
+}
+
+/**
+ * 五行バランスの鑑定文を生成
+ */
+function getGogyoReading(balance: GogyoBalance[]): string {
+  const sorted = [...balance].sort((a, b) => b.count - a.count);
+  const strongest = sorted[0];
+  const weakest = sorted[sorted.length - 1];
+
+  const parts: string[] = [];
+  if (strongest.count >= 3) {
+    const data = GOGYO_BALANCE[strongest.gogyo];
+    if (data) parts.push(data.strong);
+  }
+  if (weakest.count === 0) {
+    const data = GOGYO_BALANCE[weakest.gogyo];
+    if (data) parts.push(data.weak);
+  }
+
+  if (parts.length === 0) {
+    return '五行がバランスよく巡っています。偏りが少なく、安定した運気の持ち主。どんな環境にも適応できる柔軟さがあります。';
+  }
+  return parts.join('');
+}
 
 /**
  * 四柱推命のメイン計算
@@ -29,10 +88,26 @@ export function calculateFortune(input: FortuneInput): FortuneResult {
   // 日主
   const nicchu = dayPillar.kan;
 
+  // 日主の詳細情報
+  const nisshuData = NISSHU[nicchu];
+  const nisshuDetail = {
+    symbol: nisshuData.symbol,
+    catchphrase: nisshuData.catchphrase,
+    keywords: nisshuData.keywords,
+  };
+
   // 通変星（各柱の天干と日主の関係）
   const tpiYear = getTsuhensei(nicchu, yearPillar.kan);
   const tpiMonth = getTsuhensei(nicchu, monthPillar.kan);
   const tpiHour = hourPillar ? getTsuhensei(nicchu, hourPillar.kan) : null;
+
+  // 月柱通変星の詳細
+  const tpiMonthData = TSUHENSEI_DATA[tpiMonth];
+  const tsuhenseiDetail = {
+    catchphrase: tpiMonthData.catchphrase,
+    talent: tpiMonthData.talent,
+    caution: tpiMonthData.caution,
+  };
 
   // 十二運
   const juniunYear = getJuniunsei(nicchu, yearPillar.shi);
@@ -40,13 +115,33 @@ export function calculateFortune(input: FortuneInput): FortuneResult {
   const juniunDay = getJuniunsei(nicchu, dayPillar.shi);
   const juniunHour = hourPillar ? getJuniunsei(nicchu, hourPillar.shi) : null;
 
+  // 日柱十二運の詳細
+  const juniunDayData = JUNIUNSEI_DATA[juniunDay];
+  const juniunDayDetail = {
+    catchphrase: juniunDayData.catchphrase,
+    energy: juniunDayData.energy,
+    message: juniunDayData.message,
+  };
+
   // 蔵干通変星（日支の本気）
   const zokanTsuhensei = getZokanTsuhensei(nicchu, dayPillar.shi);
 
-  // 今年の干支（2026年 = 丙午）
+  // 五行バランス
+  const gogyoBalance = calculateGogyoBalance(fourPillars);
+  const gogyoReading = getGogyoReading(gogyoBalance);
+
+  // 今年の干支
   const currentYear = new Date().getFullYear();
   const currentYearKanshi = getKanshi(((currentYear - 4) % 60 + 60) % 60);
   const currentYearTsuhensei = getTsuhensei(nicchu, currentYearKanshi.kan);
+
+  // 年運の追加情報
+  const nenunGroup = tsuhenseiGroup(currentYearTsuhensei);
+  const nenunData = NENUN[nenunGroup];
+  const nenunDetail = {
+    title: nenunData.title,
+    luckyAction: nenunData.luckyAction,
+  };
 
   // 10年運勢を算出
   const tenYearFortune: YearlyFortune[] = [];
@@ -79,16 +174,22 @@ export function calculateFortune(input: FortuneInput): FortuneResult {
     input,
     fourPillars,
     nicchu,
+    nisshuDetail,
     tpiYear,
     tpiMonth,
     tpiHour,
+    tsuhenseiDetail,
     juniunYear,
     juniunMonth,
     juniunDay,
     juniunHour,
+    juniunDayDetail,
     zokanTsuhensei,
+    gogyoBalance,
+    gogyoReading,
     currentYearKanshi,
     currentYearTsuhensei,
+    nenunDetail,
     tenYearFortune,
     readings,
   };

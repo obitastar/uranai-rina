@@ -1,6 +1,6 @@
 "use client";
 
-type IconType = 'essence' | 'love' | 'work' | 'yearly' | 'decade' | 'complete';
+type IconType = 'essence' | 'love' | 'work' | 'yearly' | 'gogyo' | 'decade' | 'complete';
 
 interface SectionIconProps {
   type: IconType;
@@ -12,6 +12,7 @@ const COLORS: Record<IconType, { primary: string; glow: string }> = {
   love: { primary: '#F48FB1', glow: 'rgba(244,143,177,0.25)' },
   work: { primary: '#FFB74D', glow: 'rgba(255,183,77,0.25)' },
   yearly: { primary: '#81C784', glow: 'rgba(129,199,132,0.25)' },
+  gogyo: { primary: '#CE93D8', glow: 'rgba(206,147,216,0.25)' },
   decade: { primary: '#4FC3F7', glow: 'rgba(79,195,247,0.25)' },
   complete: { primary: '#d4a017', glow: 'rgba(212,160,23,0.25)' },
 };
@@ -83,6 +84,23 @@ export function SectionIcon({ type, size = 80 }: SectionIconProps) {
               return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} strokeWidth="0.8" opacity="0.4" />;
             })}
             <path d="M5,-8 A7,7 0 0,1 5,6 A5,5 0 0,0 5,-8" fill={primary} opacity="0.2" />
+          </g>
+        )}
+        {type === 'gogyo' && (
+          // 五行 - 五角形
+          <g transform={`translate(${c},${c})`} stroke={primary} fill="none" strokeWidth="1" opacity="0.8">
+            {(() => {
+              const pts = Array.from({ length: 5 }, (_, i) => {
+                const a = (i * Math.PI * 2) / 5 - Math.PI / 2;
+                return `${Math.cos(a) * 13},${Math.sin(a) * 13}`;
+              }).join(' ');
+              return <polygon points={pts} strokeWidth="1.2" />;
+            })()}
+            {Array.from({ length: 5 }, (_, i) => {
+              const a = (i * Math.PI * 2) / 5 - Math.PI / 2;
+              return <circle key={i} cx={Math.cos(a) * 13} cy={Math.sin(a) * 13} r="2" fill={primary} opacity="0.5" />;
+            })}
+            <circle cx="0" cy="0" r="3" fill={primary} opacity="0.3" />
           </g>
         )}
         {type === 'decade' && (

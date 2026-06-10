@@ -67,26 +67,69 @@ export interface YearlyFortune {
   reading: string;
 }
 
+// 五行バランス
+export interface GogyoBalance {
+  gogyo: Gogyo;
+  count: number;
+}
+
+// 日主の詳細情報
+export interface NisshuDetail {
+  symbol: string;
+  catchphrase: string;
+  keywords: string[];
+}
+
+// 通変星の詳細情報
+export interface TsuhenseiDetail {
+  catchphrase: string;
+  talent: string;
+  caution: string;
+}
+
+// 十二運星の詳細情報
+export interface JuniunseiDetail {
+  catchphrase: string;
+  energy: string;
+  message: string;
+}
+
+// 年運の追加情報
+export interface NenunDetail {
+  title: string;
+  luckyAction: string;
+}
+
 // 鑑定結果
 export interface FortuneResult {
   input: FortuneInput;
   fourPillars: FourPillars;
   // 日主
   nicchu: Jikkan;
+  nisshuDetail: NisshuDetail;
   // 通変星（年・月・日・時）
   tpiYear: Tsuhensei;
   tpiMonth: Tsuhensei;
   tpiHour: Tsuhensei | null;
+  // 通変星の詳細
+  tsuhenseiDetail: TsuhenseiDetail;
   // 十二運（年支・月支・日支・時支）
   juniunYear: Juniunsei;
   juniunMonth: Juniunsei;
   juniunDay: Juniunsei;
   juniunHour: Juniunsei | null;
+  // 十二運の詳細
+  juniunDayDetail: JuniunseiDetail;
   // 蔵干（日支の蔵干通変星）
   zokanTsuhensei: Tsuhensei;
+  // 五行バランス
+  gogyoBalance: GogyoBalance[];
+  gogyoReading: string;
   // 今年の干支
   currentYearKanshi: Kanshi;
   currentYearTsuhensei: Tsuhensei;
+  // 年運の追加情報
+  nenunDetail: NenunDetail;
   // 10年運勢
   tenYearFortune: YearlyFortune[];
   // 鑑定文
