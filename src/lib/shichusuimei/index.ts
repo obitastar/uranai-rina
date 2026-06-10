@@ -10,4 +10,5 @@ export type {
   Tsuhensei,
   Juniunsei,
   Gender,
+  YearlyFortune,
 } from './types';

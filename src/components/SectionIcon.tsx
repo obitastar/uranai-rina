@@ -1,6 +1,6 @@
 "use client";
 
-type IconType = 'essence' | 'love' | 'work' | 'yearly' | 'complete';
+type IconType = 'essence' | 'love' | 'work' | 'yearly' | 'decade' | 'complete';
 
 interface SectionIconProps {
   type: IconType;
@@ -12,6 +12,7 @@ const COLORS: Record<IconType, { primary: string; glow: string }> = {
   love: { primary: '#F48FB1', glow: 'rgba(244,143,177,0.25)' },
   work: { primary: '#FFB74D', glow: 'rgba(255,183,77,0.25)' },
   yearly: { primary: '#81C784', glow: 'rgba(129,199,132,0.25)' },
+  decade: { primary: '#4FC3F7', glow: 'rgba(79,195,247,0.25)' },
   complete: { primary: '#d4a017', glow: 'rgba(212,160,23,0.25)' },
 };
 
@@ -82,6 +83,14 @@ export function SectionIcon({ type, size = 80 }: SectionIconProps) {
               return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} strokeWidth="0.8" opacity="0.4" />;
             })}
             <path d="M5,-8 A7,7 0 0,1 5,6 A5,5 0 0,0 5,-8" fill={primary} opacity="0.2" />
+          </g>
+        )}
+        {type === 'decade' && (
+          // 10年運勢 - 時計のような円弧と矢印
+          <g transform={`translate(${c},${c})`} stroke={primary} fill="none" strokeWidth="1" opacity="0.8">
+            <path d="M0,-13 A13,13 0 1,1 -9,9" strokeWidth="1.2" />
+            <polyline points="-13,6 -9,9 -5,6" fill="none" strokeWidth="1.2" />
+            <text x="0" y="5" textAnchor="middle" fill={primary} fontSize="10" fontFamily="serif" strokeWidth="0" opacity="0.7">10</text>
           </g>
         )}
         {type === 'complete' && (

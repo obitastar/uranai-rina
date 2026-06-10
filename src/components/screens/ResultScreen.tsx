@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { FortuneResult } from "@/lib/shichusuimei";
+import type { FortuneResult, YearlyFortune } from "@/lib/shichusuimei";
 import { kanshiName } from "@/lib/shichusuimei";
 import { SlideViewer } from "@/components/SlideViewer";
 import { PillarChart } from "@/components/PillarChart";
@@ -111,7 +111,10 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
           }
         />
 
-        {/* ===== スライド6: 締め ===== */}
+        {/* ===== スライド6: 10年運勢 ===== */}
+        <DecadeSlide tenYearFortune={result.tenYearFortune} />
+
+        {/* ===== スライド7: 締め ===== */}
         <div className="flex flex-col items-center justify-center h-full px-6">
           <div className="text-center space-y-8 max-w-sm">
             <div className="animate-fade-in-scale">
@@ -165,7 +168,7 @@ function SlideContent({
   content,
   extra,
 }: {
-  iconType: 'essence' | 'love' | 'work' | 'yearly';
+  iconType: 'essence' | 'love' | 'work' | 'yearly' | 'decade';
   title: string;
   subtitle: string;
   accentColor: string;
@@ -215,6 +218,107 @@ function SlideContent({
         </div>
 
         {extra}
+      </div>
+    </div>
+  );
+}
+
+// 運勢レベルの色
+function fortuneColor(juniunsei: string): { bg: string; border: string; text: string; dot: string } {
+  const good = ['長生', '冠帯', '建禄', '帝旺'];
+  const caution = ['病', '死', '絶'];
+  if (good.includes(juniunsei)) return { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400', dot: 'bg-emerald-400' };
+  if (caution.includes(juniunsei)) return { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-amber-400', dot: 'bg-amber-400' };
+  return { bg: 'bg-sky-500/10', border: 'border-sky-500/30', text: 'text-sky-400', dot: 'bg-sky-400' };
+}
+
+// 10年運勢スライド
+function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
+  const [visible, setVisible] = useState(false);
+  const [expanded, setExpanded] = useState<number | null>(null);
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 100);
+    return () => clearTimeout(t);
+  }, []);
+
+  const currentYear = new Date().getFullYear();
+  const accentColor = SECTION_COLORS.decade.primary;
+
+  return (
+    <div className="flex flex-col items-center justify-start h-full px-6 py-8 overflow-y-auto">
+      <div className={`w-full max-w-lg space-y-4 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        {/* ヘッダー */}
+        <div className="text-center">
+          <SectionIcon type="decade" size={60} />
+        </div>
+        <div className="text-center space-y-2">
+          <h2 className="text-2xl font-black text-gold-gradient-animated tracking-[0.3em]">
+            10年運勢
+          </h2>
+          <p className="text-xs tracking-widest" style={{ color: `${accentColor}99` }}>
+            {currentYear}年 〜 {currentYear + 9}年
+          </p>
+          <div className="w-16 h-[1px] mx-auto animate-glow-line" />
+        </div>
+
+        {/* 年表 */}
+        <div className="space-y-2 pb-4">
+          {tenYearFortune.map((yf, idx) => {
+            const colors = fortuneColor(yf.juniunsei);
+            const isExpanded = expanded === idx;
+            const isCurrentYear = yf.year === currentYear;
+
+            return (
+              <button
+                key={yf.year}
+                onClick={() => setExpanded(isExpanded ? null : idx)}
+                className={`w-full text-left transition-all duration-300 rounded-xl border ${colors.border} ${colors.bg} backdrop-blur-sm ${isCurrentYear ? 'ring-1 ring-gold-500/30' : ''}`}
+                style={{ animationDelay: `${idx * 80}ms` }}
+              >
+                <div className="flex items-center gap-3 px-4 py-3">
+                  {/* 年 */}
+                  <div className="flex-shrink-0 w-14 text-center">
+                    <span className={`text-sm font-bold ${isCurrentYear ? 'text-gold-400' : 'text-navy-200/80'}`}>
+                      {yf.year}
+                    </span>
+                  </div>
+
+                  {/* 運勢ドット */}
+                  <div className={`flex-shrink-0 w-2 h-2 rounded-full ${colors.dot}`} />
+
+                  {/* 干支・通変星 */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-navy-100/90 text-sm font-medium">
+                        {kanshiName(yf.kanshi)}
+                      </span>
+                      <span className={`text-xs ${colors.text}`}>
+                        {yf.tsuhensei}
+                      </span>
+                      <span className="text-navy-500 text-[0.6rem]">
+                        {yf.juniunsei}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* 展開矢印 */}
+                  <div className={`flex-shrink-0 text-navy-500 text-xs transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+                    ▼
+                  </div>
+                </div>
+
+                {/* 展開時の鑑定文 */}
+                <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
+                  <div className="px-4 pb-3 pt-1 border-t border-navy-700/30">
+                    <p className="text-navy-200/80 text-[0.82rem] leading-[1.9] tracking-wide">
+                      {yf.reading}
+                    </p>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

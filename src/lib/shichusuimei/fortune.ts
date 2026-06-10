@@ -1,8 +1,8 @@
-import type { FortuneInput, FortuneResult, FourPillars } from './types';
+import type { FortuneInput, FortuneResult, FourPillars, YearlyFortune } from './types';
 import { getYearPillar, getMonthPillar, getDayPillar, getHourPillar, getSetsuMonth } from './calendar';
 import { getTsuhensei, getJuniunsei, getZokanTsuhensei } from './stars';
 import { getKanshi } from './kanshi';
-import { getReadings } from './readings';
+import { getReadings, getTenYearReading } from './readings';
 
 /**
  * 四柱推命のメイン計算
@@ -48,6 +48,23 @@ export function calculateFortune(input: FortuneInput): FortuneResult {
   const currentYearKanshi = getKanshi(((currentYear - 4) % 60 + 60) % 60);
   const currentYearTsuhensei = getTsuhensei(nicchu, currentYearKanshi.kan);
 
+  // 10年運勢を算出
+  const tenYearFortune: YearlyFortune[] = [];
+  for (let i = 0; i < 10; i++) {
+    const targetYear = currentYear + i;
+    const yearKanshi = getKanshi(((targetYear - 4) % 60 + 60) % 60);
+    const yearTsuhensei = getTsuhensei(nicchu, yearKanshi.kan);
+    const yearJuniunsei = getJuniunsei(nicchu, yearKanshi.shi);
+    const reading = getTenYearReading(yearTsuhensei, yearJuniunsei);
+    tenYearFortune.push({
+      year: targetYear,
+      kanshi: yearKanshi,
+      tsuhensei: yearTsuhensei,
+      juniunsei: yearJuniunsei,
+      reading,
+    });
+  }
+
   // 鑑定文を取得
   const readings = getReadings({
     nicchu,
@@ -72,6 +89,7 @@ export function calculateFortune(input: FortuneInput): FortuneResult {
     zokanTsuhensei,
     currentYearKanshi,
     currentYearTsuhensei,
+    tenYearFortune,
     readings,
   };
 }

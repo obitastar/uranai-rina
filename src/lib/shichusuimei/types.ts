@@ -58,6 +58,15 @@ export interface FortuneInput {
   gender: Gender;
 }
 
+// 年ごとの運勢
+export interface YearlyFortune {
+  year: number;
+  kanshi: Kanshi;
+  tsuhensei: Tsuhensei;
+  juniunsei: Juniunsei;
+  reading: string;
+}
+
 // 鑑定結果
 export interface FortuneResult {
   input: FortuneInput;
@@ -78,6 +87,8 @@ export interface FortuneResult {
   // 今年の干支
   currentYearKanshi: Kanshi;
   currentYearTsuhensei: Tsuhensei;
+  // 10年運勢
+  tenYearFortune: YearlyFortune[];
   // 鑑定文
   readings: {
     essence: string;
