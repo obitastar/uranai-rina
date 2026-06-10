@@ -29,14 +29,14 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
     <div className={`w-full h-screen transition-opacity duration-700 ${ready ? 'opacity-100' : 'opacity-0'}`}>
       <SlideViewer>
         {/* ===== スライド1: 命式表 + 干支キャラ ===== */}
-        <div className="flex flex-col items-center justify-center h-full px-6 py-10 overflow-y-auto">
-          <div className="w-full max-w-lg space-y-6">
+        <div className="flex flex-col items-center justify-start h-full px-4 sm:px-6 py-6 sm:py-10 overflow-y-auto">
+          <div className="w-full max-w-lg space-y-4 sm:space-y-6">
             <div className="text-center space-y-2 animate-fade-in-down">
-              <p className="text-sm text-navy-400/60 tracking-[0.2em]">{birthLabel}</p>
-              <h1 className="text-4xl font-black tracking-[0.4em] text-gold-gradient-animated">
+              <p className="text-xs sm:text-sm text-navy-400/60 tracking-[0.2em]">{birthLabel}</p>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-[0.3em] sm:tracking-[0.4em] text-gold-gradient-animated">
                 鑑定結果
               </h1>
-              <div className="w-24 h-[1px] mx-auto animate-glow-line" />
+              <div className="w-16 sm:w-24 h-[1px] mx-auto animate-glow-line" />
             </div>
 
             <div className="animate-reveal-up opacity-0 stagger-1">
@@ -44,19 +44,19 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
             </div>
 
             <div className="animate-reveal-up opacity-0 stagger-2">
-              <div className="ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md p-6">
-                <h3 className="text-center text-sm text-gold-500/70 tracking-widest mb-5">あなたの守護干支</h3>
-                <div className="flex justify-center gap-8">
+              <div className="ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md p-4 sm:p-6">
+                <h3 className="text-center text-xs sm:text-sm text-gold-500/70 tracking-widest mb-3 sm:mb-5">あなたの守護干支</h3>
+                <div className="flex justify-center gap-4 sm:gap-8">
                   <div className="text-center">
-                    <p className="text-[0.55rem] text-navy-500 tracking-widest mb-3">日支</p>
-                    <ZodiacCharacter shi={fourPillars.day.shi} size="lg" />
+                    <p className="text-[0.5rem] sm:text-[0.55rem] text-navy-500 tracking-widest mb-2 sm:mb-3">日支</p>
+                    <ZodiacCharacter shi={fourPillars.day.shi} size="md" />
                   </div>
                   <div className="text-center">
-                    <p className="text-[0.55rem] text-navy-500 tracking-widest mb-3">年支</p>
-                    <ZodiacCharacter shi={fourPillars.year.shi} size="lg" />
+                    <p className="text-[0.5rem] sm:text-[0.55rem] text-navy-500 tracking-widest mb-2 sm:mb-3">年支</p>
+                    <ZodiacCharacter shi={fourPillars.year.shi} size="md" />
                   </div>
                 </div>
-                <div className="flex justify-center mt-5 gap-3 flex-wrap">
+                <div className="flex justify-center mt-3 sm:mt-5 gap-2 sm:gap-3 flex-wrap">
                   <ZodiacBadge shi={fourPillars.month.shi} />
                   {fourPillars.hour && <ZodiacBadge shi={fourPillars.hour.shi} />}
                 </div>
@@ -159,39 +159,39 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
         <DecadeSlide tenYearFortune={result.tenYearFortune} />
 
         {/* ===== スライド8: 締め ===== */}
-        <div className="flex flex-col items-center justify-center h-full px-6">
-          <div className="text-center space-y-8 max-w-sm">
+        <div className="flex flex-col items-center justify-center h-full px-4 sm:px-6">
+          <div className="text-center space-y-5 sm:space-y-8 max-w-sm">
             <div className="animate-fade-in-scale">
-              <SectionIcon type="complete" size={100} />
+              <SectionIcon type="complete" size={80} />
             </div>
 
-            <div className="space-y-3 animate-fade-in-up stagger-1 opacity-0">
-              <h2 className="text-3xl font-black text-gold-gradient-animated tracking-[0.3em]">
+            <div className="space-y-2 sm:space-y-3 animate-fade-in-up stagger-1 opacity-0">
+              <h2 className="text-2xl sm:text-3xl font-black text-gold-gradient-animated tracking-[0.2em] sm:tracking-[0.3em]">
                 鑑定完了
               </h2>
-              <div className="w-20 h-[1px] mx-auto animate-glow-line" />
-              <p className="text-navy-300/70 text-sm leading-relaxed tracking-wide mt-4">
+              <div className="w-16 sm:w-20 h-[1px] mx-auto animate-glow-line" />
+              <p className="text-navy-300/70 text-xs sm:text-sm leading-relaxed tracking-wide mt-3 sm:mt-4">
                 今日の鑑定が<br />
                 あなたの明日を照らす<br />
                 小さな灯りとなりますように
               </p>
             </div>
 
-            <div className="space-y-4 animate-fade-in-up stagger-2 opacity-0 pt-4">
+            <div className="space-y-3 sm:space-y-4 animate-fade-in-up stagger-2 opacity-0 pt-2 sm:pt-4">
               <button
                 onClick={onRetry}
                 className="group relative w-full"
               >
                 <div className="absolute inset-0 rounded-xl bg-gold-500/15 blur-xl group-hover:bg-gold-500/25 transition-all duration-500" />
-                <div className="relative ornament-border rounded-xl px-8 py-5 bg-navy-900/50 backdrop-blur-sm hover:bg-navy-800/50 transition-all duration-500">
-                  <span className="text-lg tracking-[0.25em] text-gold-gradient-animated font-bold">
+                <div className="relative ornament-border rounded-xl px-6 sm:px-8 py-4 sm:py-5 bg-navy-900/50 backdrop-blur-sm hover:bg-navy-800/50 transition-all duration-500">
+                  <span className="text-base sm:text-lg tracking-[0.2em] sm:tracking-[0.25em] text-gold-gradient-animated font-bold">
                     もう一度鑑定する
                   </span>
                 </div>
               </button>
               <button
                 onClick={onTop}
-                className="text-navy-500 hover:text-gold-500/50 text-sm tracking-widest transition-colors duration-300"
+                className="text-navy-500 hover:text-gold-500/50 text-xs sm:text-sm tracking-widest transition-colors duration-300"
               >
                 トップに戻る
               </button>
@@ -226,22 +226,22 @@ function SlideContent({
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-start h-full px-6 py-8 overflow-y-auto">
-      <div className={`w-full max-w-lg space-y-4 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+    <div className="flex flex-col items-center justify-start h-full px-4 sm:px-6 py-5 sm:py-8 overflow-y-auto">
+      <div className={`w-full max-w-lg space-y-3 sm:space-y-4 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         {/* アイコン */}
         <div className="text-center">
-          <SectionIcon type={iconType} size={60} />
+          <SectionIcon type={iconType} size={48} />
         </div>
 
         {/* タイトル */}
-        <div className="text-center space-y-2">
-          <h2 className="text-3xl font-black text-gold-gradient-animated tracking-[0.3em]">
+        <div className="text-center space-y-1.5 sm:space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-black text-gold-gradient-animated tracking-[0.2em] sm:tracking-[0.3em]">
             {title}
           </h2>
-          <p className="text-[0.7rem] tracking-widest leading-relaxed" style={{ color: `${accentColor}99` }}>
+          <p className="text-[0.6rem] sm:text-[0.7rem] tracking-widest leading-relaxed" style={{ color: `${accentColor}99` }}>
             {subtitle}
           </p>
-          <div className="w-16 h-[1px] mx-auto animate-glow-line" />
+          <div className="w-12 sm:w-16 h-[1px] mx-auto animate-glow-line" />
         </div>
 
         {/* コンテンツ */}
@@ -254,8 +254,8 @@ function SlideContent({
               animation: 'glowLine 3s ease-in-out infinite',
             }}
           />
-          <div className="p-5 max-h-[35vh] overflow-y-auto">
-            <p className="text-navy-100/90 leading-[2.1] text-[0.88rem] tracking-wide">
+          <div className="p-3 sm:p-5 max-h-[40vh] overflow-y-auto">
+            <p className="text-navy-100/90 leading-[1.9] sm:leading-[2.1] text-[0.8rem] sm:text-[0.88rem] tracking-wide">
               {content}
             </p>
           </div>
@@ -288,36 +288,36 @@ function GogyoSlide({ gogyoBalance, gogyoReading }: { gogyoBalance: GogyoBalance
   const accentColor = SECTION_COLORS.gogyo.primary;
 
   return (
-    <div className="flex flex-col items-center justify-center h-full px-6 py-8 overflow-y-auto">
-      <div className={`w-full max-w-lg space-y-5 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+    <div className="flex flex-col items-center justify-start h-full px-4 sm:px-6 py-5 sm:py-8 overflow-y-auto">
+      <div className={`w-full max-w-lg space-y-3 sm:space-y-5 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <div className="text-center">
-          <SectionIcon type="gogyo" size={60} />
+          <SectionIcon type="gogyo" size={48} />
         </div>
-        <div className="text-center space-y-2">
-          <h2 className="text-3xl font-black text-gold-gradient-animated tracking-[0.3em]">
+        <div className="text-center space-y-1.5 sm:space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-black text-gold-gradient-animated tracking-[0.2em] sm:tracking-[0.3em]">
             五行バランス
           </h2>
-          <p className="text-[0.7rem] tracking-widest" style={{ color: `${accentColor}99` }}>
+          <p className="text-[0.6rem] sm:text-[0.7rem] tracking-widest" style={{ color: `${accentColor}99` }}>
             木 ・ 火 ・ 土 ・ 金 ・ 水
           </p>
-          <div className="w-16 h-[1px] mx-auto animate-glow-line" />
+          <div className="w-12 sm:w-16 h-[1px] mx-auto animate-glow-line" />
         </div>
 
         {/* バーチャート */}
-        <div className="ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md p-5 space-y-4">
+        <div className="ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md p-3 sm:p-5 space-y-3 sm:space-y-4">
           {gogyoBalance.map(({ gogyo, count }) => {
             const colors = GOGYO_COLORS[gogyo];
             const pct = maxCount > 0 ? (count / maxCount) * 100 : 0;
             return (
-              <div key={gogyo} className="flex items-center gap-3">
-                <span className={`w-8 text-center text-lg font-bold ${colors.text}`}>{gogyo}</span>
-                <div className="flex-1 h-6 rounded-full bg-navy-800/60 overflow-hidden">
+              <div key={gogyo} className="flex items-center gap-2 sm:gap-3">
+                <span className={`w-6 sm:w-8 text-center text-base sm:text-lg font-bold ${colors.text}`}>{gogyo}</span>
+                <div className="flex-1 h-5 sm:h-6 rounded-full bg-navy-800/60 overflow-hidden">
                   <div
                     className={`h-full rounded-full ${colors.bar} transition-all duration-1000`}
                     style={{ width: `${pct}%`, opacity: 0.7 }}
                   />
                 </div>
-                <span className="w-6 text-center text-sm text-navy-300/80 font-medium">{count}</span>
+                <span className="w-5 sm:w-6 text-center text-xs sm:text-sm text-navy-300/80 font-medium">{count}</span>
               </div>
             );
           })}
@@ -333,8 +333,8 @@ function GogyoSlide({ gogyoBalance, gogyoReading }: { gogyoBalance: GogyoBalance
               animation: 'glowLine 3s ease-in-out infinite',
             }}
           />
-          <div className="p-5">
-            <p className="text-navy-100/90 leading-[2.1] text-[0.88rem] tracking-wide">
+          <div className="p-3 sm:p-5">
+            <p className="text-navy-100/90 leading-[1.9] sm:leading-[2.1] text-[0.8rem] sm:text-[0.88rem] tracking-wide">
               {gogyoReading}
             </p>
           </div>
@@ -366,22 +366,22 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
   const accentColor = SECTION_COLORS.decade.primary;
 
   return (
-    <div className="flex flex-col items-center justify-start h-full px-6 py-8 overflow-y-auto">
-      <div className={`w-full max-w-lg space-y-4 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+    <div className="flex flex-col items-center justify-start h-full px-4 sm:px-6 py-5 sm:py-8 overflow-y-auto">
+      <div className={`w-full max-w-lg space-y-3 sm:space-y-4 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <div className="text-center">
-          <SectionIcon type="decade" size={60} />
+          <SectionIcon type="decade" size={48} />
         </div>
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-black text-gold-gradient-animated tracking-[0.3em]">
+        <div className="text-center space-y-1.5 sm:space-y-2">
+          <h2 className="text-xl sm:text-2xl font-black text-gold-gradient-animated tracking-[0.2em] sm:tracking-[0.3em]">
             10年運勢
           </h2>
-          <p className="text-xs tracking-widest" style={{ color: `${accentColor}99` }}>
+          <p className="text-[0.6rem] sm:text-xs tracking-widest" style={{ color: `${accentColor}99` }}>
             {currentYear}年 〜 {currentYear + 9}年
           </p>
-          <div className="w-16 h-[1px] mx-auto animate-glow-line" />
+          <div className="w-12 sm:w-16 h-[1px] mx-auto animate-glow-line" />
         </div>
 
-        <div className="space-y-2 pb-4">
+        <div className="space-y-1.5 sm:space-y-2 pb-2 sm:pb-4">
           {tenYearFortune.map((yf, idx) => {
             const colors = fortuneColor(yf.juniunsei);
             const isExpanded = expanded === idx;
@@ -393,33 +393,33 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
                 onClick={() => setExpanded(isExpanded ? null : idx)}
                 className={`w-full text-left transition-all duration-300 rounded-xl border ${colors.border} ${colors.bg} backdrop-blur-sm ${isCurrentYear ? 'ring-1 ring-gold-500/30' : ''}`}
               >
-                <div className="flex items-center gap-3 px-4 py-3">
-                  <div className="flex-shrink-0 w-14 text-center">
-                    <span className={`text-sm font-bold ${isCurrentYear ? 'text-gold-400' : 'text-navy-200/80'}`}>
+                <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3">
+                  <div className="flex-shrink-0 w-10 sm:w-14 text-center">
+                    <span className={`text-xs sm:text-sm font-bold ${isCurrentYear ? 'text-gold-400' : 'text-navy-200/80'}`}>
                       {yf.year}
                     </span>
                   </div>
-                  <div className={`flex-shrink-0 w-2 h-2 rounded-full ${colors.dot}`} />
+                  <div className={`flex-shrink-0 w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full ${colors.dot}`} />
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-navy-100/90 text-sm font-medium">
+                    <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+                      <span className="text-navy-100/90 text-xs sm:text-sm font-medium">
                         {kanshiName(yf.kanshi)}
                       </span>
-                      <span className={`text-xs ${colors.text}`}>
+                      <span className={`text-[0.6rem] sm:text-xs ${colors.text}`}>
                         {yf.tsuhensei}
                       </span>
-                      <span className="text-navy-500 text-[0.6rem]">
+                      <span className="text-navy-500 text-[0.5rem] sm:text-[0.6rem]">
                         {yf.juniunsei}
                       </span>
                     </div>
                   </div>
-                  <div className={`flex-shrink-0 text-navy-500 text-xs transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+                  <div className={`flex-shrink-0 text-navy-500 text-[0.6rem] sm:text-xs transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
                     ▼
                   </div>
                 </div>
                 <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
-                  <div className="px-4 pb-3 pt-1 border-t border-navy-700/30">
-                    <p className="text-navy-200/80 text-[0.82rem] leading-[1.9] tracking-wide">
+                  <div className="px-3 sm:px-4 pb-2 sm:pb-3 pt-1 border-t border-navy-700/30">
+                    <p className="text-navy-200/80 text-[0.75rem] sm:text-[0.82rem] leading-[1.8] sm:leading-[1.9] tracking-wide">
                       {yf.reading}
                     </p>
                   </div>

@@ -82,7 +82,7 @@ export function TopScreen({ onStart }: TopScreenProps) {
   }, []);
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen px-6 py-12 text-center overflow-hidden">
+    <div className="relative flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 py-8 sm:py-12 text-center overflow-hidden">
       {/* 背景パーティクル */}
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" />
 
@@ -92,13 +92,13 @@ export function TopScreen({ onStart }: TopScreenProps) {
         <div className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] rounded-full bg-navy-400/[0.05] blur-[100px]" />
       </div>
 
-      <div className="relative z-10 flex flex-col items-center gap-10">
+      <div className="relative z-10 flex flex-col items-center gap-6 sm:gap-10">
         {/* メイン：八卦曼荼羅 */}
         <div className={`relative ${mounted ? 'animate-fade-in-scale' : 'opacity-0'}`}>
           {/* 最外周の光輪 */}
           <div className="absolute inset-0 rounded-full bg-gold-500/[0.06] blur-[100px] scale-[2.5]" />
 
-          <div className="relative w-72 h-72 md:w-80 md:h-80 flex items-center justify-center">
+          <div className="relative w-48 h-48 sm:w-72 sm:h-72 md:w-80 md:h-80 flex items-center justify-center">
             {/* 外側リング：八卦 */}
             <svg viewBox="0 0 320 320" className="absolute w-[360px] h-[360px] md:w-[400px] md:h-[400px] animate-slow-spin">
               <defs>
@@ -219,17 +219,17 @@ export function TopScreen({ onStart }: TopScreenProps) {
         <div className="space-y-4">
           <div className={`${mounted ? 'animate-fade-in-up stagger-2 opacity-0' : 'opacity-0'}`}>
             <p className="text-xs text-gold-500/40 tracking-[0.5em] mb-3 font-medium">FORTUNE TELLING</p>
-            <h1 className="text-5xl md:text-6xl font-black tracking-[0.5em] text-gold-gradient-animated leading-tight">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-[0.3em] sm:tracking-[0.5em] text-gold-gradient-animated leading-tight">
               四柱推命
             </h1>
           </div>
           <div className={`${mounted ? 'animate-fade-in-up stagger-3 opacity-0' : 'opacity-0'}`}>
-            <p className="text-xl text-navy-100/60 tracking-[0.4em] font-medium">
+            <p className="text-base sm:text-xl text-navy-100/60 tracking-[0.3em] sm:tracking-[0.4em] font-medium">
               運 命 鑑 定
             </p>
           </div>
-          <div className={`w-40 h-px mx-auto animate-glow-line ${mounted ? 'animate-fade-in stagger-3 opacity-0' : 'opacity-0'}`} />
-          <p className={`text-sm text-navy-300/50 leading-[2.2] max-w-sm mx-auto tracking-wider ${mounted ? 'animate-fade-in-up stagger-4 opacity-0' : 'opacity-0'}`}>
+          <div className={`w-24 sm:w-40 h-px mx-auto animate-glow-line ${mounted ? 'animate-fade-in stagger-3 opacity-0' : 'opacity-0'}`} />
+          <p className={`text-xs sm:text-sm text-navy-300/50 leading-[2] sm:leading-[2.2] max-w-sm mx-auto tracking-wider ${mounted ? 'animate-fade-in-up stagger-4 opacity-0' : 'opacity-0'}`}>
             天の理に基づき、生年月日と出生時刻から<br />
             あなたの本質・恋愛・仕事・運勢を読み解く
           </p>
@@ -241,8 +241,8 @@ export function TopScreen({ onStart }: TopScreenProps) {
           className={`group relative mt-4 ${mounted ? 'animate-fade-in-up stagger-5 opacity-0' : 'opacity-0'}`}
         >
           <div className="absolute inset-0 rounded-full bg-gold-500/15 blur-2xl group-hover:bg-gold-500/30 group-hover:blur-3xl transition-all duration-700" />
-          <div className="relative ornament-border rounded-full px-16 py-5 bg-navy-900/50 backdrop-blur-sm hover:bg-navy-800/50 transition-all duration-500 animate-breathe">
-            <span className="text-xl tracking-[0.35em] text-gold-gradient-animated font-bold">
+          <div className="relative ornament-border rounded-full px-10 sm:px-16 py-4 sm:py-5 bg-navy-900/50 backdrop-blur-sm hover:bg-navy-800/50 transition-all duration-500 animate-breathe">
+            <span className="text-base sm:text-xl tracking-[0.25em] sm:tracking-[0.35em] text-gold-gradient-animated font-bold">
               鑑定を始める
             </span>
           </div>

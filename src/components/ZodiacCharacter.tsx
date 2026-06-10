@@ -523,15 +523,20 @@ interface ZodiacCharacterProps {
 
 export function ZodiacCharacter({ shi, size = 'md' }: ZodiacCharacterProps) {
   const t = ZODIAC_MAP[shi];
-  const dims = { sm: 100, md: 140, lg: 200, xl: 280 };
-  const d = dims[size];
+  // レスポンシブサイズ: CSSクラスで制御
+  const sizeClasses = {
+    sm: 'w-16 h-16 sm:w-20 sm:h-20 md:w-[100px] md:h-[100px]',
+    md: 'w-24 h-24 sm:w-28 sm:h-28 md:w-[140px] md:h-[140px]',
+    lg: 'w-32 h-32 sm:w-40 sm:h-40 md:w-[200px] md:h-[200px]',
+    xl: 'w-40 h-40 sm:w-52 sm:h-52 md:w-[280px] md:h-[280px]',
+  };
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="relative" style={{ width: d, height: d }}>
+    <div className="flex flex-col items-center gap-2 sm:gap-4">
+      <div className={`relative ${sizeClasses[size]} animate-zodiac-float`}>
         {/* Outer glow pulse */}
         <div
-          className="absolute inset-0 rounded-full blur-3xl scale-[1.6] animate-gentle-pulse"
+          className="absolute inset-0 rounded-full blur-3xl scale-[1.6] animate-zodiac-glow"
           style={{ backgroundColor: t.glow }}
         />
 
@@ -556,8 +561,8 @@ export function ZodiacCharacter({ shi, size = 'md' }: ZodiacCharacterProps) {
           })}
         </svg>
 
-        {/* Main art */}
-        <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full" style={{ filter: `drop-shadow(0 0 15px ${t.glow})` }}>
+        {/* Main art with breathing animation */}
+        <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full animate-zodiac-breath" style={{ filter: `drop-shadow(0 0 15px ${t.glow})` }}>
           <SvgDefs id={shi} t={t} />
           {/* Background aura */}
           <circle cx="100" cy="100" r="85" fill={`url(#a-${shi})`} />
@@ -566,11 +571,11 @@ export function ZodiacCharacter({ shi, size = 'md' }: ZodiacCharacterProps) {
       </div>
 
       {/* Label */}
-      <div className="text-center space-y-1">
-        <p className="text-xl font-black tracking-[0.2em]" style={{ color: t.primary, textShadow: `0 0 15px ${t.glow}` }}>
+      <div className="text-center space-y-0.5 sm:space-y-1">
+        <p className="text-base sm:text-lg md:text-xl font-black tracking-[0.2em]" style={{ color: t.primary, textShadow: `0 0 15px ${t.glow}` }}>
           {shi} ─ {t.animal}
         </p>
-        <p className="text-[0.65rem] tracking-[0.25em]" style={{ color: `${t.primary}70` }}>
+        <p className="text-[0.55rem] sm:text-[0.65rem] tracking-[0.2em] sm:tracking-[0.25em]" style={{ color: `${t.primary}70` }}>
           {t.element}行 / {t.trait}
         </p>
       </div>

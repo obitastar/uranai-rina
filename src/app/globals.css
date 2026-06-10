@@ -44,6 +44,19 @@ body {
   }
 }
 
+/* スマートフォン最適化 */
+@media (max-width: 640px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 380px) {
+  html {
+    font-size: 13px;
+  }
+}
+
 /* 和風装飾ボーダー */
 .ornament-border {
   border: 1px solid rgba(212, 160, 23, 0.4);
@@ -223,6 +236,37 @@ body {
 /* スクロールバー非表示（店頭用途） */
 ::-webkit-scrollbar { display: none; }
 body { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ===== 干支キャラアニメーション ===== */
+@keyframes zodiacFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-6px) rotate(0.5deg); }
+  75% { transform: translateY(4px) rotate(-0.5deg); }
+}
+.animate-zodiac-float { animation: zodiacFloat 5s ease-in-out infinite; }
+
+@keyframes zodiacGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.08); }
+}
+.animate-zodiac-glow { animation: zodiacGlow 3s ease-in-out infinite; }
+
+@keyframes zodiacBreath {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+.animate-zodiac-breath { animation: zodiacBreath 4s ease-in-out infinite; }
+
+@keyframes zodiacEyeGlow {
+  0%, 100% { filter: drop-shadow(0 0 2px currentColor); }
+  50% { filter: drop-shadow(0 0 8px currentColor); }
+}
+
+@keyframes zodiacTailWag {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  75% { transform: rotate(-3deg); }
+}
 
 /* グラデーション背景 */
 .bg-mystical {
