@@ -6,6 +6,7 @@ import { kanshiName } from "@/lib/shichusuimei";
 import { SlideViewer } from "@/components/SlideViewer";
 import { PillarChart } from "@/components/PillarChart";
 import { ZodiacCharacter, ZodiacBadge } from "@/components/ZodiacCharacter";
+import { SectionIcon, SECTION_COLORS } from "@/components/SectionIcon";
 
 interface ResultScreenProps {
   result: FortuneResult;
@@ -42,31 +43,23 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
               <PillarChart result={result} />
             </div>
 
-            {/* 干支キャラクター */}
             <div className="animate-reveal-up opacity-0 stagger-2">
               <div className="ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md p-6">
                 <h3 className="text-center text-sm text-gold-500/70 tracking-widest mb-5">あなたの守護干支</h3>
                 <div className="flex justify-center gap-8">
                   <div className="text-center">
-                    <p className="text-[0.6rem] text-navy-500 tracking-widest mb-2">日支</p>
+                    <p className="text-[0.55rem] text-navy-500 tracking-widest mb-3">日支</p>
                     <ZodiacCharacter shi={fourPillars.day.shi} size="md" />
                   </div>
                   <div className="text-center">
-                    <p className="text-[0.6rem] text-navy-500 tracking-widest mb-2">年支</p>
+                    <p className="text-[0.55rem] text-navy-500 tracking-widest mb-3">年支</p>
                     <ZodiacCharacter shi={fourPillars.year.shi} size="md" />
                   </div>
                 </div>
-                {fourPillars.hour && (
-                  <div className="flex justify-center mt-4 gap-3">
-                    <ZodiacBadge shi={fourPillars.month.shi} />
-                    <ZodiacBadge shi={fourPillars.hour.shi} />
-                  </div>
-                )}
-                {!fourPillars.hour && (
-                  <div className="flex justify-center mt-4">
-                    <ZodiacBadge shi={fourPillars.month.shi} />
-                  </div>
-                )}
+                <div className="flex justify-center mt-5 gap-3 flex-wrap">
+                  <ZodiacBadge shi={fourPillars.month.shi} />
+                  {fourPillars.hour && <ZodiacBadge shi={fourPillars.hour.shi} />}
+                </div>
               </div>
             </div>
           </div>
@@ -74,10 +67,10 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
 
         {/* ===== スライド2: 本質 ===== */}
         <SlideContent
+          iconType="essence"
           title="本質"
           subtitle={`日主: ${result.nicchu}`}
-          emoji="🔮"
-          accentColor="#9C27B0"
+          accentColor={SECTION_COLORS.essence.primary}
           content={result.readings.essence}
           extra={
             <div className="mt-5 flex justify-center">
@@ -88,28 +81,28 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
 
         {/* ===== スライド3: 恋愛運 ===== */}
         <SlideContent
+          iconType="love"
           title="恋愛運"
           subtitle={result.zokanTsuhensei}
-          emoji="💕"
-          accentColor="#E91E63"
+          accentColor={SECTION_COLORS.love.primary}
           content={result.readings.love}
         />
 
         {/* ===== スライド4: 仕事運 ===== */}
         <SlideContent
+          iconType="work"
           title="仕事運"
           subtitle={result.tpiMonth}
-          emoji="⚡"
-          accentColor="#FF9800"
+          accentColor={SECTION_COLORS.work.primary}
           content={result.readings.work}
         />
 
         {/* ===== スライド5: 今年の運勢 ===== */}
         <SlideContent
+          iconType="yearly"
           title={`${currentYear}年の運勢`}
           subtitle={`流年: ${kanshiName(result.currentYearKanshi)} / ${result.currentYearTsuhensei}`}
-          emoji="🌟"
-          accentColor="#4CAF50"
+          accentColor={SECTION_COLORS.yearly.primary}
           content={result.readings.yearly}
           extra={
             <div className="mt-5 flex justify-center">
@@ -118,14 +111,11 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
           }
         />
 
-        {/* ===== スライド6: 締め＋アクション ===== */}
+        {/* ===== スライド6: 締め ===== */}
         <div className="flex flex-col items-center justify-center h-full px-6">
           <div className="text-center space-y-8 max-w-sm">
             <div className="animate-fade-in-scale">
-              <div className="relative inline-block">
-                <div className="absolute inset-0 bg-gold-500/10 blur-[60px] rounded-full scale-[2]" />
-                <span className="relative text-8xl">🙏</span>
-              </div>
+              <SectionIcon type="complete" size={100} />
             </div>
 
             <div className="space-y-3 animate-fade-in-up stagger-1 opacity-0">
@@ -133,12 +123,14 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
                 鑑定完了
               </h2>
               <div className="w-20 h-[1px] mx-auto animate-glow-line" />
-              <p className="text-navy-300/70 text-sm leading-relaxed tracking-wide">
-                四柱推命があなたの運命の道筋を<br />照らす光となりますように
+              <p className="text-navy-300/70 text-sm leading-relaxed tracking-wide mt-4">
+                今日の鑑定が<br />
+                あなたの明日を照らす<br />
+                小さな灯りとなりますように
               </p>
             </div>
 
-            <div className="space-y-4 animate-fade-in-up stagger-2 opacity-0">
+            <div className="space-y-4 animate-fade-in-up stagger-2 opacity-0 pt-4">
               <button
                 onClick={onRetry}
                 className="group relative w-full"
@@ -166,16 +158,16 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
 
 // 各スライドの共通コンポーネント
 function SlideContent({
+  iconType,
   title,
   subtitle,
-  emoji,
   accentColor,
   content,
   extra,
 }: {
+  iconType: 'essence' | 'love' | 'work' | 'yearly';
   title: string;
   subtitle: string;
-  emoji: string;
   accentColor: string;
   content: string;
   extra?: React.ReactNode;
@@ -188,16 +180,10 @@ function SlideContent({
 
   return (
     <div className="flex flex-col items-center justify-center h-full px-6 py-10 overflow-y-auto">
-      <div className={`w-full max-w-lg space-y-6 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+      <div className={`w-full max-w-lg space-y-5 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         {/* アイコン */}
         <div className="text-center">
-          <div className="relative inline-block">
-            <div
-              className="absolute inset-0 blur-3xl rounded-full scale-[3] animate-gentle-pulse"
-              style={{ backgroundColor: `${accentColor}15` }}
-            />
-            <span className="relative text-6xl drop-shadow-lg">{emoji}</span>
-          </div>
+          <SectionIcon type={iconType} size={72} />
         </div>
 
         {/* タイトル */}
@@ -221,8 +207,8 @@ function SlideContent({
               animation: 'glowLine 3s ease-in-out infinite',
             }}
           />
-          <div className="p-7">
-            <p className="text-navy-100/90 leading-[2] text-[0.95rem] tracking-wide">
+          <div className="p-6 max-h-[45vh] overflow-y-auto">
+            <p className="text-navy-100/90 leading-[2.1] text-[0.92rem] tracking-wide">
               {content}
             </p>
           </div>
