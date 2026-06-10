@@ -17,35 +17,37 @@ export function PillarChart({ result }: PillarChartProps) {
   }, []);
 
   const pillars = [
-    { label: "時柱", kanshi: fourPillars.hour, tsuhen: tpiHour, juniun: juniunHour },
-    { label: "日柱", kanshi: fourPillars.day, tsuhen: null, juniun: juniunDay },
-    { label: "月柱", kanshi: fourPillars.month, tsuhen: tpiMonth, juniun: juniunMonth },
-    { label: "年柱", kanshi: fourPillars.year, tsuhen: tpiYear, juniun: juniunYear },
+    { label: "時の星", subLabel: "行動・晩年", kanshi: fourPillars.hour, tsuhen: tpiHour, juniun: juniunHour, isDay: false },
+    { label: "日の星", subLabel: "自分自身", kanshi: fourPillars.day, tsuhen: null, juniun: juniunDay, isDay: true },
+    { label: "月の星", subLabel: "仕事・社会", kanshi: fourPillars.month, tsuhen: tpiMonth, juniun: juniunMonth, isDay: false },
+    { label: "年の星", subLabel: "家系・目上", kanshi: fourPillars.year, tsuhen: tpiYear, juniun: juniunYear, isDay: false },
   ];
 
   return (
     <div className="card-glow ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md overflow-hidden">
       <div className="h-[1px] w-full animate-glow-line" />
-      <div className="p-6">
-        <h2 className="text-center text-xl font-bold text-gold-gradient-animated tracking-[0.3em] mb-2">
-          命 式
+      <div className="p-4 sm:p-6">
+        <h2 className="text-center text-xl sm:text-2xl font-bold text-gold-gradient-animated tracking-[0.3em] mb-1">
+          あなたの星の配置
         </h2>
-        <p className="text-center text-xs text-navy-500 tracking-widest mb-5">
-          Four Pillars of Destiny
+        <p className="text-center text-sm sm:text-base text-navy-300/70 tracking-wide mb-4 sm:mb-5">
+          生年月日から導き出された、あなただけの運命の表です
         </p>
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-gold-500/20 to-transparent mb-6" />
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-gold-500/20 to-transparent mb-4 sm:mb-6" />
 
-        <div className="grid grid-cols-4 gap-3 text-center">
+        <div className="grid grid-cols-4 gap-2 sm:gap-3 text-center">
           {/* ヘッダー */}
           {pillars.map((p, i) => (
             <div
               key={p.label}
-              className={`text-xs text-navy-400/80 tracking-widest pb-2 transition-all duration-700 ${
+              className={`pb-1 transition-all duration-700 ${
                 revealed ? 'opacity-100' : 'opacity-0'
               }`}
               style={{ transitionDelay: `${i * 100}ms` }}
             >
-              {p.label}
+              <span className="text-sm sm:text-base text-navy-200/90 tracking-widest font-medium">{p.label}</span>
+              <br />
+              <span className="text-[0.6rem] sm:text-xs text-navy-400/70">{p.subLabel}</span>
             </div>
           ))}
 
@@ -53,12 +55,12 @@ export function PillarChart({ result }: PillarChartProps) {
           {pillars.map((p, i) => (
             <div
               key={`tsuhen-${i}`}
-              className={`text-[0.7rem] text-gold-500/70 py-1 tracking-wider transition-all duration-700 ${
+              className={`text-xs sm:text-sm text-gold-400/80 py-1 tracking-wider transition-all duration-700 ${
                 revealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
               }`}
               style={{ transitionDelay: `${200 + i * 100}ms` }}
             >
-              {p.tsuhen ?? (p.label === "日柱" ? "日主" : "—")}
+              {p.tsuhen ?? (p.isDay ? "本質" : "—")}
             </div>
           ))}
 
@@ -71,14 +73,14 @@ export function PillarChart({ result }: PillarChartProps) {
               }`}
               style={{ transitionDelay: `${400 + i * 150}ms` }}
             >
-              {p.label === "日柱" && (
+              {p.isDay && (
                 <div className="absolute inset-0 bg-gold-500/10 rounded-lg border border-gold-500/20" />
               )}
               <span
-                className={`relative text-3xl font-black ${
-                  p.label === "日柱"
+                className={`relative text-2xl sm:text-3xl font-black ${
+                  p.isDay
                     ? "text-gold-gradient-animated"
-                    : "text-navy-100"
+                    : "text-navy-50"
                 }`}
               >
                 {p.kanshi?.kan ?? "—"}
@@ -95,7 +97,7 @@ export function PillarChart({ result }: PillarChartProps) {
               }`}
               style={{ transitionDelay: `${700 + i * 150}ms` }}
             >
-              <span className="text-3xl font-black text-navy-200/90">
+              <span className="text-2xl sm:text-3xl font-black text-navy-100/90">
                 {p.kanshi?.shi ?? "—"}
               </span>
             </div>
@@ -105,7 +107,7 @@ export function PillarChart({ result }: PillarChartProps) {
           {pillars.map((p, i) => (
             <div
               key={`juniun-${i}`}
-              className={`text-[0.7rem] text-navy-400/60 pt-2 tracking-wider transition-all duration-700 ${
+              className={`text-xs sm:text-sm text-navy-300/70 pt-2 tracking-wider transition-all duration-700 ${
                 revealed ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
               }`}
               style={{ transitionDelay: `${1000 + i * 100}ms` }}

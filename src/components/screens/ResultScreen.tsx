@@ -38,7 +38,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
               </h1>
               <div className="w-16 sm:w-24 h-[1px] mx-auto animate-glow-line" />
               <p className="text-sm sm:text-base text-navy-200/60 leading-relaxed">
-                四柱推命に基づき、あなたの命式を算出しました
+                生年月日から、あなたの運命の星を読み解きました
               </p>
             </div>
 
@@ -48,14 +48,14 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
 
             <div className="animate-reveal-up opacity-0 stagger-2">
               <div className="ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md p-4 sm:p-6">
-                <h3 className="text-center text-sm sm:text-base text-gold-500/80 tracking-widest mb-3 sm:mb-5">あなたの守護干支</h3>
+                <h3 className="text-center text-sm sm:text-base text-gold-500/80 tracking-widest mb-3 sm:mb-5">あなたの守護動物</h3>
                 <div className="flex justify-center gap-4 sm:gap-8">
                   <div className="text-center">
-                    <p className="text-xs sm:text-sm text-navy-400 tracking-widest mb-2 sm:mb-3">日支</p>
+                    <p className="text-xs sm:text-sm text-navy-400 tracking-widest mb-2 sm:mb-3">生まれ日</p>
                     <ZodiacCharacter shi={fourPillars.day.shi} size="md" />
                   </div>
                   <div className="text-center">
-                    <p className="text-xs sm:text-sm text-navy-400 tracking-widest mb-2 sm:mb-3">年支</p>
+                    <p className="text-xs sm:text-sm text-navy-400 tracking-widest mb-2 sm:mb-3">生まれ年</p>
                     <ZodiacCharacter shi={fourPillars.year.shi} size="md" />
                   </div>
                 </div>
@@ -73,7 +73,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
           iconType="essence"
           title="本質"
           subtitle={`${result.nisshuDetail.symbol}の人 ── ${result.nisshuDetail.catchphrase}`}
-          description="生まれた日の天干（日主）から読み解く、あなたの生まれ持った性格や本質的な気質です。"
+          description="あなたが生まれた日の星から読み解く、生まれ持った性格や本質的な気質です。"
           accentColor={SECTION_COLORS.essence.primary}
           content={result.readings.essence}
           extra={
@@ -87,7 +87,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
               </div>
               <div className="ornament-border rounded-xl bg-navy-900/30 p-4">
                 <p className="text-sm text-gold-500/70 tracking-widest mb-2 text-center">
-                  十二運「{result.juniunDay}」── {result.juniunDayDetail.catchphrase}
+                  運勢エネルギー「{result.juniunDay}」── {result.juniunDayDetail.catchphrase}
                 </p>
                 <p className="text-navy-100/80 text-base leading-[2] tracking-wide">
                   {result.juniunDayDetail.message}
@@ -104,8 +104,8 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
         <SlideContent
           iconType="love"
           title="恋愛運"
-          subtitle={`蔵干通変星「${result.zokanTsuhensei}」`}
-          description="日支の蔵干（内面に隠された星）から、恋愛傾向やパートナーとの関わり方を読み解きます。"
+          subtitle={`内面の星「${result.zokanTsuhensei}」`}
+          description="あなたの内面に秘められた星から、恋愛傾向やパートナーとの関わり方を読み解きます。"
           accentColor={SECTION_COLORS.love.primary}
           content={result.readings.love}
         />
@@ -114,8 +114,8 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
         <SlideContent
           iconType="work"
           title="仕事運"
-          subtitle={`月柱通変星「${result.tpiMonth}」── ${result.tsuhenseiDetail.catchphrase}`}
-          description="月柱の通変星から、社会での役割・適職・仕事での才能と注意点を診断します。"
+          subtitle={`社会運の星「${result.tpiMonth}」── ${result.tsuhenseiDetail.catchphrase}`}
+          description="社会での役割を表す星から、あなたの適職・仕事での才能と注意点を診断します。"
           accentColor={SECTION_COLORS.work.primary}
           content={result.readings.work}
           extra={
@@ -141,8 +141,8 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
         <SlideContent
           iconType="yearly"
           title={`${currentYear}年の運勢`}
-          subtitle={`${result.nenunDetail.title} ── ${kanshiName(result.currentYearKanshi)} / ${result.currentYearTsuhensei}`}
-          description="今年の干支とあなたの日主の関係から、今年一年の運気の流れとテーマを読み解きます。"
+          subtitle={`${result.nenunDetail.title} ── 今年の星「${result.currentYearTsuhensei}」`}
+          description="今年の星の巡りから、一年間の運気の流れとテーマを読み解きます。"
           accentColor={SECTION_COLORS.yearly.primary}
           content={result.readings.yearly}
           extra={
@@ -307,7 +307,7 @@ function GogyoSlide({ gogyoBalance, gogyoReading }: { gogyoBalance: GogyoBalance
         </div>
         <div className="text-center space-y-1.5 sm:space-y-2">
           <h2 className="text-2xl sm:text-3xl font-black text-gold-gradient-animated tracking-[0.2em] sm:tracking-[0.3em]">
-            五行バランス
+            エネルギーバランス
           </h2>
           <p className="text-sm sm:text-base tracking-widest font-medium" style={{ color: `${accentColor}CC` }}>
             木 ・ 火 ・ 土 ・ 金 ・ 水
@@ -317,7 +317,7 @@ function GogyoSlide({ gogyoBalance, gogyoReading }: { gogyoBalance: GogyoBalance
 
         {/* 説明文 */}
         <p className="text-center text-sm sm:text-base text-navy-300/70 leading-relaxed tracking-wide px-2">
-          命式に含まれる五行（木・火・土・金・水）の偏りから、あなたの気質の傾向を診断します。
+          自然界の5つのエネルギー（木・火・土・金・水）のバランスから、あなたの気質の傾向を診断します。
         </p>
 
         {/* バーチャート */}
@@ -400,7 +400,7 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
 
         {/* 説明文 */}
         <p className="text-center text-sm sm:text-base text-navy-300/70 leading-relaxed tracking-wide px-2">
-          毎年の干支とあなたの日主の関係から、向こう10年間の運気の波を一覧で表示しています。
+          毎年の星の巡りから、向こう10年間の運気の波を一覧で表示しています。
         </p>
 
         <div className="space-y-1.5 sm:space-y-2 pb-2 sm:pb-4">
