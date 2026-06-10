@@ -9,12 +9,20 @@ import { ResultCard } from "@/components/ResultCard";
 import { PillarChart } from "@/components/PillarChart";
 import { LoadingScreen } from "@/components/LoadingScreen";
 
+const SECTION_ICONS = [
+  { icon: "◆", color: "from-purple-500/20 to-indigo-500/20" },
+  { icon: "♥", color: "from-pink-500/20 to-rose-500/20" },
+  { icon: "★", color: "from-amber-500/20 to-yellow-500/20" },
+  { icon: "◎", color: "from-emerald-500/20 to-teal-500/20" },
+];
+
 function ResultContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [result, setResult] = useState<FortuneResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
     const y = searchParams.get("y");
@@ -29,7 +37,6 @@ function ResultContent() {
       return;
     }
 
-    // 演出のための遅延
     const timer = setTimeout(() => {
       try {
         const fortune = calculateFortune({
@@ -40,11 +47,13 @@ function ResultContent() {
           gender: g as Gender,
         });
         setResult(fortune);
-      } catch (e) {
+      } catch {
         setError("鑑定中にエラーが発生しました");
       }
       setLoading(false);
-    }, 3500);
+      // コンテンツの表示を少し遅らせて演出
+      setTimeout(() => setShowContent(true), 200);
+    }, 3800);
 
     return () => clearTimeout(timer);
   }, [searchParams]);
@@ -55,14 +64,17 @@ function ResultContent() {
 
   if (error || !result) {
     return (
-      <main className="flex flex-1 flex-col items-center justify-center px-6">
-        <p className="text-red-400 text-lg mb-8">{error || "結果を取得できませんでした"}</p>
-        <button
-          onClick={() => router.push("/input")}
-          className="text-gold-400 hover:text-gold-300 tracking-wider"
-        >
-          もう一度入力する
-        </button>
+      <main className="flex flex-1 flex-col items-center justify-center px-6 bg-mystical min-h-screen">
+        <div className="text-center space-y-6 animate-fade-in-up">
+          <div className="text-4xl text-navy-400">☰</div>
+          <p className="text-red-400/80 text-lg">{error || "結果を取得できませんでした"}</p>
+          <button
+            onClick={() => router.push("/input")}
+            className="ornament-border rounded-full px-10 py-3 bg-navy-900/60 text-gold-400 hover:text-gold-300 tracking-wider transition-all"
+          >
+            もう一度入力する
+          </button>
+        </div>
       </main>
     );
   }
@@ -73,77 +85,92 @@ function ResultContent() {
   }生`;
 
   return (
-    <main className="relative flex flex-col items-center min-h-screen px-4 py-8">
+    <main className="relative flex flex-col items-center min-h-screen px-4 py-8 bg-mystical">
       <StarField />
 
-      <div className="relative z-10 w-full max-w-lg space-y-6">
+      <div className={`relative z-10 w-full max-w-lg transition-all duration-1000 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
         {/* ヘッダー */}
-        <div className="text-center space-y-2 animate-fade-in-up">
-          <p className="text-sm text-navy-400 tracking-wider">{birthLabel}</p>
-          <h1 className="text-3xl font-bold tracking-[0.2em] text-gold-gradient">
-            鑑定結果
-          </h1>
-          <div className="w-16 h-px mx-auto bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
+        <div className="text-center space-y-3 mb-8">
+          <div className="animate-fade-in-down opacity-0">
+            <p className="text-sm text-navy-400/60 tracking-[0.2em]">{birthLabel}</p>
+          </div>
+          <div className="animate-fade-in-scale opacity-0 stagger-1">
+            <div className="relative inline-block">
+              <div className="absolute inset-0 bg-gold-500/10 blur-3xl rounded-full scale-150" />
+              <h1 className="relative text-4xl font-black tracking-[0.4em] text-gold-gradient-animated">
+                鑑定結果
+              </h1>
+            </div>
+          </div>
+          <div className="animate-fade-in opacity-0 stagger-2">
+            <div className="w-24 h-[1px] mx-auto animate-glow-line" />
+          </div>
         </div>
 
         {/* 命式表 */}
-        <div className="animate-fade-in-up stagger-1 opacity-0">
+        <div className="mb-8 animate-reveal-up opacity-0 stagger-2">
           <PillarChart result={result} />
         </div>
 
-        {/* 本質 */}
-        <div className="animate-fade-in-up stagger-1 opacity-0">
-          <ResultCard
-            title="本質"
-            subtitle={`日主: ${result.nicchu}`}
-            icon="◆"
-            content={result.readings.essence}
-          />
-        </div>
+        {/* 鑑定セクション */}
+        <div className="space-y-6">
+          {/* 本質 */}
+          <div className="animate-reveal-up opacity-0 stagger-3">
+            <ResultCard
+              title="本質"
+              subtitle={`日主: ${result.nicchu}`}
+              icon={SECTION_ICONS[0].icon}
+              content={result.readings.essence}
+            />
+          </div>
 
-        {/* 恋愛 */}
-        <div className="animate-fade-in-up stagger-2 opacity-0">
-          <ResultCard
-            title="恋愛運"
-            subtitle={`${result.zokanTsuhensei}`}
-            icon="♥"
-            content={result.readings.love}
-          />
-        </div>
+          {/* 恋愛 */}
+          <div className="animate-reveal-up opacity-0 stagger-4">
+            <ResultCard
+              title="恋愛運"
+              subtitle={`${result.zokanTsuhensei}`}
+              icon={SECTION_ICONS[1].icon}
+              content={result.readings.love}
+            />
+          </div>
 
-        {/* 仕事 */}
-        <div className="animate-fade-in-up stagger-3 opacity-0">
-          <ResultCard
-            title="仕事運"
-            subtitle={`${result.tpiMonth}`}
-            icon="★"
-            content={result.readings.work}
-          />
-        </div>
+          {/* 仕事 */}
+          <div className="animate-reveal-up opacity-0 stagger-5">
+            <ResultCard
+              title="仕事運"
+              subtitle={`${result.tpiMonth}`}
+              icon={SECTION_ICONS[2].icon}
+              content={result.readings.work}
+            />
+          </div>
 
-        {/* 今年の運勢 */}
-        <div className="animate-fade-in-up stagger-4 opacity-0">
-          <ResultCard
-            title={`${new Date().getFullYear()}年の運勢`}
-            subtitle={`流年: ${kanshiName(result.currentYearKanshi)} / ${result.currentYearTsuhensei}`}
-            icon="◎"
-            content={result.readings.yearly}
-          />
+          {/* 今年の運勢 */}
+          <div className="animate-reveal-up opacity-0 stagger-6">
+            <ResultCard
+              title={`${new Date().getFullYear()}年の運勢`}
+              subtitle={`流年: ${kanshiName(result.currentYearKanshi)} / ${result.currentYearTsuhensei}`}
+              icon={SECTION_ICONS[3].icon}
+              content={result.readings.yearly}
+            />
+          </div>
         </div>
 
         {/* アクションボタン */}
-        <div className="animate-fade-in-up stagger-4 opacity-0 flex flex-col items-center gap-4 pt-4 pb-12">
+        <div className="flex flex-col items-center gap-5 pt-10 pb-16 animate-fade-in-up opacity-0 stagger-6">
           <button
             onClick={() => router.push("/input")}
-            className="ornament-border rounded-full px-12 py-4 bg-navy-900/80 hover:bg-navy-800/80 transition-all"
+            className="group relative"
           >
-            <span className="text-lg tracking-[0.2em] text-gold-gradient font-medium">
-              もう一度鑑定する
-            </span>
+            <div className="absolute inset-0 rounded-full bg-gold-500/15 blur-xl group-hover:bg-gold-500/25 transition-all duration-500" />
+            <div className="relative ornament-border rounded-full px-14 py-4 bg-navy-900/50 backdrop-blur-sm hover:bg-navy-800/50 transition-all duration-500 animate-breathe">
+              <span className="text-lg tracking-[0.25em] text-gold-gradient-animated font-bold">
+                もう一度鑑定する
+              </span>
+            </div>
           </button>
           <button
             onClick={() => router.push("/")}
-            className="text-navy-400 hover:text-navy-200 text-sm tracking-wider transition-colors"
+            className="text-navy-500 hover:text-gold-500/50 text-sm tracking-widest transition-colors duration-300"
           >
             トップに戻る
           </button>
