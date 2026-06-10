@@ -49,11 +49,11 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
                 <div className="flex justify-center gap-8">
                   <div className="text-center">
                     <p className="text-[0.55rem] text-navy-500 tracking-widest mb-3">日支</p>
-                    <ZodiacCharacter shi={fourPillars.day.shi} size="md" />
+                    <ZodiacCharacter shi={fourPillars.day.shi} size="lg" />
                   </div>
                   <div className="text-center">
                     <p className="text-[0.55rem] text-navy-500 tracking-widest mb-3">年支</p>
-                    <ZodiacCharacter shi={fourPillars.year.shi} size="md" />
+                    <ZodiacCharacter shi={fourPillars.year.shi} size="lg" />
                   </div>
                 </div>
                 <div className="flex justify-center mt-5 gap-3 flex-wrap">
@@ -74,7 +74,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
           content={result.readings.essence}
           extra={
             <div className="mt-5 flex justify-center">
-              <ZodiacCharacter shi={fourPillars.day.shi} size="lg" />
+              <ZodiacCharacter shi={fourPillars.day.shi} size="xl" />
             </div>
           }
         />
@@ -106,7 +106,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
           content={result.readings.yearly}
           extra={
             <div className="mt-5 flex justify-center">
-              <ZodiacCharacter shi={result.currentYearKanshi.shi} size="md" />
+              <ZodiacCharacter shi={result.currentYearKanshi.shi} size="xl" />
             </div>
           }
         />
