@@ -29,7 +29,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
     <div className={`w-full h-screen transition-opacity duration-700 ${ready ? 'opacity-100' : 'opacity-0'}`}>
       <SlideViewer>
         {/* ===== スライド1: 命式表 + 干支キャラ ===== */}
-        <div className="flex flex-col items-center justify-start h-full px-4 sm:px-6 py-6 sm:py-10 overflow-y-auto">
+        <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-6 sm:py-10">
           <div className="w-full max-w-lg space-y-4 sm:space-y-6">
             <div className="text-center space-y-2 animate-fade-in-down">
               <p className="text-sm sm:text-base text-navy-300/70 tracking-[0.2em]">{birthLabel}</p>
@@ -164,7 +164,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
         <DecadeSlide tenYearFortune={result.tenYearFortune} />
 
         {/* ===== スライド8: 締め ===== */}
-        <div className="flex flex-col items-center justify-center h-full px-4 sm:px-6">
+        <div className="flex flex-col items-center justify-center min-h-full px-4 sm:px-6">
           <div className="text-center space-y-5 sm:space-y-8 max-w-sm">
             <div className="animate-fade-in-scale">
               <SectionIcon type="complete" size={80} />
@@ -233,7 +233,7 @@ function SlideContent({
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-start h-full px-4 sm:px-6 py-5 sm:py-8 overflow-y-auto">
+    <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-5 sm:py-8">
       <div className={`w-full max-w-lg space-y-3 sm:space-y-4 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         {/* アイコン */}
         <div className="text-center">
@@ -266,7 +266,7 @@ function SlideContent({
               animation: 'glowLine 3s ease-in-out infinite',
             }}
           />
-          <div className="p-4 sm:p-5 max-h-[40vh] overflow-y-auto">
+          <div className="p-4 sm:p-5">
             <p className="text-navy-50/90 leading-[1.9] sm:leading-[2] text-sm sm:text-base tracking-wide">
               {content}
             </p>
@@ -300,7 +300,7 @@ function GogyoSlide({ gogyoBalance, gogyoReading }: { gogyoBalance: GogyoBalance
   const accentColor = SECTION_COLORS.gogyo.primary;
 
   return (
-    <div className="flex flex-col items-center justify-start h-full px-4 sm:px-6 py-5 sm:py-8 overflow-y-auto">
+    <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-5 sm:py-8">
       <div className={`w-full max-w-lg space-y-3 sm:space-y-5 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <div className="text-center">
           <SectionIcon type="gogyo" size={48} />
@@ -392,7 +392,7 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
   const selectedFortune = tenYearFortune.find(yf => yf.year === selectedYear);
 
   return (
-    <div className="flex flex-col items-center justify-start h-full px-4 sm:px-6 py-5 sm:py-8 overflow-y-auto">
+    <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-5 sm:py-8">
       <div className={`w-full max-w-lg space-y-3 sm:space-y-4 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <div className="text-center">
           <SectionIcon type="decade" size={48} />

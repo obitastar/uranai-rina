@@ -46,7 +46,7 @@ export function SlideViewer({ children, onSlideChange }: SlideViewerProps) {
                 zIndex: isActive ? 10 : 0,
               }}
             >
-              <div className="h-full pb-20 sm:pb-24">
+              <div className="h-full pb-20 sm:pb-24 overflow-y-auto overscroll-contain">
                 {child}
               </div>
             </div>
