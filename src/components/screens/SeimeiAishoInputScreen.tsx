@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { AishoIcon } from "@/components/AishoIcons";
 
 interface Props {
   myName: string;
@@ -40,7 +41,7 @@ export function SeimeiAishoInputScreen({ myName, onSubmit, onBack }: Props) {
     <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 py-6 sm:py-8">
       <div className="relative z-10 w-full max-w-md space-y-5 sm:space-y-8">
         <div className={`text-center space-y-2 sm:space-y-3 ${mounted ? 'animate-fade-in-down' : 'opacity-0'}`}>
-          <div className="text-gold-500/60 text-2xl sm:text-3xl mb-1 sm:mb-2">☯</div>
+          <div className="flex justify-center mb-1 sm:mb-2"><AishoIcon type="overall" size={48} /></div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-[0.2em] sm:tracking-[0.3em] text-gold-gradient">
             相性診断
           </h1>
