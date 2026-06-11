@@ -1,6 +1,6 @@
 "use client";
 
-type IconType = 'essence' | 'love' | 'work' | 'yearly' | 'gogyo' | 'decade' | 'complete' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky' | 'strength' | 'chishi' | 'daiun';
+type IconType = 'essence' | 'love' | 'work' | 'yearly' | 'gogyo' | 'decade' | 'complete' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky' | 'strength' | 'chishi' | 'daiun' | 'nacchin' | 'kakkyoku';
 
 interface SectionIconProps {
   type: IconType;
@@ -22,6 +22,8 @@ const COLORS: Record<IconType, { primary: string; glow: string }> = {
   strength: { primary: '#fb923c', glow: 'rgba(251,146,60,0.25)' },
   chishi: { primary: '#94a3b8', glow: 'rgba(148,163,184,0.25)' },
   daiun: { primary: '#a3e635', glow: 'rgba(163,230,53,0.25)' },
+  nacchin: { primary: '#e879f9', glow: 'rgba(232,121,249,0.25)' },
+  kakkyoku: { primary: '#38bdf8', glow: 'rgba(56,189,248,0.25)' },
 };
 
 export function SectionIcon({ type, size = 80 }: SectionIconProps) {
@@ -202,6 +204,33 @@ export function SectionIcon({ type, size = 80 }: SectionIconProps) {
               <circle key={i} cx={x} cy={i % 2 === 0 ? 4 : -2} r="1.5" fill={primary} opacity={0.3 + i * 0.15} />
             ))}
             <text x="0" y="-10" textAnchor="middle" fill={primary} fontSize="8" fontFamily="serif" strokeWidth="0" opacity="0.6">大運</text>
+          </g>
+        )}
+        {type === 'nacchin' && (
+          // 納音 - 音叉のような波紋
+          <g transform={`translate(${c},${c})`} stroke={primary} fill="none" strokeWidth="1" opacity="0.8">
+            <path d="M-4,-12 Q-8,0 0,8 Q8,0 4,-12" strokeWidth="1.2" />
+            <line x1="0" y1="8" x2="0" y2="14" strokeWidth="1.5" />
+            <circle cx="0" cy="0" r="3" fill={primary} opacity="0.2" />
+            <circle cx="0" cy="0" r="7" strokeDasharray="2 3" opacity="0.3" />
+            <circle cx="0" cy="0" r="11" strokeDasharray="1 4" opacity="0.2" />
+          </g>
+        )}
+        {type === 'kakkyoku' && (
+          // 格局 - 構造を表す六角形と内部格子
+          <g transform={`translate(${c},${c})`} stroke={primary} fill="none" strokeWidth="1" opacity="0.8">
+            {(() => {
+              const pts = Array.from({ length: 6 }, (_, i) => {
+                const a = (i * Math.PI * 2) / 6 - Math.PI / 2;
+                return `${Math.cos(a) * 13},${Math.sin(a) * 13}`;
+              }).join(' ');
+              return <polygon points={pts} fill={primary} fillOpacity="0.08" strokeWidth="1.2" />;
+            })()}
+            <line x1="0" y1="-13" x2="0" y2="13" strokeWidth="0.5" opacity="0.3" />
+            <line x1="-11" y1="-6.5" x2="11" y2="6.5" strokeWidth="0.5" opacity="0.3" />
+            <line x1="-11" y1="6.5" x2="11" y2="-6.5" strokeWidth="0.5" opacity="0.3" />
+            <circle cx="0" cy="0" r="4" fill={primary} opacity="0.3" />
+            <text x="0" y="2" textAnchor="middle" fill={primary} fontSize="6" fontFamily="serif" strokeWidth="0" opacity="0.8">格</text>
           </g>
         )}
       </svg>

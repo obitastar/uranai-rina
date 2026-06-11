@@ -8,7 +8,7 @@ interface PillarChartProps {
 }
 
 export function PillarChart({ result }: PillarChartProps) {
-  const { fourPillars, tpiYear, tpiMonth, tpiHour, juniunYear, juniunMonth, juniunDay, juniunHour } = result;
+  const { fourPillars, tpiYear, tpiMonth, tpiHour, juniunYear, juniunMonth, juniunDay, juniunHour, zokanDetails } = result;
   const [revealed, setRevealed] = useState(false);
 
   useEffect(() => {
@@ -17,10 +17,10 @@ export function PillarChart({ result }: PillarChartProps) {
   }, []);
 
   const pillars = [
-    { label: "時の星", subLabel: "行動・晩年", kanshi: fourPillars.hour, tsuhen: tpiHour, juniun: juniunHour, isDay: false },
-    { label: "日の星", subLabel: "自分自身", kanshi: fourPillars.day, tsuhen: null, juniun: juniunDay, isDay: true },
-    { label: "月の星", subLabel: "仕事・社会", kanshi: fourPillars.month, tsuhen: tpiMonth, juniun: juniunMonth, isDay: false },
-    { label: "年の星", subLabel: "家系・目上", kanshi: fourPillars.year, tsuhen: tpiYear, juniun: juniunYear, isDay: false },
+    { label: "時の星", subLabel: "行動・晩年", kanshi: fourPillars.hour, tsuhen: tpiHour, juniun: juniunHour, isDay: false, zokan: zokanDetails.hour },
+    { label: "日の星", subLabel: "自分自身", kanshi: fourPillars.day, tsuhen: null, juniun: juniunDay, isDay: true, zokan: zokanDetails.day },
+    { label: "月の星", subLabel: "仕事・社会", kanshi: fourPillars.month, tsuhen: tpiMonth, juniun: juniunMonth, isDay: false, zokan: zokanDetails.month },
+    { label: "年の星", subLabel: "家系・目上", kanshi: fourPillars.year, tsuhen: tpiYear, juniun: juniunYear, isDay: false, zokan: zokanDetails.year },
   ];
 
   return (
@@ -121,6 +121,31 @@ export function PillarChart({ result }: PillarChartProps) {
               {p.juniun ?? "—"}
             </div>
           ))}
+
+          {/* 蔵干通変星 */}
+          {pillars.map((p, i) => (
+            <div
+              key={`zokan-${i}`}
+              className={`text-[0.6rem] sm:text-xs text-cyan-300/60 pt-1 tracking-wider transition-all duration-700 ${
+                revealed ? 'opacity-100' : 'opacity-0'
+              }`}
+              style={{ transitionDelay: `${1200 + i * 100}ms` }}
+            >
+              {p.zokan ? p.zokan.tpiHonki : "—"}
+            </div>
+          ))}
+        </div>
+
+        {/* 蔵干凡例 */}
+        <div
+          className={`mt-3 sm:mt-4 pt-3 border-t border-navy-700/30 transition-all duration-700 ${
+            revealed ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{ transitionDelay: '1500ms' }}
+        >
+          <p className="text-center text-[0.6rem] sm:text-xs text-navy-400/50 tracking-wider mb-2">
+            <ruby>蔵干<rt className="text-[0.4rem] opacity-60">ぞうかん</rt></ruby>通変星
+          </p>
         </div>
       </div>
     </div>

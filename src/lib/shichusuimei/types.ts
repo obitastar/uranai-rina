@@ -191,6 +191,35 @@ export interface StrengthResult {
   reading: string;
 }
 
+// 納音
+export interface NacchinInfo {
+  name: string;
+  yomi: string;
+  gogyo: Gogyo;
+  symbol: string;
+  personality: string;
+}
+
+// 格局
+export interface KakkyokuInfo {
+  name: string;
+  category: '内格' | '外格';
+  description: string;
+  reading: string;
+  strength: string;
+  weakness: string;
+}
+
+// 蔵干詳細（全柱分）
+export interface ZokanDetail {
+  honki: Jikkan;
+  chuki: Jikkan | null;
+  yoki: Jikkan | null;
+  tpiHonki: Tsuhensei;
+  tpiChuki: Tsuhensei | null;
+  tpiYoki: Tsuhensei | null;
+}
+
 // 鑑定結果
 export interface FortuneResult {
   input: FortuneInput;
@@ -247,4 +276,15 @@ export interface FortuneResult {
   daiun: DaiunResult;
   // 身強身弱・用神
   strength: StrengthResult;
+  // 納音
+  nacchin: NacchinInfo;
+  // 格局
+  kakkyoku: KakkyokuInfo;
+  // 蔵干詳細（年・月・日・時の全柱分）
+  zokanDetails: {
+    year: ZokanDetail;
+    month: ZokanDetail;
+    day: ZokanDetail;
+    hour: ZokanDetail | null;
+  };
 }

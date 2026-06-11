@@ -34,3 +34,93 @@ export function getZokanList(shi: Junishi): Jikkan[] {
   if (entry.yoki) result.push(entry.yoki);
   return result;
 }
+
+// 蔵干優勢日数（余気→中気→本気の順で月内を進行）
+export interface ZokanDayRange {
+  kan: Jikkan;
+  days: number;  // この蔵干が優勢な日数
+  label: '余気' | '中気' | '本気';
+}
+
+// 節入りからの経過日数に応じて優勢な蔵干が切り替わる
+// 順序: 余気（月初）→ 中気 → 本気（月末）
+// 卯・酉・子は中気なし（余気→本気の2段階）
+// 各地支の合計日数は30日
+export const ZOKAN_DAY_RANGES: Record<Junishi, ZokanDayRange[]> = {
+  '子': [
+    { kan: '壬', days: 10, label: '余気' },
+    { kan: '癸', days: 20, label: '本気' },
+  ],
+  '丑': [
+    { kan: '癸', days: 9,  label: '余気' },
+    { kan: '辛', days: 3,  label: '中気' },
+    { kan: '己', days: 18, label: '本気' },
+  ],
+  '寅': [
+    { kan: '戊', days: 7,  label: '余気' },
+    { kan: '丙', days: 7,  label: '中気' },
+    { kan: '甲', days: 16, label: '本気' },
+  ],
+  '卯': [
+    { kan: '甲', days: 10, label: '余気' },
+    { kan: '乙', days: 20, label: '本気' },
+  ],
+  '辰': [
+    { kan: '乙', days: 9,  label: '余気' },
+    { kan: '癸', days: 3,  label: '中気' },
+    { kan: '戊', days: 18, label: '本気' },
+  ],
+  '巳': [
+    { kan: '戊', days: 7,  label: '余気' },
+    { kan: '庚', days: 7,  label: '中気' },
+    { kan: '丙', days: 16, label: '本気' },
+  ],
+  '午': [
+    { kan: '丙', days: 10, label: '余気' },
+    { kan: '己', days: 9,  label: '中気' },  // ※流派差あり
+    { kan: '丁', days: 11, label: '本気' },
+  ],
+  '未': [
+    { kan: '丁', days: 9,  label: '余気' },
+    { kan: '乙', days: 3,  label: '中気' },
+    { kan: '己', days: 18, label: '本気' },
+  ],
+  '申': [
+    { kan: '戊', days: 7,  label: '余気' },
+    { kan: '壬', days: 7,  label: '中気' },
+    { kan: '庚', days: 16, label: '本気' },
+  ],
+  '酉': [
+    { kan: '庚', days: 10, label: '余気' },
+    { kan: '辛', days: 20, label: '本気' },
+  ],
+  '戌': [
+    { kan: '辛', days: 9,  label: '余気' },
+    { kan: '丁', days: 3,  label: '中気' },
+    { kan: '戊', days: 18, label: '本気' },
+  ],
+  '亥': [
+    { kan: '戊', days: 7,  label: '余気' },
+    { kan: '甲', days: 5,  label: '中気' },
+    { kan: '壬', days: 18, label: '本気' },
+  ],
+};
+
+/**
+ * 月内の日数から優勢な蔵干を取得
+ * @param shi 地支
+ * @param dayInMonth 節入りからの日数（1-30）
+ * @returns 優勢な蔵干の天干
+ */
+export function getDominantZokan(shi: Junishi, dayInMonth: number): Jikkan {
+  const ranges = ZOKAN_DAY_RANGES[shi];
+  let accumulated = 0;
+  for (const range of ranges) {
+    accumulated += range.days;
+    if (dayInMonth <= accumulated) {
+      return range.kan;
+    }
+  }
+  // 範囲外の場合は本気（最後のエントリ）を返す
+  return ranges[ranges.length - 1].kan;
+}

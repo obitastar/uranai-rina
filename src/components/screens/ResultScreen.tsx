@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { FortuneResult, YearlyFortune, GogyoBalance, ShinsatsuInfo, KyuseiInfo, LuckyInfo, DaiunResult, DaiunPeriod, StrengthResult, ChishiRelationResult } from "@/lib/shichusuimei";
+import type { FortuneResult, YearlyFortune, GogyoBalance, ShinsatsuInfo, KyuseiInfo, LuckyInfo, DaiunResult, DaiunPeriod, StrengthResult, ChishiRelationResult, NacchinInfo, KakkyokuInfo } from "@/lib/shichusuimei";
 import { SlideViewer } from "@/components/SlideViewer";
 import { PillarChart } from "@/components/PillarChart";
 import { ZodiacCharacter, ZodiacBadge } from "@/components/ZodiacCharacter";
@@ -14,7 +14,7 @@ interface ResultScreenProps {
   onAisho?: () => void;
 }
 
-const SLIDE_LABELS = ["命式表", "本質", "恋愛運", "仕事運", "五行", "身強身弱", "健康運", "空亡", "神殺", "地支", "開運", "大運", "今年", "10年運勢", "完了"];
+const SLIDE_LABELS = ["命式表", "本質", "恋愛運", "仕事運", "五行", "格局", "身強身弱", "納音", "健康運", "空亡", "神殺", "地支", "開運", "大運", "今年", "10年運勢", "完了"];
 
 export function ResultScreen({ result, onRetry, onTop, onAisho }: ResultScreenProps) {
   const { input, fourPillars } = result;
@@ -129,8 +129,14 @@ export function ResultScreen({ result, onRetry, onTop, onAisho }: ResultScreenPr
         {/* ===== スライド5: 五行バランス ===== */}
         <GogyoSlide gogyoBalance={result.gogyoBalance} gogyoReading={result.gogyoReading} />
 
-        {/* ===== スライド6: 身強身弱 ===== */}
+        {/* ===== スライド6: 格局 ===== */}
+        <KakkyokuSlide kakkyoku={result.kakkyoku} />
+
+        {/* ===== スライド7: 身強身弱 ===== */}
         <StrengthSlide strength={result.strength} />
+
+        {/* ===== スライド8: 納音 ===== */}
+        <NacchinSlide nacchin={result.nacchin} />
 
         {/* ===== スライド7: 健康運 ===== */}
         <SlideContent
@@ -270,7 +276,7 @@ function SlideContent({
   content,
   extra,
 }: {
-  iconType: 'essence' | 'love' | 'work' | 'yearly' | 'decade' | 'gogyo' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky' | 'strength' | 'chishi' | 'daiun';
+  iconType: 'essence' | 'love' | 'work' | 'yearly' | 'decade' | 'gogyo' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky' | 'strength' | 'chishi' | 'daiun' | 'nacchin' | 'kakkyoku';
   title: string;
   subtitle: string;
   description: React.ReactNode;
@@ -574,6 +580,121 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
             })}
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+// 格局スライド
+function KakkyokuSlide({ kakkyoku }: { kakkyoku: KakkyokuInfo }) {
+  const accentColor = SECTION_COLORS.kakkyoku.primary;
+
+  return (
+    <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-5 sm:py-8">
+      <div className="w-full max-w-lg space-y-3 sm:space-y-4">
+        <div className="text-center">
+          <SectionIcon type="kakkyoku" size={48} />
+        </div>
+        <div className="text-center space-y-1.5 sm:space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-black text-gold-gradient tracking-[0.2em] sm:tracking-[0.3em]">
+            <ruby>格局<rt className="text-[0.5rem] opacity-60">かっきょく</rt></ruby>
+          </h2>
+          <p className="text-sm sm:text-base tracking-widest font-medium" style={{ color: `${accentColor}CC` }}>
+            {kakkyoku.name}（{kakkyoku.category}）
+          </p>
+          <div className="w-12 sm:w-16 h-[1px] mx-auto bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
+        </div>
+
+        <p className="text-center text-sm text-navy-300/70 leading-relaxed tracking-wide px-2">
+          <ruby>格局<rt className="text-[0.5rem] opacity-60">かっきょく</rt></ruby>は命式全体の構造パターン。あなたの運命の骨格を表し、用神を定める基盤となります。
+        </p>
+
+        {/* 格局名と説明 */}
+        <div className="ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-7 text-center space-y-3">
+          <span className="inline-block text-xl font-bold px-5 py-2 rounded-full border border-sky-400/30 text-sky-300 bg-sky-500/10">
+            {kakkyoku.name}
+          </span>
+          <p className="text-navy-200/80 text-sm tracking-wider">{kakkyoku.description}</p>
+        </div>
+
+        {/* 鑑定文 */}
+        <div className="ornament-border rounded-2xl bg-navy-900/40 overflow-hidden">
+          <div className="h-[2px] w-full" style={{ background: `linear-gradient(90deg, transparent, ${accentColor}40, transparent)` }} />
+          <div className="p-4 sm:p-5">
+            <p className="text-navy-50/90 leading-[1.9] sm:leading-[2] text-sm sm:text-base tracking-wide">
+              {kakkyoku.reading}
+            </p>
+          </div>
+        </div>
+
+        {/* 強み・弱み */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4">
+            <p className="text-xs text-emerald-400/80 tracking-widest mb-2 text-center font-medium">強み</p>
+            <p className="text-navy-100/80 text-sm leading-[1.8]">{kakkyoku.strength}</p>
+          </div>
+          <div className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4">
+            <p className="text-xs text-amber-400/80 tracking-widest mb-2 text-center font-medium">課題</p>
+            <p className="text-navy-100/80 text-sm leading-[1.8]">{kakkyoku.weakness}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 納音スライド
+function NacchinSlide({ nacchin }: { nacchin: NacchinInfo }) {
+  const accentColor = SECTION_COLORS.nacchin.primary;
+  const gogyoColors: Record<string, string> = {
+    '木': 'text-green-400 bg-green-500/10 border-green-500/20',
+    '火': 'text-red-400 bg-red-500/10 border-red-500/20',
+    '土': 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20',
+    '金': 'text-slate-300 bg-slate-500/10 border-slate-500/20',
+    '水': 'text-blue-400 bg-blue-500/10 border-blue-500/20',
+  };
+  const gogyoColor = gogyoColors[nacchin.gogyo] || gogyoColors['土'];
+
+  return (
+    <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-5 sm:py-8">
+      <div className="w-full max-w-lg space-y-3 sm:space-y-4">
+        <div className="text-center">
+          <SectionIcon type="nacchin" size={48} />
+        </div>
+        <div className="text-center space-y-1.5 sm:space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-black text-gold-gradient tracking-[0.2em] sm:tracking-[0.3em]">
+            <ruby>納音<rt className="text-[0.5rem] opacity-60">なっちん</rt></ruby>
+          </h2>
+          <p className="text-sm sm:text-base tracking-widest font-medium" style={{ color: `${accentColor}CC` }}>
+            {nacchin.name}（{nacchin.yomi}）
+          </p>
+          <div className="w-12 sm:w-16 h-[1px] mx-auto bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
+        </div>
+
+        <p className="text-center text-sm text-navy-300/70 leading-relaxed tracking-wide px-2">
+          <ruby>納音<rt className="text-[0.5rem] opacity-60">なっちん</rt></ruby>は干支が奏でる「音」。六十干支の五行の本質を詩的に表し、人の気質の底流を読み解きます。
+        </p>
+
+        {/* 納音の象徴 */}
+        <div className="ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-7 text-center space-y-3">
+          <p className="text-2xl sm:text-3xl font-black text-gold-gradient tracking-[0.3em]">{nacchin.name}</p>
+          <p className="text-navy-200/70 text-sm tracking-[0.2em]">{nacchin.symbol}</p>
+          <div className="flex justify-center">
+            <span className={`px-4 py-1.5 rounded-full text-sm font-medium border ${gogyoColor}`}>
+              {nacchin.gogyo}の気
+            </span>
+          </div>
+        </div>
+
+        {/* 鑑定文 */}
+        <div className="ornament-border rounded-2xl bg-navy-900/40 overflow-hidden">
+          <div className="h-[2px] w-full" style={{ background: `linear-gradient(90deg, transparent, ${accentColor}40, transparent)` }} />
+          <div className="p-4 sm:p-5">
+            <p className="text-navy-50/90 leading-[1.9] sm:leading-[2] text-sm sm:text-base tracking-wide">
+              {nacchin.personality}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

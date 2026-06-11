@@ -27,4 +27,7 @@ export type {
   DaiunResult,
   StrengthLevel,
   StrengthResult,
+  NacchinInfo,
+  KakkyokuInfo,
+  ZokanDetail,
 } from './types';

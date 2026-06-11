@@ -1,9 +1,9 @@
-import type { FortuneInput, FortuneResult, FourPillars, YearlyFortune, GogyoBalance, Gogyo } from './types';
+import type { FortuneInput, FortuneResult, FourPillars, YearlyFortune, GogyoBalance, Gogyo, ZokanDetail } from './types';
 import { GOGYO } from './types';
 import { getYearPillar, getMonthPillar, getDayPillar, getHourPillar, getSetsuMonth } from './calendar';
 import { getTsuhensei, getJuniunsei, getZokanTsuhensei } from './stars';
 import { getKanshi } from './kanshi';
-import { kanGogyo, shiGogyo } from './gogyo';
+import { kanGogyo, shiGogyo, zokanHonki } from './gogyo';
 import { getReadings, getTenYearReading, getTenYearDetail, getJuniunLevel } from './readings';
 import { NISSHU } from './data-nisshu';
 import { TSUHENSEI as TSUHENSEI_DATA } from './data-tsuhensei';
@@ -16,6 +16,22 @@ import { generateHealthReading } from './data-health';
 import { analyzeChishiRelations } from './data-chishi-relation';
 import { calculateDaiun } from './data-daiun';
 import { analyzeStrength } from './data-strength';
+import { getNacchin } from './data-nacchin';
+import { analyzeKakkyoku } from './data-kakkyoku';
+import { ZOKAN_FULL } from './data-zokan';
+
+// 蔵干詳細を計算（1柱分）
+function calcZokanDetail(nicchu: string, shi: string): ZokanDetail {
+  const entry = ZOKAN_FULL[shi as keyof typeof ZOKAN_FULL];
+  return {
+    honki: entry.honki,
+    chuki: entry.chuki,
+    yoki: entry.yoki,
+    tpiHonki: getTsuhensei(nicchu as any, entry.honki),
+    tpiChuki: entry.chuki ? getTsuhensei(nicchu as any, entry.chuki) : null,
+    tpiYoki: entry.yoki ? getTsuhensei(nicchu as any, entry.yoki) : null,
+  };
+}
 
 // 通変星のグループ判定
 function tsuhenseiGroup(star: string): string {
@@ -231,6 +247,35 @@ export function calculateFortune(input: FortuneInput): FortuneResult {
   // 身強身弱・用神
   const strength = analyzeStrength(nicchu, fourPillars, setsuMonth);
 
+  // 納音（日柱の六十干支から）
+  const nacchinData = getNacchin(dayPillar.index);
+  const nacchin = {
+    name: nacchinData.name,
+    yomi: nacchinData.yomi,
+    gogyo: nacchinData.gogyo,
+    symbol: nacchinData.symbol,
+    personality: nacchinData.personality,
+  };
+
+  // 格局
+  const kakkyokuData = analyzeKakkyoku(nicchu, fourPillars);
+  const kakkyoku = {
+    name: kakkyokuData.name,
+    category: kakkyokuData.category,
+    description: kakkyokuData.description,
+    reading: kakkyokuData.reading,
+    strength: kakkyokuData.strength,
+    weakness: kakkyokuData.weakness,
+  };
+
+  // 蔵干詳細（全柱分）
+  const zokanDetails = {
+    year: calcZokanDetail(nicchu, yearPillar.shi),
+    month: calcZokanDetail(nicchu, monthPillar.shi),
+    day: calcZokanDetail(nicchu, dayPillar.shi),
+    hour: hourPillar ? calcZokanDetail(nicchu, hourPillar.shi) : null,
+  };
+
   return {
     input,
     fourPillars,
@@ -261,5 +306,8 @@ export function calculateFortune(input: FortuneInput): FortuneResult {
     chishiRelations,
     daiun,
     strength,
+    nacchin,
+    kakkyoku,
+    zokanDetails,
   };
 }
