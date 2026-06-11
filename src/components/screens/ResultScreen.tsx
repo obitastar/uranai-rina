@@ -89,7 +89,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
                 <p className="text-sm text-gold-500/70 tracking-widest mb-2 text-center">
                   運勢エネルギー「{result.juniunDay}」── {result.juniunDayDetail.catchphrase}
                 </p>
-                <p className="text-navy-100/80 text-base leading-[2] tracking-wide">
+                <p className="text-navy-100/80 text-sm leading-[1.9] tracking-wide">
                   {result.juniunDayDetail.message}
                 </p>
               </div>
@@ -149,7 +149,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
             <div className="space-y-4 mt-4">
               <div className="ornament-border rounded-xl bg-navy-900/30 p-4">
                 <p className="text-sm text-emerald-400/70 tracking-widest mb-2 text-center font-medium">おすすめの過ごし方</p>
-                <p className="text-navy-50/90 text-base sm:text-lg leading-[2] tracking-wide text-center">
+                <p className="text-navy-50/90 text-sm sm:text-base leading-[1.9] tracking-wide text-center">
                   {result.nenunDetail.luckyAction}
                 </p>
               </div>
@@ -267,7 +267,7 @@ function SlideContent({
             }}
           />
           <div className="p-4 sm:p-5 max-h-[40vh] overflow-y-auto">
-            <p className="text-navy-50/90 leading-[2] sm:leading-[2.2] text-base sm:text-lg tracking-wide">
+            <p className="text-navy-50/90 leading-[1.9] sm:leading-[2] text-sm sm:text-base tracking-wide">
               {content}
             </p>
           </div>
@@ -351,7 +351,7 @@ function GogyoSlide({ gogyoBalance, gogyoReading }: { gogyoBalance: GogyoBalance
             }}
           />
           <div className="p-4 sm:p-5">
-            <p className="text-navy-50/90 leading-[2] sm:leading-[2.2] text-base sm:text-lg tracking-wide">
+            <p className="text-navy-50/90 leading-[1.9] sm:leading-[2] text-sm sm:text-base tracking-wide">
               {gogyoReading}
             </p>
           </div>
@@ -479,7 +479,7 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
                       <span className="text-lg sm:text-xl">{cat.icon}</span>
                       <p className={`text-[0.6rem] sm:text-xs font-bold mt-0.5 ${cat.color} tracking-wider`}>{cat.label}</p>
                     </div>
-                    <p className="flex-1 text-navy-100/90 text-sm sm:text-base leading-[1.8] sm:leading-[2] tracking-wide">
+                    <p className="flex-1 text-navy-100/90 text-xs sm:text-sm leading-[1.8] sm:leading-[1.9] tracking-wide">
                       {selectedFortune.detail[cat.key]}
                     </p>
                   </div>
