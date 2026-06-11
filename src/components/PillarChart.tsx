@@ -28,11 +28,17 @@ export function PillarChart({ result }: PillarChartProps) {
       <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
       <div className="p-4 sm:p-6">
         <h2 className="text-center text-xl sm:text-2xl font-bold text-gold-gradient-animated tracking-[0.3em] mb-1">
-          あなたの星の配置
+          <ruby>命式<rt className="text-[0.5rem] opacity-60">めいしき</rt></ruby>
         </h2>
-        <p className="text-center text-sm sm:text-base text-navy-300/70 tracking-wide mb-4 sm:mb-5">
-          生年月日から導き出された、あなただけの運命の表です
+        <p className="text-center text-sm sm:text-base text-navy-300/70 tracking-wide mb-2 sm:mb-3">
+          生年月日から導き出された、あなただけの星の配置です
         </p>
+        <div className="flex justify-center gap-3 sm:gap-4 text-[0.6rem] sm:text-xs text-navy-400/60 tracking-wider mb-3 sm:mb-4">
+          <span><ruby>通変星<rt className="text-[0.5rem] opacity-60">つうへんせい</rt></ruby></span>
+          <span><ruby>天干<rt className="text-[0.5rem] opacity-60">てんかん</rt></ruby></span>
+          <span><ruby>地支<rt className="text-[0.5rem] opacity-60">ちし</rt></ruby></span>
+          <span><ruby>十二運<rt className="text-[0.5rem] opacity-60">じゅうにうん</rt></ruby></span>
+        </div>
         <div className="w-full h-px bg-gradient-to-r from-transparent via-gold-500/20 to-transparent mb-4 sm:mb-6" />
 
         <div className="grid grid-cols-4 gap-2 sm:gap-3 text-center">

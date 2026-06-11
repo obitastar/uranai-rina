@@ -64,7 +64,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
           iconType="essence"
           title="本質"
           subtitle={`${result.nisshuDetail.symbol}の人 ── ${result.nisshuDetail.catchphrase}`}
-          description="あなたが生まれた日の星から読み解く、生まれ持った性格や本質的な気質です。"
+          description={<>あなたの<ruby>日主<rt className="text-[0.5rem] opacity-60">にっしゅ</rt></ruby>── 生まれた日の星から読み解く、生まれ持った性格や本質的な気質です。</>}
           accentColor={SECTION_COLORS.essence.primary}
           content={result.readings.essence}
           extra={
@@ -78,7 +78,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
               </div>
               <div className="ornament-border rounded-xl bg-navy-900/30 p-4">
                 <p className="text-sm text-gold-500/70 tracking-widest mb-2 text-center">
-                  運勢エネルギー「{result.juniunDay}」── {result.juniunDayDetail.catchphrase}
+                  <ruby>十二運<rt className="text-[0.5rem] opacity-60">じゅうにうん</rt></ruby>「{result.juniunDay}」── {result.juniunDayDetail.catchphrase}
                 </p>
                 <p className="text-navy-100/80 text-sm leading-[1.9] tracking-wide">
                   {result.juniunDayDetail.message}
@@ -96,7 +96,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
           iconType="love"
           title="恋愛運"
           subtitle={`内面の星「${result.zokanTsuhensei}」`}
-          description="あなたの内面に秘められた星から、恋愛傾向やパートナーとの関わり方を読み解きます。"
+          description={<>あなたの内面に秘められた星（<ruby>通変星<rt className="text-[0.5rem] opacity-60">つうへんせい</rt></ruby>）から、恋愛傾向やパートナーとの関わり方を読み解きます。</>}
           accentColor={SECTION_COLORS.love.primary}
           content={result.readings.love}
         />
@@ -106,7 +106,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
           iconType="work"
           title="仕事運"
           subtitle={`社会運の星「${result.tpiMonth}」── ${result.tsuhenseiDetail.catchphrase}`}
-          description="社会での役割を表す星から、あなたの適職・仕事での才能と注意点を診断します。"
+          description={<>社会での役割を表す<ruby>通変星<rt className="text-[0.5rem] opacity-60">つうへんせい</rt></ruby>から、あなたの適職・仕事での才能と注意点を診断します。</>}
           accentColor={SECTION_COLORS.work.primary}
           content={result.readings.work}
           extra={
@@ -133,7 +133,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
           iconType="yearly"
           title={`${currentYear}年の運勢`}
           subtitle={`${result.nenunDetail.title} ── 今年の星「${result.currentYearTsuhensei}」`}
-          description="今年の星の巡りから、一年間の運気の流れとテーマを読み解きます。"
+          description={<>今年の星の巡り（<ruby>年運<rt className="text-[0.5rem] opacity-60">ねんうん</rt></ruby>）から、一年間の運気の流れとテーマを読み解きます。</>}
           accentColor={SECTION_COLORS.yearly.primary}
           content={result.readings.yearly}
           extra={
@@ -209,7 +209,7 @@ function SlideContent({
   iconType: 'essence' | 'love' | 'work' | 'yearly' | 'decade' | 'gogyo';
   title: string;
   subtitle: string;
-  description: string;
+  description: React.ReactNode;
   accentColor: string;
   content: string;
   extra?: React.ReactNode;
@@ -281,7 +281,7 @@ function GogyoSlide({ gogyoBalance, gogyoReading }: { gogyoBalance: GogyoBalance
         </div>
         <div className="text-center space-y-1.5 sm:space-y-2">
           <h2 className="text-2xl sm:text-3xl font-black text-gold-gradient tracking-[0.2em] sm:tracking-[0.3em]">
-            エネルギーバランス
+            <ruby>五行<rt className="text-[0.5rem] opacity-60">ごぎょう</rt></ruby>バランス
           </h2>
           <p className="text-sm sm:text-base tracking-widest font-medium" style={{ color: `${accentColor}CC` }}>
             木 ・ 火 ・ 土 ・ 金 ・ 水
@@ -290,7 +290,7 @@ function GogyoSlide({ gogyoBalance, gogyoReading }: { gogyoBalance: GogyoBalance
         </div>
 
         <p className="text-center text-sm sm:text-base text-navy-300/70 leading-relaxed tracking-wide px-2">
-          自然界の5つのエネルギーのバランスから、あなたの気質の傾向を診断します。
+          自然界の5つのエネルギー（<ruby>五行<rt className="text-[0.5rem] opacity-60">ごぎょう</rt></ruby>）のバランスから、あなたの気質の傾向を診断します。
         </p>
 
         {/* バーチャート */}

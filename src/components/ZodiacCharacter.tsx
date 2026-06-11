@@ -97,11 +97,21 @@ function AuraRing({ color }: { color: string }) {
   );
 }
 
-// パルスするグロー背景
-function GlowPulse({ color, bg }: { color: string; bg: string }) {
+// 五行カラーマップ
+const GOGYO_GLOW_COLORS: Record<string, string> = {
+  '木': '#1a4d2e',
+  '火': '#4d1a1a',
+  '土': '#4d3d1a',
+  '金': '#3d3d4d',
+  '水': '#1a2d4d',
+};
+
+// パルスするグロー背景（五行カラー）
+function GlowPulse({ color, element }: { color: string; element: string }) {
+  const gogyoBg = GOGYO_GLOW_COLORS[element] || '#1a2d4d';
   return (
     <g>
-      <circle cx="100" cy="100" r="88" fill={`${bg}50`}>
+      <circle cx="100" cy="100" r="88" fill={`${gogyoBg}`} opacity="0.7">
         <animate attributeName="r" values="86;90;86" dur="3s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0.6;0.9;0.6" dur="3s" repeatCount="indefinite" />
       </circle>
@@ -416,7 +426,7 @@ export function ZodiacCharacter({ shi, size = 'md' }: ZodiacCharacterProps) {
     <div className="flex flex-col items-center gap-2">
       <div className={`relative ${sizeClasses[size]} animate-zodiac-float`}>
         <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full overflow-visible">
-          <GlowPulse color={t.primary} bg={t.bg} />
+          <GlowPulse color={t.primary} element={t.element} />
           <AuraRing color={t.primary} />
           <CuteZodiacArt shi={shi} t={t} />
           <Sparkles color={t.primary} />
