@@ -8,6 +8,11 @@ import { getReadings, getTenYearReading, getTenYearDetail, getJuniunLevel } from
 import { NISSHU } from './data-nisshu';
 import { TSUHENSEI as TSUHENSEI_DATA } from './data-tsuhensei';
 import { JUNIUNSEI as JUNIUNSEI_DATA, GOGYO_BALANCE, NENUN } from './data-interpretation';
+import { getKuubou, isKuubouYear } from './data-kuubou';
+import { analyzeShinsatsu } from './data-shinsatsu';
+import { getKyusei } from './data-kyusei';
+import { getLuckyData } from './data-lucky';
+import { generateHealthReading } from './data-health';
 
 // 通変星のグループ判定
 function tsuhenseiGroup(star: string): string {
@@ -174,6 +179,41 @@ export function calculateFortune(input: FortuneInput): FortuneResult {
     gender: input.gender,
   });
 
+  // 空亡（天中殺）
+  const kuubouData = getKuubou(dayPillar.index);
+  const kuubou = {
+    pair: kuubouData.pair,
+    junName: kuubouData.junName,
+    meaning: kuubouData.meaning,
+    advice: kuubouData.advice,
+    isKuubouYear: isKuubouYear(kuubouData.pair, currentYearKanshi.shi),
+  };
+
+  // 神殺
+  const shinsatsu = analyzeShinsatsu(nicchu, fourPillars).map(s => ({
+    name: s.name,
+    exists: s.exists,
+    description: s.description,
+  }));
+
+  // 九星気学
+  const kyuseiData = getKyusei(input.year, input.month, input.day);
+  const kyusei = {
+    number: kyuseiData.number,
+    name: kyuseiData.name,
+    gogyo: kyuseiData.gogyo,
+    colors: kyuseiData.colors,
+    luckyNumbers: kyuseiData.luckyNumbers,
+    luckyDirections: kyuseiData.luckyDirections,
+    personality: kyuseiData.personality,
+  };
+
+  // ラッキーデータ
+  const lucky = getLuckyData(nicchu);
+
+  // 健康運
+  const healthReading = generateHealthReading(gogyoBalance);
+
   return {
     input,
     fourPillars,
@@ -196,5 +236,10 @@ export function calculateFortune(input: FortuneInput): FortuneResult {
     nenunDetail,
     tenYearFortune,
     readings,
+    kuubou,
+    shinsatsu,
+    kyusei,
+    lucky,
+    healthReading,
   };
 }

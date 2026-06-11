@@ -10,12 +10,13 @@ interface SeimeiResultScreenProps {
   onAisho?: () => void;
 }
 
-const SLIDE_LABELS = ["総合", "画数解析", "人格", "地格", "総格", "外格", "三才", "アドバイス"];
+const SLIDE_LABELS = ["総合", "画数解析", "人格", "地格", "総格", "外格", "三才", "陰陽", "アドバイス"];
 
 // 吉凶のカラー
 function kikkyoColor(kikkyo: string): string {
   if (kikkyo === "大吉") return "text-gold-300";
   if (kikkyo === "吉") return "text-emerald-300";
+  if (kikkyo === "半吉") return "text-sky-300";
   if (kikkyo === "吉凶混合") return "text-amber-300";
   if (kikkyo === "凶") return "text-red-300/80";
   return "text-red-300";
@@ -24,6 +25,7 @@ function kikkyoColor(kikkyo: string): string {
 function kikkyoBg(kikkyo: string): string {
   if (kikkyo === "大吉") return "bg-gold-500/20 border-gold-500/30";
   if (kikkyo === "吉") return "bg-emerald-500/15 border-emerald-500/30";
+  if (kikkyo === "半吉") return "bg-sky-500/15 border-sky-500/30";
   if (kikkyo === "吉凶混合") return "bg-amber-500/15 border-amber-500/30";
   if (kikkyo === "凶") return "bg-red-500/10 border-red-500/20";
   return "bg-red-500/15 border-red-500/25";
@@ -268,7 +270,88 @@ export function SeimeiResultScreen({ result, onRetry, onTop, onAisho }: SeimeiRe
           </div>
         </div>
 
-        {/* ===== スライド8: アドバイス＆完了 ===== */}
+        {/* ===== スライド8: 陰陽配列 ===== */}
+        <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-6 sm:py-10">
+          <div className="w-full max-w-md space-y-5 sm:space-y-7">
+            <div className="text-center space-y-2">
+              <h2 className="text-2xl font-bold tracking-[0.2em] text-gold-gradient">
+                <ruby>陰陽配列<rp>(</rp><rt className="text-[0.5rem] opacity-60">いんようはいれつ</rt><rp>)</rp></ruby>
+              </h2>
+              <p className="text-sm text-navy-300/60">各文字の画数の奇偶から読み解く気の流れ</p>
+            </div>
+
+            {/* 陰陽パターン表示 */}
+            <div className="ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-7 space-y-5">
+              <div className="space-y-4">
+                <div>
+                  <p className="text-xs text-gold-400/60 tracking-widest mb-3 text-center">姓</p>
+                  <div className="flex gap-3 justify-center">
+                    {[...sei].map((ch, i) => (
+                      <div key={i} className="text-center">
+                        <span className="text-xl text-navy-100">{ch}</span>
+                        <p className="text-xs text-navy-400 mt-1">{seiStrokes[i]}画</p>
+                        <div className={`mt-1.5 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${
+                          result.inyo.pattern[i] === '陽'
+                            ? 'bg-amber-500/20 border border-amber-500/30 text-amber-300'
+                            : 'bg-indigo-500/20 border border-indigo-500/30 text-indigo-300'
+                        }`}>
+                          {result.inyo.pattern[i]}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="w-full h-px bg-gold-500/10" />
+                <div>
+                  <p className="text-xs text-gold-400/60 tracking-widest mb-3 text-center">名</p>
+                  <div className="flex gap-3 justify-center">
+                    {[...mei].map((ch, i) => {
+                      const patternIdx = seiStrokes.length + i;
+                      return (
+                        <div key={i} className="text-center">
+                          <span className="text-xl text-navy-100">{ch}</span>
+                          <p className="text-xs text-navy-400 mt-1">{meiStrokes[i]}画</p>
+                          <div className={`mt-1.5 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${
+                            result.inyo.pattern[patternIdx] === '陽'
+                              ? 'bg-amber-500/20 border border-amber-500/30 text-amber-300'
+                              : 'bg-indigo-500/20 border border-indigo-500/30 text-indigo-300'
+                          }`}>
+                            {result.inyo.pattern[patternIdx]}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* 吉凶 */}
+              <div className="text-center">
+                <span className={`inline-block text-lg font-bold px-4 py-1 rounded-full border ${kikkyoBg(result.inyo.kikkyo)}`}>
+                  <span className={kikkyoColor(result.inyo.kikkyo)}>{result.inyo.kikkyo}</span>
+                </span>
+              </div>
+            </div>
+
+            {/* 解説 */}
+            <div className="ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-6 space-y-3">
+              <h3 className="text-center text-sm text-gold-400/70 tracking-widest">陰陽配列の意味</h3>
+              <p className="text-sm text-navy-200/80 leading-relaxed">
+                {result.inyo.description}
+              </p>
+            </div>
+
+            <div className="ornament-border rounded-xl bg-navy-900/30 p-4 space-y-2">
+              <p className="text-xs text-navy-400/60 tracking-widest">陰陽配列とは</p>
+              <p className="text-sm text-navy-300/60 leading-relaxed">
+                名前の各文字の画数が奇数（陽）か偶数（陰）かを見て、配列のバランスから吉凶を判断する手法です。
+                陰陽が交互に並ぶ配列が最も良く、全て同じに偏ると凶とされます。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ===== スライド9: アドバイス＆完了 ===== */}
         <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-6 sm:py-10">
           <div className="w-full max-w-md space-y-5 sm:space-y-7">
             <div className="text-center space-y-2">

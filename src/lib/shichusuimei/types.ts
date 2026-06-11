@@ -112,6 +112,43 @@ export interface NenunDetail {
   luckyAction: string;
 }
 
+// 空亡データ
+export interface KuubouInfo {
+  pair: [Junishi, Junishi];
+  junName: string;
+  meaning: string;
+  advice: string;
+  isKuubouYear: boolean; // 今年が空亡年か
+}
+
+// 神殺データ
+export interface ShinsatsuInfo {
+  name: string;
+  exists: boolean;
+  description: string;
+}
+
+// 九星データ
+export interface KyuseiInfo {
+  number: number;
+  name: string;
+  gogyo: string;
+  colors: string[];
+  luckyNumbers: number[];
+  luckyDirections: string[];
+  personality: string;
+}
+
+// ラッキーデータ
+export interface LuckyInfo {
+  colors: string[];
+  items: string[];
+  numbers: number[];
+  direction: string;
+  season: string;
+  description: string;
+}
+
 // 鑑定結果
 export interface FortuneResult {
   input: FortuneInput;
@@ -151,4 +188,15 @@ export interface FortuneResult {
     work: string;
     yearly: string;
   };
+  // --- 新規追加 ---
+  // 空亡（天中殺）
+  kuubou: KuubouInfo;
+  // 神殺
+  shinsatsu: ShinsatsuInfo[];
+  // 九星気学
+  kyusei: KyuseiInfo;
+  // ラッキーカラー・アイテム
+  lucky: LuckyInfo;
+  // 健康運
+  healthReading: string;
 }

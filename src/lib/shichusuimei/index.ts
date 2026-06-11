@@ -17,4 +17,8 @@ export type {
   TsuhenseiDetail,
   JuniunseiDetail,
   NenunDetail,
+  KuubouInfo,
+  ShinsatsuInfo,
+  KyuseiInfo,
+  LuckyInfo,
 } from './types';

@@ -6,6 +6,7 @@
 import { getSuri, type SuriData } from "./suri";
 import { calcGokaku, calcSansai, GOKAKU_META, type Gokaku, type SansaiData, type Gogyo } from "./gokaku";
 import { getStrokes } from "./kakusu-dict";
+import { analyzeInyoHairetu, type InyoResult } from "./data-inyou";
 
 // --- 型定義 ---
 
@@ -33,6 +34,7 @@ export interface SeimeiResult {
   gokaku: Gokaku;        // 五格の数値
   gokakuDetails: GokakuDetail[];  // 五格それぞれの数理結果（重要度順）
   sansai: SansaiData;    // 三才配置
+  inyo: InyoResult;      // 陰陽配列
   unknownChars?: string[]; // 辞書にない文字（あれば）
 }
 
@@ -98,6 +100,9 @@ export function analyzeSeimei(sei: string, mei: string): SeimeiResult {
   // 三才配置
   const sansai = calcSansai(gokaku);
 
+  // 陰陽配列
+  const inyo = analyzeInyoHairetu(seiResult.strokes, meiResult.strokes);
+
   return {
     sei,
     mei,
@@ -106,6 +111,7 @@ export function analyzeSeimei(sei: string, mei: string): SeimeiResult {
     gokaku,
     gokakuDetails,
     sansai,
+    inyo,
   };
 }
 
@@ -147,6 +153,7 @@ export function analyzeSeimeiWithStrokes(
     });
 
   const sansai = calcSansai(gokaku);
+  const inyo = analyzeInyoHairetu(seiStrokes, meiStrokes);
 
   return {
     sei,
@@ -156,6 +163,7 @@ export function analyzeSeimeiWithStrokes(
     gokaku,
     gokakuDetails,
     sansai,
+    inyo,
   };
 }
 
@@ -171,3 +179,5 @@ export type { Gokaku, SansaiData, Gogyo, GokakuMeta } from "./gokaku";
 export { getSuri, normalizeKaku, KIKKYO_SCORE } from "./suri";
 export { calcGokaku, calcSansai, kakuToGogyo, GOKAKU_META } from "./gokaku";
 export { getCharKakusu, getStrokes, KANJI_KAKUSU, HIRAGANA_KAKUSU, KATAKANA_KAKUSU } from "./kakusu-dict";
+export { analyzeInyoHairetu } from "./data-inyou";
+export type { InyoResult, Inyo as InyoType } from "./data-inyou";

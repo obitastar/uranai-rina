@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { FortuneResult, YearlyFortune, GogyoBalance } from "@/lib/shichusuimei";
+import type { FortuneResult, YearlyFortune, GogyoBalance, ShinsatsuInfo, KyuseiInfo, LuckyInfo } from "@/lib/shichusuimei";
 import { SlideViewer } from "@/components/SlideViewer";
 import { PillarChart } from "@/components/PillarChart";
 import { ZodiacCharacter, ZodiacBadge } from "@/components/ZodiacCharacter";
@@ -14,7 +14,7 @@ interface ResultScreenProps {
   onAisho?: () => void;
 }
 
-const SLIDE_LABELS = ["命式表", "本質", "恋愛運", "仕事運", "五行", "今年", "10年運勢", "完了"];
+const SLIDE_LABELS = ["命式表", "本質", "恋愛運", "仕事運", "五行", "健康運", "空亡", "神殺", "開運", "今年", "10年運勢", "完了"];
 
 export function ResultScreen({ result, onRetry, onTop, onAisho }: ResultScreenProps) {
   const { input, fourPillars } = result;
@@ -129,7 +129,51 @@ export function ResultScreen({ result, onRetry, onTop, onAisho }: ResultScreenPr
         {/* ===== スライド5: 五行バランス ===== */}
         <GogyoSlide gogyoBalance={result.gogyoBalance} gogyoReading={result.gogyoReading} />
 
-        {/* ===== スライド6: 今年の運勢 ===== */}
+        {/* ===== スライド6: 健康運 ===== */}
+        <SlideContent
+          iconType="health"
+          title="健康運"
+          subtitle={`五行バランスから読み解く体質`}
+          description={<>命式の<ruby>五行<rt className="text-[0.5rem] opacity-60">ごぎょう</rt></ruby>バランスから、注意すべき体の部位や健康のアドバイスをお伝えします。</>}
+          accentColor={SECTION_COLORS.health.primary}
+          content={result.healthReading}
+        />
+
+        {/* ===== スライド7: 空亡（天中殺） ===== */}
+        <SlideContent
+          iconType="kuubou"
+          title="空亡（天中殺）"
+          subtitle={`${result.kuubou.junName} ── ${result.kuubou.pair[0]}・${result.kuubou.pair[1]}が空亡`}
+          description={<><ruby>空亡<rt className="text-[0.5rem] opacity-60">くうぼう</rt></ruby>とは運気が不安定になる時期のこと。自分の空亡を知ることで、備えと活かし方が見えてきます。</>}
+          accentColor={SECTION_COLORS.kuubou.primary}
+          content={result.kuubou.meaning}
+          extra={
+            <div className="space-y-3 mt-4">
+              {result.kuubou.isKuubouYear && (
+                <div className="ornament-border rounded-xl bg-amber-500/10 border border-amber-500/30 p-4">
+                  <p className="text-sm text-amber-400 tracking-widest mb-1 text-center font-medium">今年は空亡年です</p>
+                  <p className="text-navy-100/80 text-sm leading-[1.9] tracking-wide text-center">
+                    新しいことを始めるより、内面を磨く時期です。焦らず種まきの年と捉えましょう。
+                  </p>
+                </div>
+              )}
+              <div className="ornament-border rounded-xl bg-navy-900/30 p-4">
+                <p className="text-sm text-emerald-400/70 tracking-widest mb-2 text-center font-medium">空亡期間の過ごし方</p>
+                <p className="text-navy-50/90 text-sm leading-[1.9] tracking-wide text-center">
+                  {result.kuubou.advice}
+                </p>
+              </div>
+            </div>
+          }
+        />
+
+        {/* ===== スライド8: 神殺 ===== */}
+        <ShinsatsuSlide shinsatsu={result.shinsatsu} />
+
+        {/* ===== スライド9: 開運（九星 + ラッキー） ===== */}
+        <LuckySlide kyusei={result.kyusei} lucky={result.lucky} />
+
+        {/* ===== スライド10: 今年の運勢 ===== */}
         <SlideContent
           iconType="yearly"
           title={`${currentYear}年の運勢`}
@@ -217,7 +261,7 @@ function SlideContent({
   content,
   extra,
 }: {
-  iconType: 'essence' | 'love' | 'work' | 'yearly' | 'decade' | 'gogyo';
+  iconType: 'essence' | 'love' | 'work' | 'yearly' | 'decade' | 'gogyo' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky';
   title: string;
   subtitle: string;
   description: React.ReactNode;
@@ -521,6 +565,168 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
             })}
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+// 神殺スライド
+function ShinsatsuSlide({ shinsatsu }: { shinsatsu: ShinsatsuInfo[] }) {
+  const accentColor = SECTION_COLORS.shinsatsu.primary;
+
+  return (
+    <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-5 sm:py-8">
+      <div className="w-full max-w-lg space-y-3 sm:space-y-4">
+        <div className="text-center">
+          <SectionIcon type="shinsatsu" size={48} />
+        </div>
+        <div className="text-center space-y-1.5 sm:space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-black text-gold-gradient tracking-[0.2em] sm:tracking-[0.3em]">
+            <ruby>神殺<rt className="text-[0.5rem] opacity-60">しんさつ</rt></ruby>
+          </h2>
+          <p className="text-sm sm:text-base tracking-widest font-medium" style={{ color: `${accentColor}CC` }}>
+            命式に宿る特別な星たち
+          </p>
+          <div className="w-12 sm:w-16 h-[1px] mx-auto bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
+        </div>
+
+        <p className="text-center text-sm text-navy-300/70 leading-relaxed tracking-wide px-2">
+          あなたの命式に宿る吉凶の特殊星です。存在する星はより詳しい鑑定文で表示されます。
+        </p>
+
+        <div className="space-y-2 sm:space-y-3">
+          {shinsatsu.map((s) => (
+            <div
+              key={s.name}
+              className={`ornament-border rounded-xl p-3 sm:p-4 ${
+                s.exists
+                  ? 'bg-amber-500/10 border border-amber-500/20'
+                  : 'bg-navy-900/30 border border-navy-700/20 opacity-60'
+              }`}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span className={`text-lg font-bold ${s.exists ? 'text-amber-400' : 'text-navy-400'}`}>
+                  {s.name}
+                </span>
+                {s.exists ? (
+                  <span className="px-2 py-0.5 rounded-full text-[0.6rem] font-medium bg-amber-500/20 text-amber-400 tracking-wider">
+                    命式に存在
+                  </span>
+                ) : (
+                  <span className="px-2 py-0.5 rounded-full text-[0.6rem] font-medium bg-navy-700/30 text-navy-400 tracking-wider">
+                    なし
+                  </span>
+                )}
+              </div>
+              <p className={`text-sm leading-[1.9] tracking-wide ${s.exists ? 'text-navy-50/90' : 'text-navy-300/60'}`}>
+                {s.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 開運スライド（九星 + ラッキー）
+function LuckySlide({ kyusei, lucky }: { kyusei: KyuseiInfo; lucky: LuckyInfo }) {
+  const accentColor = SECTION_COLORS.lucky.primary;
+
+  return (
+    <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-5 sm:py-8">
+      <div className="w-full max-w-lg space-y-3 sm:space-y-4">
+        <div className="text-center">
+          <SectionIcon type="lucky" size={48} />
+        </div>
+        <div className="text-center space-y-1.5 sm:space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-black text-gold-gradient tracking-[0.2em] sm:tracking-[0.3em]">
+            開運ガイド
+          </h2>
+          <p className="text-sm sm:text-base tracking-widest font-medium" style={{ color: `${accentColor}CC` }}>
+            {kyusei.name}のあなたへ
+          </p>
+          <div className="w-12 sm:w-16 h-[1px] mx-auto bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
+        </div>
+
+        {/* 九星気学 */}
+        <div className="ornament-border rounded-2xl bg-navy-900/40 p-4 sm:p-5">
+          <h3 className="text-center text-sm text-gold-500/80 tracking-widest mb-3">
+            <ruby>九星気学<rt className="text-[0.5rem] opacity-60">きゅうせいきがく</rt></ruby>
+          </h3>
+          <p className="text-navy-50/90 text-sm leading-[1.9] tracking-wide text-center">
+            {kyusei.personality}
+          </p>
+        </div>
+
+        {/* ラッキーアイテム一覧 */}
+        <div className="grid grid-cols-2 gap-2 sm:gap-3">
+          <div className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4">
+            <p className="text-xs text-pink-400/80 tracking-widest mb-2 text-center font-medium">ラッキーカラー</p>
+            <div className="flex flex-wrap justify-center gap-1.5">
+              {lucky.colors.map(c => (
+                <span key={c} className="px-2 py-1 rounded-full text-xs border border-pink-400/20 text-pink-200/90 bg-pink-500/10">
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4">
+            <p className="text-xs text-amber-400/80 tracking-widest mb-2 text-center font-medium">ラッキーナンバー</p>
+            <div className="flex justify-center gap-2">
+              {lucky.numbers.map(n => (
+                <span key={n} className="w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold border border-amber-400/20 text-amber-200/90 bg-amber-500/10">
+                  {n}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4">
+            <p className="text-xs text-emerald-400/80 tracking-widest mb-2 text-center font-medium">吉方位</p>
+            <p className="text-center text-sm text-navy-50/90">{lucky.direction}</p>
+          </div>
+          <div className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4">
+            <p className="text-xs text-sky-400/80 tracking-widest mb-2 text-center font-medium">ラッキーシーズン</p>
+            <p className="text-center text-sm text-navy-50/90">{lucky.season}</p>
+          </div>
+        </div>
+
+        {/* ラッキーアイテム */}
+        <div className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4">
+          <p className="text-xs text-purple-400/80 tracking-widest mb-2 text-center font-medium">ラッキーアイテム</p>
+          <div className="flex flex-wrap justify-center gap-1.5">
+            {lucky.items.map(item => (
+              <span key={item} className="px-3 py-1.5 rounded-full text-sm border border-purple-400/20 text-purple-200/90 bg-purple-500/10">
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* 九星の吉方位 */}
+        <div className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4">
+          <p className="text-xs text-gold-500/80 tracking-widest mb-2 text-center font-medium">九星の吉方位</p>
+          <div className="flex justify-center gap-2">
+            {kyusei.luckyDirections.map(d => (
+              <span key={d} className="px-3 py-1.5 rounded-full text-sm border border-gold-500/20 text-gold-300/90 bg-gold-500/10">
+                {d}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* 開運メッセージ */}
+        <div className="ornament-border rounded-2xl bg-navy-900/40 overflow-hidden">
+          <div
+            className="h-[2px] w-full"
+            style={{ background: `linear-gradient(90deg, transparent, ${accentColor}40, transparent)` }}
+          />
+          <div className="p-4 sm:p-5">
+            <p className="text-navy-50/90 leading-[1.9] sm:leading-[2] text-sm sm:text-base tracking-wide">
+              {lucky.description}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

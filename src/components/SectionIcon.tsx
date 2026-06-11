@@ -1,6 +1,6 @@
 "use client";
 
-type IconType = 'essence' | 'love' | 'work' | 'yearly' | 'gogyo' | 'decade' | 'complete';
+type IconType = 'essence' | 'love' | 'work' | 'yearly' | 'gogyo' | 'decade' | 'complete' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky';
 
 interface SectionIconProps {
   type: IconType;
@@ -15,6 +15,10 @@ const COLORS: Record<IconType, { primary: string; glow: string }> = {
   gogyo: { primary: '#CE93D8', glow: 'rgba(206,147,216,0.25)' },
   decade: { primary: '#4FC3F7', glow: 'rgba(79,195,247,0.25)' },
   complete: { primary: '#d4a017', glow: 'rgba(212,160,23,0.25)' },
+  health: { primary: '#22d3ee', glow: 'rgba(34,211,238,0.25)' },
+  kuubou: { primary: '#a78bfa', glow: 'rgba(167,139,250,0.25)' },
+  shinsatsu: { primary: '#fbbf24', glow: 'rgba(251,191,36,0.25)' },
+  lucky: { primary: '#f472b6', glow: 'rgba(244,114,182,0.25)' },
 };
 
 export function SectionIcon({ type, size = 80 }: SectionIconProps) {
@@ -117,6 +121,53 @@ export function SectionIcon({ type, size = 80 }: SectionIconProps) {
             <circle cx="0" cy="0" r="12" />
             <circle cx="0" cy="0" r="8" strokeWidth="0.5" opacity="0.4" />
             <path d="M0,-6 L5.2,3 L-5.2,3 Z" fill={primary} opacity="0.3" />
+          </g>
+        )}
+        {type === 'health' && (
+          // 健康 - 十字と心臓のイメージ
+          <g transform={`translate(${c},${c})`} stroke={primary} fill="none" strokeWidth="1.2" opacity="0.8">
+            <rect x="-3" y="-12" width="6" height="24" rx="2" fill={primary} opacity="0.15" />
+            <rect x="-12" y="-3" width="24" height="6" rx="2" fill={primary} opacity="0.15" />
+            <line x1="0" y1="-12" x2="0" y2="12" />
+            <line x1="-12" y1="0" x2="12" y2="0" />
+            <circle cx="0" cy="0" r="3" fill={primary} opacity="0.4" />
+          </g>
+        )}
+        {type === 'kuubou' && (
+          // 空亡 - 欠けた円（虚空のイメージ）
+          <g transform={`translate(${c},${c})`} stroke={primary} fill="none" strokeWidth="1.2" opacity="0.8">
+            <path d="M11,-7 A13,13 0 1,0 11,7" />
+            <line x1="11" y1="-7" x2="11" y2="7" strokeDasharray="2 2" opacity="0.4" />
+            <circle cx="-2" cy="0" r="5" fill={primary} opacity="0.1" />
+            <circle cx="-2" cy="0" r="1.5" fill={primary} opacity="0.5" />
+          </g>
+        )}
+        {type === 'shinsatsu' && (
+          // 神殺 - 星と光線
+          <g transform={`translate(${c},${c})`} stroke={primary} fill="none" strokeWidth="1" opacity="0.8">
+            {Array.from({ length: 6 }, (_, i) => {
+              const a = (i * Math.PI * 2) / 6 - Math.PI / 2;
+              return <line key={i} x1={Math.cos(a) * 5} y1={Math.sin(a) * 5} x2={Math.cos(a) * 13} y2={Math.sin(a) * 13} strokeWidth="0.8" opacity="0.5" />;
+            })}
+            {(() => {
+              const pts = Array.from({ length: 6 }, (_, i) => {
+                const a = (i * Math.PI * 2) / 6 - Math.PI / 2;
+                const rr = i % 2 === 0 ? 12 : 6;
+                return `${Math.cos(a) * rr},${Math.sin(a) * rr}`;
+              }).join(' ');
+              return <polygon points={pts} fill={primary} fillOpacity="0.15" strokeWidth="1.2" />;
+            })()}
+            <circle cx="0" cy="0" r="3" fill={primary} opacity="0.5" />
+          </g>
+        )}
+        {type === 'lucky' && (
+          // 開運 - 四つ葉のクローバー風
+          <g transform={`translate(${c},${c})`} stroke={primary} fill="none" strokeWidth="1" opacity="0.8">
+            <circle cx="0" cy="-7" r="6" fill={primary} fillOpacity="0.1" />
+            <circle cx="0" cy="7" r="6" fill={primary} fillOpacity="0.1" />
+            <circle cx="-7" cy="0" r="6" fill={primary} fillOpacity="0.1" />
+            <circle cx="7" cy="0" r="6" fill={primary} fillOpacity="0.1" />
+            <circle cx="0" cy="0" r="2" fill={primary} opacity="0.6" />
           </g>
         )}
       </svg>
