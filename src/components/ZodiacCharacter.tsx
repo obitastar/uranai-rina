@@ -7,197 +7,310 @@ interface ZodiacTheme {
   kanji: string;
   element: string;
   trait: string;
-  highlight: string;
   primary: string;
-  dark: string;
-  accent: string;
+  secondary: string;
+  bg: string;
+  cheek: string;
 }
 
 const ZODIAC_MAP: Record<Junishi, ZodiacTheme> = {
-  '子': { animal: '鼠', kanji: '子', element: '水', trait: '知恵と機敏さの守護', highlight: '#BAE6FD', primary: '#38BDF8', dark: '#0C4A6E', accent: '#67E8F9' },
-  '丑': { animal: '牛', kanji: '丑', element: '土', trait: '忍耐と誠実さの守護', highlight: '#F5E6D3', primary: '#C8956B', dark: '#5C3310', accent: '#FFD700' },
-  '寅': { animal: '虎', kanji: '寅', element: '木', trait: '勇気と威厳の守護', highlight: '#FED7AA', primary: '#F97316', dark: '#7C2D12', accent: '#FDE047' },
-  '卯': { animal: '兎', kanji: '卯', element: '木', trait: '優美と幸運の守護', highlight: '#FECDD3', primary: '#F472B6', dark: '#9D174D', accent: '#FDF2F8' },
-  '辰': { animal: '龍', kanji: '辰', element: '土', trait: '権威と繁栄の守護', highlight: '#FEF3C7', primary: '#F59E0B', dark: '#78350F', accent: '#FDE047' },
-  '巳': { animal: '蛇', kanji: '巳', element: '火', trait: '知恵と神秘の守護', highlight: '#E9D5FF', primary: '#A855F7', dark: '#581C87', accent: '#E879F9' },
-  '午': { animal: '馬', kanji: '午', element: '火', trait: '情熱と行動力の守護', highlight: '#FECACA', primary: '#EF4444', dark: '#7F1D1D', accent: '#FB923C' },
-  '未': { animal: '羊', kanji: '未', element: '土', trait: '温和と芸術性の守護', highlight: '#D1FAE5', primary: '#34D399', dark: '#064E3B', accent: '#A7F3D0' },
-  '申': { animal: '猿', kanji: '申', element: '金', trait: '才知と器用さの守護', highlight: '#FEF9C3', primary: '#EAB308', dark: '#713F12', accent: '#FDE68A' },
-  '酉': { animal: '鶏', kanji: '酉', element: '金', trait: '誠実と先見性の守護', highlight: '#F1F5F9', primary: '#94A3B8', dark: '#1E293B', accent: '#E2E8F0' },
-  '戌': { animal: '犬', kanji: '戌', element: '土', trait: '忠誠と正義の守護', highlight: '#F5DEB3', primary: '#B8860B', dark: '#4A2C17', accent: '#DAA520' },
-  '亥': { animal: '猪', kanji: '亥', element: '水', trait: '勇猛と直進の守護', highlight: '#BFDBFE', primary: '#3B82F6', dark: '#1E3A5F', accent: '#60A5FA' },
+  '子': { animal: '鼠', kanji: '子', element: '水', trait: '知恵と機敏さの守護', primary: '#60A5FA', secondary: '#DBEAFE', bg: '#1E3A5F', cheek: '#FCA5A5' },
+  '丑': { animal: '牛', kanji: '丑', element: '土', trait: '忍耐と誠実さの守護', primary: '#C8956B', secondary: '#F5E6D3', bg: '#5C3310', cheek: '#FDBA74' },
+  '寅': { animal: '虎', kanji: '寅', element: '木', trait: '勇気と威厳の守護', primary: '#FB923C', secondary: '#FED7AA', bg: '#7C2D12', cheek: '#FDE047' },
+  '卯': { animal: '兎', kanji: '卯', element: '木', trait: '優美と幸運の守護', primary: '#F9A8D4', secondary: '#FCE7F3', bg: '#831843', cheek: '#FCA5A5' },
+  '辰': { animal: '龍', kanji: '辰', element: '土', trait: '権威と繁栄の守護', primary: '#FBBF24', secondary: '#FEF3C7', bg: '#78350F', cheek: '#FDE68A' },
+  '巳': { animal: '蛇', kanji: '巳', element: '火', trait: '知恵と神秘の守護', primary: '#C084FC', secondary: '#EDE9FE', bg: '#581C87', cheek: '#F0ABFC' },
+  '午': { animal: '馬', kanji: '午', element: '火', trait: '情熱と行動力の守護', primary: '#F87171', secondary: '#FEE2E2', bg: '#7F1D1D', cheek: '#FDBA74' },
+  '未': { animal: '羊', kanji: '未', element: '土', trait: '温和と芸術性の守護', primary: '#6EE7B7', secondary: '#D1FAE5', bg: '#064E3B', cheek: '#FCA5A5' },
+  '申': { animal: '猿', kanji: '申', element: '金', trait: '才知と器用さの守護', primary: '#FCD34D', secondary: '#FEF9C3', bg: '#713F12', cheek: '#FCA5A5' },
+  '酉': { animal: '鶏', kanji: '酉', element: '金', trait: '誠実と先見性の守護', primary: '#F97316', secondary: '#FED7AA', bg: '#431407', cheek: '#FDE047' },
+  '戌': { animal: '犬', kanji: '戌', element: '土', trait: '忠誠と正義の守護', primary: '#D97706', secondary: '#F5DEB3', bg: '#4A2C17', cheek: '#FCA5A5' },
+  '亥': { animal: '猪', kanji: '亥', element: '水', trait: '勇猛と直進の守護', primary: '#818CF8', secondary: '#E0E7FF', bg: '#312E81', cheek: '#FCA5A5' },
 };
 
-// 簡略化されたアート（フィルターなし）
-function ZodiacArt({ shi, t }: { shi: Junishi; t: ZodiacTheme }) {
-  const id = shi;
-  const bf = `url(#b-${id})`;
-  const dk = t.dark;
-  const sw = 1.5;
+function CuteZodiacArt({ shi, t }: { shi: Junishi; t: ZodiacTheme }) {
+  const p = t.primary;
+  const s = t.secondary;
+  const ch = t.cheek;
 
-  // 共通defs
-  const defs = (
-    <defs>
-      <radialGradient id={`b-${id}`} cx="38%" cy="32%" r="65%">
-        <stop offset="0%" stopColor={t.highlight} />
-        <stop offset="45%" stopColor={t.primary} />
-        <stop offset="100%" stopColor={t.dark} />
-      </radialGradient>
-      <radialGradient id={`eye-${id}`} cx="40%" cy="35%" r="55%">
-        <stop offset="0%" stopColor="white" stopOpacity="0.95" />
-        <stop offset="40%" stopColor={t.accent} />
-        <stop offset="100%" stopColor={t.dark} />
-      </radialGradient>
-    </defs>
-  );
-
-  // 簡略化：各動物の主要シルエットのみ
-  const arts: Record<Junishi, React.ReactNode> = {
-    '子': (
-      <g>
-        <ellipse cx="100" cy="115" rx="28" ry="34" fill={bf} stroke={dk} strokeWidth={sw} />
-        <circle cx="100" cy="70" r="26" fill={bf} stroke={dk} strokeWidth={sw} />
-        <ellipse cx="76" cy="48" rx="13" ry="16" fill={bf} stroke={dk} strokeWidth={sw} />
-        <ellipse cx="124" cy="48" rx="13" ry="16" fill={bf} stroke={dk} strokeWidth={sw} />
-        <circle cx={90} cy={66} r={5} fill={`url(#eye-${id})`} />
-        <circle cx={110} cy={66} r={5} fill={`url(#eye-${id})`} />
-        <ellipse cx="100" cy="78" rx="4" ry="3" fill={dk} />
-      </g>
-    ),
-    '丑': (
-      <g>
-        <path d="M68,55 C58,32 48,18 42,20 C36,22 42,38 52,48 L68,58" fill={t.accent} stroke={dk} strokeWidth={sw} />
-        <path d="M132,55 C142,32 152,18 158,20 C164,22 158,38 148,48 L132,58" fill={t.accent} stroke={dk} strokeWidth={sw} />
-        <path d="M66,55 C72,42 86,34 100,34 C114,34 128,42 134,55 C140,68 140,82 134,92 C128,102 116,108 100,110 C84,108 72,102 66,92 C60,82 60,68 66,55Z" fill={bf} stroke={dk} strokeWidth="2" />
-        <circle cx={84} cy={66} r={5} fill={`url(#eye-${id})`} />
-        <circle cx={116} cy={66} r={5} fill={`url(#eye-${id})`} />
-        <ellipse cx="100" cy="86" rx="16" ry="10" fill={t.primary} opacity="0.4" stroke={dk} strokeWidth="1" />
-      </g>
-    ),
-    '寅': (
-      <g>
-        <path d="M68,48 C74,36 86,28 100,28 C114,28 126,36 132,48 C138,60 140,74 134,84 C128,92 118,98 100,100 C82,98 72,92 66,84 C60,74 62,60 68,48Z" fill={bf} stroke={dk} strokeWidth="2" />
-        <rect x="91" y="38" width="18" height="2.5" rx="1" fill={t.accent} opacity="0.8" />
-        <rect x="93" y="44" width="14" height="2" rx="1" fill={t.accent} opacity="0.7" />
-        <rect x="95" y="50" width="10" height="1.8" rx="1" fill={t.accent} opacity="0.6" />
-        <circle cx="86" cy="62" r="3.5" fill={`url(#eye-${id})`} />
-        <circle cx="114" cy="62" r="3.5" fill={`url(#eye-${id})`} />
-        <path d="M96,74 L100,78 L104,74Z" fill={dk} />
-        <path d="M80,96 C76,108 74,124 78,140 C82,152 92,160 100,162 C108,160 118,152 122,140 C126,124 124,108 120,96" fill={bf} stroke={dk} strokeWidth={sw} />
-      </g>
-    ),
-    '卯': (
-      <g>
-        <path d="M86,50 C84,28 80,4 86,0 C92,-2 94,18 93,40Z" fill={bf} stroke={dk} strokeWidth={sw} />
-        <path d="M114,50 C116,28 120,4 114,0 C108,-2 106,18 107,40Z" fill={bf} stroke={dk} strokeWidth={sw} />
-        <ellipse cx="100" cy="68" rx="28" ry="26" fill={bf} stroke={dk} strokeWidth="2" />
-        <ellipse cx="88" cy="64" rx="7" ry="8" fill={`url(#eye-${id})`} />
-        <ellipse cx="112" cy="64" rx="7" ry="8" fill={`url(#eye-${id})`} />
-        <path d="M97,76 L100,80 L103,76Z" fill={t.accent} opacity="0.7" />
-        <ellipse cx="100" cy="118" rx="26" ry="32" fill={bf} stroke={dk} strokeWidth={sw} />
-        <circle cx="122" cy="138" r="10" fill={bf} stroke={dk} strokeWidth="1" />
-      </g>
-    ),
-    '辰': (
-      <g>
-        <path d="M72,42 C62,22 52,10 46,12 C40,14 48,28 56,36 L70,46" fill={t.accent} stroke={dk} strokeWidth="2" />
-        <path d="M128,42 C138,22 148,10 154,12 C160,14 152,28 144,36 L130,46" fill={t.accent} stroke={dk} strokeWidth="2" />
-        <path d="M66,46 C74,34 86,26 100,26 C114,26 126,34 134,46 C142,58 144,72 138,82 C132,90 120,96 100,98 C80,96 68,90 62,82 C56,72 58,58 66,46Z" fill={bf} stroke={dk} strokeWidth="2.5" />
-        <circle cx="80" cy="64" r="4.5" fill={`url(#eye-${id})`} />
-        <circle cx="120" cy="64" r="4.5" fill={`url(#eye-${id})`} />
-        <path d="M90,80 L100,86 L110,80" fill="none" stroke={dk} strokeWidth="2" />
-        <path d="M100,96 C112,106 126,112 134,126 C142,140 134,156 120,160 C106,164 90,156 84,144 C78,132 84,120 96,114 C104,110 108,104 100,96Z" fill={bf} stroke={dk} strokeWidth="2" />
-      </g>
-    ),
-    '巳': (
-      <g>
-        <path d="M100,30 C122,28 142,40 146,58 C150,76 136,88 120,90 C108,92 104,100 108,114 C114,128 130,132 138,144 C146,156 138,170 122,172 C106,174 88,164 82,150 C76,136 82,122 96,116 C108,110 112,98 104,88 C96,80 80,76 70,68 C60,58 58,42 68,34 C76,28 88,28 100,30Z" fill={bf} stroke={dk} strokeWidth="2.5" />
-        <path d="M78,40 C82,30 92,24 100,24 C108,24 118,28 122,36 C126,44 122,54 114,58 C106,62 94,62 86,58 C78,54 74,48 78,40Z" fill={bf} stroke={dk} strokeWidth="2" />
-        <ellipse cx="90" cy="42" rx="4" ry="5" fill={`url(#eye-${id})`} />
-        <ellipse cx="110" cy="42" rx="4" ry="5" fill={`url(#eye-${id})`} />
-        <circle cx="100" cy="20" r="5" fill={t.accent} opacity="0.6" />
-      </g>
-    ),
-    '午': (
-      <g>
-        <path d="M88,30 C84,14 82,0 86,-2 C92,-2 92,10 94,24Z" fill={bf} stroke={dk} strokeWidth="1" />
-        <path d="M96,26 C94,8 96,-4 102,-4 C104,0 104,10 102,22Z" fill={bf} stroke={dk} strokeWidth="1" />
-        <path d="M72,50 C78,36 88,26 100,26 C112,26 122,36 128,50 C134,64 130,78 124,86 C118,94 110,98 100,98 C90,98 82,94 76,86 C70,78 66,64 72,50Z" fill={bf} stroke={dk} strokeWidth="2.5" />
-        <circle cx={86} cy={58} r={5} fill={`url(#eye-${id})`} />
-        <circle cx={114} cy={58} r={5} fill={`url(#eye-${id})`} />
-        <ellipse cx="92" cy="78" rx="3.5" ry="2.5" fill={dk} opacity="0.5" />
-        <ellipse cx="108" cy="78" rx="3.5" ry="2.5" fill={dk} opacity="0.5" />
-        <path d="M80,96 C76,106 74,120 76,136 C78,148 88,156 100,158 C112,156 122,148 124,136 C126,120 124,106 120,96" fill={bf} stroke={dk} strokeWidth="2" />
-      </g>
-    ),
-    '未': (
-      <g>
-        <path d="M74,50 C66,36 54,30 48,34 C42,38 48,50 58,52 L72,52" fill={t.accent} stroke={dk} strokeWidth="1.5" />
-        <path d="M126,50 C134,36 146,30 152,34 C158,38 152,50 142,52 L128,52" fill={t.accent} stroke={dk} strokeWidth="1.5" />
-        <ellipse cx="100" cy="68" rx="30" ry="28" fill={bf} stroke={dk} strokeWidth="2" />
-        <ellipse cx="86" cy="66" rx="5" ry="4.5" fill={`url(#eye-${id})`} />
-        <ellipse cx="114" cy="66" rx="5" ry="4.5" fill={`url(#eye-${id})`} />
-        <ellipse cx="100" cy="78" rx="4" ry="3" fill={dk} opacity="0.4" />
-        <ellipse cx="100" cy="122" rx="30" ry="34" fill={bf} stroke={dk} strokeWidth="1.5" />
-      </g>
-    ),
-    '申': (
-      <g>
-        <circle cx="68" cy="58" r="12" fill={bf} stroke={dk} strokeWidth={sw} />
-        <circle cx="132" cy="58" r="12" fill={bf} stroke={dk} strokeWidth={sw} />
-        <ellipse cx="100" cy="62" rx="28" ry="30" fill={bf} stroke={dk} strokeWidth="2" />
-        <circle cx={88} cy={60} r={4.5} fill={`url(#eye-${id})`} />
-        <circle cx={112} cy={60} r={4.5} fill={`url(#eye-${id})`} />
-        <ellipse cx="100" cy="72" rx="5" ry="3.5" fill={dk} opacity="0.5" />
-        <path d="M90,80 Q100,88 110,80" fill="none" stroke={dk} strokeWidth="1.5" />
-        <ellipse cx="100" cy="118" rx="24" ry="30" fill={bf} stroke={dk} strokeWidth={sw} />
-      </g>
-    ),
-    '酉': (
-      <g>
-        <path d="M90,30 C86,14 82,2 86,0 C90,-2 94,12 94,26Z" fill="#EF4444" stroke="#991B1B" strokeWidth="1" />
-        <path d="M98,26 C98,8 100,-2 104,0 C108,2 106,16 104,24Z" fill="#EF4444" stroke="#991B1B" strokeWidth="1.2" />
-        <path d="M108,30 C112,16 116,6 114,2 C112,0 108,12 108,24Z" fill="#DC2626" stroke="#991B1B" strokeWidth="1" />
-        <ellipse cx="100" cy="58" rx="26" ry="28" fill={bf} stroke={dk} strokeWidth="2" />
-        <circle cx={88} cy={54} r={4} fill={`url(#eye-${id})`} />
-        <circle cx={112} cy={54} r={4} fill={`url(#eye-${id})`} />
-        <path d="M94,66 L100,58 L106,66 L100,72Z" fill={t.accent} stroke={dk} strokeWidth="1" />
-        <ellipse cx="100" cy="112" rx="26" ry="32" fill={bf} stroke={dk} strokeWidth="2" />
-      </g>
-    ),
-    '戌': (
-      <g>
-        <path d="M72,48 C66,24 62,10 68,8 C74,6 78,22 80,40Z" fill={bf} stroke={dk} strokeWidth="2" />
-        <path d="M128,48 C134,24 138,10 132,8 C126,6 122,22 120,40Z" fill={bf} stroke={dk} strokeWidth="2" />
-        <path d="M72,48 C76,38 86,30 100,30 C114,30 124,38 128,48 C134,62 134,78 128,88 C122,96 112,102 100,104 C88,102 78,96 72,88 C66,78 66,62 72,48Z" fill={bf} stroke={dk} strokeWidth="2.5" />
-        <ellipse cx="86" cy="62" rx="6" ry="6.5" fill={`url(#eye-${id})`} />
-        <ellipse cx="114" cy="62" rx="6" ry="6.5" fill={`url(#eye-${id})`} />
-        <ellipse cx="100" cy="76" rx="7" ry="5" fill={dk} />
-        <path d="M80,100 C76,110 74,126 76,140 C78,152 90,160 100,162 C110,160 122,152 124,140 C126,126 124,110 120,100" fill={bf} stroke={dk} strokeWidth="2" />
-        <path d="M78,100 C86,96 96,94 100,94 C104,94 114,96 122,100" fill="none" stroke={t.accent} strokeWidth="3" strokeLinecap="round" />
-      </g>
-    ),
-    '亥': (
-      <g>
-        <path d="M74,42 C70,28 74,18 80,20 C84,22 82,34 80,42Z" fill={bf} stroke={dk} strokeWidth={sw} />
-        <path d="M126,42 C130,28 126,18 120,20 C116,22 118,34 120,42Z" fill={bf} stroke={dk} strokeWidth={sw} />
-        <path d="M68,46 C74,34 86,26 100,26 C114,26 126,34 132,46 C138,60 140,76 136,90 C132,100 120,108 100,110 C80,108 68,100 64,90 C60,76 62,60 68,46Z" fill={bf} stroke={dk} strokeWidth="2.5" />
-        <circle cx="82" cy="66" r="4" fill={`url(#eye-${id})`} />
-        <circle cx="118" cy="66" r="4" fill={`url(#eye-${id})`} />
-        <ellipse cx="100" cy="84" rx="14" ry="10" fill={t.primary} opacity="0.4" stroke={dk} strokeWidth="1.5" />
-        <path d="M84,94 C82,100 80,106 82,110" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
-        <path d="M116,94 C118,100 120,106 118,110" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
-        <path d="M76,108 C70,120 68,136 72,150 C76,160 88,168 100,168 C112,168 124,160 128,150 C132,136 130,120 124,108" fill={bf} stroke={dk} strokeWidth="2" />
-      </g>
-    ),
-  };
-
-  return (
-    <>
-      {defs}
-      {arts[shi]}
-    </>
-  );
+  switch (shi) {
+    case '子': // ネズミ
+      return (
+        <g>
+          <ellipse cx="100" cy="120" rx="30" ry="35" fill={p} />
+          <circle cx="100" cy="78" r="32" fill={p} />
+          <circle cx="70" cy="55" r="18" fill={p} stroke={s} strokeWidth="2" />
+          <circle cx="70" cy="55" r="11" fill={s} opacity="0.5" />
+          <circle cx="130" cy="55" r="18" fill={p} stroke={s} strokeWidth="2" />
+          <circle cx="130" cy="55" r="11" fill={s} opacity="0.5" />
+          <circle cx="100" cy="78" r="30" fill={s} />
+          <circle cx="78" cy="88" r="7" fill={ch} opacity="0.5" />
+          <circle cx="122" cy="88" r="7" fill={ch} opacity="0.5" />
+          <circle cx="87" cy="74" r="8" fill="#1a1a2e" />
+          <circle cx="113" cy="74" r="8" fill="#1a1a2e" />
+          <circle cx="85" cy="71" r="3" fill="white" />
+          <circle cx="111" cy="71" r="3" fill="white" />
+          <circle cx="89" cy="76" r="1.5" fill="white" />
+          <circle cx="115" cy="76" r="1.5" fill="white" />
+          <ellipse cx="100" cy="86" rx="4" ry="3" fill="#F472B6" />
+          <path d="M96,91 Q100,95 104,91" fill="none" stroke="#9D174D" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="68" y1="82" x2="84" y2="84" stroke={p} strokeWidth="1.2" opacity="0.6" />
+          <line x1="68" y1="88" x2="84" y2="88" stroke={p} strokeWidth="1.2" opacity="0.6" />
+          <line x1="132" y1="82" x2="116" y2="84" stroke={p} strokeWidth="1.2" opacity="0.6" />
+          <line x1="132" y1="88" x2="116" y2="88" stroke={p} strokeWidth="1.2" opacity="0.6" />
+        </g>
+      );
+    case '丑': // 牛
+      return (
+        <g>
+          <ellipse cx="100" cy="125" rx="32" ry="30" fill={p} />
+          <path d="M72,52 C65,35 60,25 65,22 C70,20 75,30 78,45" fill={s} stroke={p} strokeWidth="2" />
+          <path d="M128,52 C135,35 140,25 135,22 C130,20 125,30 122,45" fill={s} stroke={p} strokeWidth="2" />
+          <circle cx="100" cy="80" r="35" fill={s} />
+          <ellipse cx="62" cy="72" rx="12" ry="8" fill={p} />
+          <ellipse cx="138" cy="72" rx="12" ry="8" fill={p} />
+          <circle cx="78" cy="92" r="7" fill={ch} opacity="0.4" />
+          <circle cx="122" cy="92" r="7" fill={ch} opacity="0.4" />
+          <circle cx="85" cy="76" r="7" fill="#1a1a2e" />
+          <circle cx="115" cy="76" r="7" fill="#1a1a2e" />
+          <circle cx="83" cy="73" r="2.5" fill="white" />
+          <circle cx="113" cy="73" r="2.5" fill="white" />
+          <ellipse cx="100" cy="92" rx="14" ry="10" fill={p} opacity="0.5" />
+          <circle cx="94" cy="92" r="3" fill="#5C3310" opacity="0.5" />
+          <circle cx="106" cy="92" r="3" fill="#5C3310" opacity="0.5" />
+          <path d="M94,100 Q100,105 106,100" fill="none" stroke="#5C3310" strokeWidth="1.5" strokeLinecap="round" />
+        </g>
+      );
+    case '寅': // 虎
+      return (
+        <g>
+          <ellipse cx="100" cy="125" rx="28" ry="30" fill={p} />
+          <path d="M72,48 C68,32 72,22 80,24 C86,26 82,38 80,46Z" fill={p} stroke="#FDE047" strokeWidth="1.5" />
+          <path d="M128,48 C132,32 128,22 120,24 C114,26 118,38 120,46Z" fill={p} stroke="#FDE047" strokeWidth="1.5" />
+          <circle cx="100" cy="78" r="34" fill={s} />
+          <path d="M80,55 C85,50 90,52 92,55" fill="none" stroke={p} strokeWidth="3" strokeLinecap="round" />
+          <path d="M100,48 L100,56" stroke={p} strokeWidth="3" strokeLinecap="round" />
+          <path d="M108,55 C115,50 120,52 120,55" fill="none" stroke={p} strokeWidth="3" strokeLinecap="round" />
+          <circle cx="76" cy="88" r="7" fill={ch} opacity="0.5" />
+          <circle cx="124" cy="88" r="7" fill={ch} opacity="0.5" />
+          <ellipse cx="86" cy="74" rx="7" ry="8" fill="#1a1a2e" />
+          <ellipse cx="114" cy="74" rx="7" ry="8" fill="#1a1a2e" />
+          <circle cx="84" cy="71" r="3" fill="white" />
+          <circle cx="112" cy="71" r="3" fill="white" />
+          <path d="M96,86 L100,90 L104,86Z" fill="#F472B6" />
+          <path d="M92,94 Q100,100 108,94" fill="none" stroke="#9D174D" strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M93,94 L92,98" stroke="white" strokeWidth="2" strokeLinecap="round" />
+          <path d="M107,94 L108,98" stroke="white" strokeWidth="2" strokeLinecap="round" />
+        </g>
+      );
+    case '卯': // 兎
+      return (
+        <g>
+          <ellipse cx="100" cy="130" rx="28" ry="30" fill={s} />
+          <ellipse cx="82" cy="28" rx="10" ry="32" fill={s} stroke={p} strokeWidth="2" />
+          <ellipse cx="82" cy="28" rx="5" ry="22" fill={p} opacity="0.3" />
+          <ellipse cx="118" cy="28" rx="10" ry="32" fill={s} stroke={p} strokeWidth="2" />
+          <ellipse cx="118" cy="28" rx="5" ry="22" fill={p} opacity="0.3" />
+          <circle cx="100" cy="82" r="32" fill={s} />
+          <circle cx="76" cy="90" r="8" fill={ch} opacity="0.5" />
+          <circle cx="124" cy="90" r="8" fill={ch} opacity="0.5" />
+          <ellipse cx="86" cy="78" rx="9" ry="10" fill="#1a1a2e" />
+          <ellipse cx="114" cy="78" rx="9" ry="10" fill="#1a1a2e" />
+          <circle cx="83" cy="74" r="4" fill="white" />
+          <circle cx="111" cy="74" r="4" fill="white" />
+          <circle cx="88" cy="80" r="2" fill="white" />
+          <circle cx="116" cy="80" r="2" fill="white" />
+          <ellipse cx="100" cy="90" rx="3" ry="2.5" fill="#F472B6" />
+          <path d="M100,92 L100,96" stroke="#9D174D" strokeWidth="1.2" strokeLinecap="round" />
+          <path d="M96,99 Q100,96 104,99" fill="none" stroke="#9D174D" strokeWidth="1.2" strokeLinecap="round" />
+          <circle cx="128" cy="140" r="9" fill="white" />
+        </g>
+      );
+    case '辰': // 龍
+      return (
+        <g>
+          <ellipse cx="100" cy="128" rx="26" ry="28" fill={p} />
+          <path d="M76,48 C68,32 64,20 70,18 C76,16 78,28 80,40" fill="#FDE047" stroke={p} strokeWidth="1.5" />
+          <path d="M124,48 C132,32 136,20 130,18 C124,16 122,28 120,40" fill="#FDE047" stroke={p} strokeWidth="1.5" />
+          <circle cx="100" cy="78" r="35" fill={p} />
+          <circle cx="100" cy="82" r="30" fill={s} />
+          <circle cx="74" cy="90" r="7" fill={ch} opacity="0.5" />
+          <circle cx="126" cy="90" r="7" fill={ch} opacity="0.5" />
+          <ellipse cx="85" cy="76" rx="8" ry="9" fill="#1a1a2e" />
+          <ellipse cx="115" cy="76" rx="8" ry="9" fill="#1a1a2e" />
+          <circle cx="83" cy="73" r="3.5" fill="white" />
+          <circle cx="113" cy="73" r="3.5" fill="white" />
+          <circle cx="87" cy="78" r="1.5" fill="white" />
+          <circle cx="117" cy="78" r="1.5" fill="white" />
+          <circle cx="95" cy="90" r="2.5" fill={p} />
+          <circle cx="105" cy="90" r="2.5" fill={p} />
+          <path d="M92,96 Q100,102 108,96" fill="none" stroke="#78350F" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M66,82 C72,78 78,80 82,82" fill="none" stroke={p} strokeWidth="2" strokeLinecap="round" />
+          <path d="M134,82 C128,78 122,80 118,82" fill="none" stroke={p} strokeWidth="2" strokeLinecap="round" />
+        </g>
+      );
+    case '巳': // 蛇
+      return (
+        <g>
+          <path d="M70,130 C70,155 130,155 130,130 C130,110 110,105 100,110 C90,115 80,110 80,100 C80,90 90,85 100,88" fill={p} stroke={s} strokeWidth="2" />
+          <path d="M75,135 C75,148 125,148 125,135" fill={s} opacity="0.3" />
+          <circle cx="100" cy="68" r="30" fill={p} />
+          <circle cx="100" cy="70" r="26" fill={s} />
+          <circle cx="100" cy="40" r="7" fill="#FDE047" />
+          <circle cx="100" cy="40" r="4" fill="#FBBF24" />
+          <circle cx="78" cy="78" r="6" fill={ch} opacity="0.5" />
+          <circle cx="122" cy="78" r="6" fill={ch} opacity="0.5" />
+          <ellipse cx="87" cy="66" rx="7" ry="8" fill="#1a1a2e" />
+          <ellipse cx="113" cy="66" rx="7" ry="8" fill="#1a1a2e" />
+          <ellipse cx="87" cy="66" rx="2" ry="6" fill={p} opacity="0.3" />
+          <ellipse cx="113" cy="66" rx="2" ry="6" fill={p} opacity="0.3" />
+          <circle cx="85" cy="63" r="3" fill="white" />
+          <circle cx="111" cy="63" r="3" fill="white" />
+          <path d="M94,80 Q100,84 106,80" fill="none" stroke="#581C87" strokeWidth="1.2" strokeLinecap="round" />
+          <path d="M98,82 L96,90 M102,82 L104,90" stroke="#F472B6" strokeWidth="1.5" strokeLinecap="round" />
+        </g>
+      );
+    case '午': // 馬
+      return (
+        <g>
+          <ellipse cx="100" cy="130" rx="28" ry="30" fill={p} />
+          <path d="M85,38 C82,22 86,14 92,18 L90,34Z" fill="#FDE047" stroke={p} strokeWidth="1" />
+          <path d="M95,34 C94,16 98,8 104,12 L100,30Z" fill="#FBBF24" stroke={p} strokeWidth="1" />
+          <path d="M108,38 C112,24 108,16 104,18 L106,34Z" fill="#FDE047" stroke={p} strokeWidth="1" />
+          <circle cx="100" cy="74" r="34" fill={s} />
+          <path d="M68,52 C64,40 68,34 74,36 C78,38 76,46 74,52Z" fill={p} />
+          <path d="M132,52 C136,40 132,34 126,36 C122,38 124,46 126,52Z" fill={p} />
+          <circle cx="76" cy="84" r="7" fill={ch} opacity="0.5" />
+          <circle cx="124" cy="84" r="7" fill={ch} opacity="0.5" />
+          <circle cx="86" cy="70" r="8" fill="#1a1a2e" />
+          <circle cx="114" cy="70" r="8" fill="#1a1a2e" />
+          <circle cx="84" cy="67" r="3" fill="white" />
+          <circle cx="112" cy="67" r="3" fill="white" />
+          <ellipse cx="93" cy="88" rx="3" ry="2" fill="#7F1D1D" opacity="0.5" />
+          <ellipse cx="107" cy="88" rx="3" ry="2" fill="#7F1D1D" opacity="0.5" />
+          <path d="M94,94 Q100,99 106,94" fill="none" stroke="#7F1D1D" strokeWidth="1.5" strokeLinecap="round" />
+        </g>
+      );
+    case '未': // 羊
+      return (
+        <g>
+          <circle cx="80" cy="130" r="16" fill="white" />
+          <circle cx="100" cy="135" r="18" fill="white" />
+          <circle cx="120" cy="130" r="16" fill="white" />
+          <circle cx="88" cy="118" r="14" fill="white" />
+          <circle cx="112" cy="118" r="14" fill="white" />
+          <path d="M78,48 C68,42 62,36 66,32 C70,28 76,34 80,42" fill={p} strokeWidth="1.5" />
+          <path d="M122,48 C132,42 138,36 134,32 C130,28 124,34 120,42" fill={p} strokeWidth="1.5" />
+          <circle cx="76" cy="56" r="10" fill="white" />
+          <circle cx="100" cy="50" r="12" fill="white" />
+          <circle cx="124" cy="56" r="10" fill="white" />
+          <circle cx="100" cy="76" r="28" fill={s} />
+          <circle cx="78" cy="84" r="7" fill={ch} opacity="0.5" />
+          <circle cx="122" cy="84" r="7" fill={ch} opacity="0.5" />
+          <circle cx="88" cy="72" r="6" fill="#1a1a2e" />
+          <circle cx="112" cy="72" r="6" fill="#1a1a2e" />
+          <circle cx="86" cy="70" r="2.5" fill="white" />
+          <circle cx="110" cy="70" r="2.5" fill="white" />
+          <ellipse cx="100" cy="82" rx="3" ry="2.5" fill="#F472B6" />
+          <path d="M96,87 Q100,91 104,87" fill="none" stroke="#064E3B" strokeWidth="1.2" strokeLinecap="round" />
+        </g>
+      );
+    case '申': // 猿
+      return (
+        <g>
+          <ellipse cx="100" cy="130" rx="26" ry="28" fill={p} />
+          <circle cx="65" cy="70" r="14" fill={p} />
+          <circle cx="65" cy="70" r="9" fill={s} />
+          <circle cx="135" cy="70" r="14" fill={p} />
+          <circle cx="135" cy="70" r="9" fill={s} />
+          <circle cx="100" cy="72" r="32" fill={p} />
+          <ellipse cx="100" cy="80" rx="22" ry="20" fill={s} />
+          <circle cx="80" cy="86" r="6" fill={ch} opacity="0.5" />
+          <circle cx="120" cy="86" r="6" fill={ch} opacity="0.5" />
+          <circle cx="88" cy="72" r="7" fill="#1a1a2e" />
+          <circle cx="112" cy="72" r="7" fill="#1a1a2e" />
+          <circle cx="86" cy="69" r="3" fill="white" />
+          <circle cx="110" cy="69" r="3" fill="white" />
+          <ellipse cx="100" cy="82" rx="4" ry="3" fill="#713F12" opacity="0.6" />
+          <path d="M90,90 Q100,98 110,90" fill="none" stroke="#713F12" strokeWidth="2" strokeLinecap="round" />
+          <circle cx="56" cy="108" r="8" fill="#F9A8D4" />
+          <path d="M55,100 C56,96 58,96 59,100" fill="#4ADE80" />
+        </g>
+      );
+    case '酉': // 鶏
+      return (
+        <g>
+          <ellipse cx="100" cy="125" rx="28" ry="32" fill={s} />
+          <ellipse cx="68" cy="120" rx="14" ry="8" fill={p} opacity="0.7" />
+          <ellipse cx="132" cy="120" rx="14" ry="8" fill={p} opacity="0.7" />
+          <circle cx="92" cy="36" r="7" fill="#EF4444" />
+          <circle cx="100" cy="32" r="8" fill="#EF4444" />
+          <circle cx="108" cy="36" r="7" fill="#EF4444" />
+          <circle cx="100" cy="70" r="30" fill={s} />
+          <circle cx="78" cy="78" r="6" fill={ch} opacity="0.5" />
+          <circle cx="122" cy="78" r="6" fill={ch} opacity="0.5" />
+          <circle cx="88" cy="66" r="7" fill="#1a1a2e" />
+          <circle cx="112" cy="66" r="7" fill="#1a1a2e" />
+          <circle cx="86" cy="63" r="3" fill="white" />
+          <circle cx="110" cy="63" r="3" fill="white" />
+          <path d="M94,78 L100,72 L106,78 L100,84Z" fill="#FDE047" stroke="#D97706" strokeWidth="1" />
+          <path d="M99,84 C97,90 98,93 100,92" fill="#EF4444" />
+          <path d="M88,150 C80,160 75,170 80,172" fill={p} stroke={p} strokeWidth="2" />
+          <path d="M100,152 L100,172" stroke={p} strokeWidth="3" strokeLinecap="round" />
+          <path d="M112,150 C120,160 125,170 120,172" fill={p} stroke={p} strokeWidth="2" />
+        </g>
+      );
+    case '戌': // 犬
+      return (
+        <g>
+          <ellipse cx="100" cy="130" rx="28" ry="30" fill={p} />
+          <ellipse cx="70" cy="72" rx="14" ry="22" fill={s} stroke={p} strokeWidth="2" transform="rotate(-10 70 72)" />
+          <ellipse cx="130" cy="72" rx="14" ry="22" fill={s} stroke={p} strokeWidth="2" transform="rotate(10 130 72)" />
+          <circle cx="100" cy="78" r="32" fill={s} />
+          <path d="M74,105 Q100,112 126,105" fill="none" stroke="#EF4444" strokeWidth="4" strokeLinecap="round" />
+          <circle cx="100" cy="110" r="4" fill="#FDE047" />
+          <circle cx="76" cy="88" r="7" fill={ch} opacity="0.5" />
+          <circle cx="124" cy="88" r="7" fill={ch} opacity="0.5" />
+          <circle cx="86" cy="74" r="8" fill="#1a1a2e" />
+          <circle cx="114" cy="74" r="8" fill="#1a1a2e" />
+          <circle cx="84" cy="71" r="3.5" fill="white" />
+          <circle cx="112" cy="71" r="3.5" fill="white" />
+          <circle cx="88" cy="76" r="1.5" fill="white" />
+          <circle cx="116" cy="76" r="1.5" fill="white" />
+          <ellipse cx="100" cy="86" rx="6" ry="4.5" fill="#1a1a2e" />
+          <circle cx="98" cy="84" r="1.5" fill="white" opacity="0.4" />
+          <path d="M100,90 L100,94" stroke="#4A2C17" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M93,97 Q100,102 107,97" fill="none" stroke="#4A2C17" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M130,130 C140,125 145,118 142,112" fill="none" stroke={p} strokeWidth="5" strokeLinecap="round" />
+        </g>
+      );
+    case '亥': // 猪
+      return (
+        <g>
+          <ellipse cx="100" cy="128" rx="30" ry="32" fill={p} />
+          <path d="M74,50 C70,38 74,30 80,32 C84,34 82,42 80,48Z" fill={p} stroke={s} strokeWidth="1.5" />
+          <path d="M126,50 C130,38 126,30 120,32 C116,34 118,42 120,48Z" fill={p} stroke={s} strokeWidth="1.5" />
+          <circle cx="100" cy="76" r="32" fill={s} />
+          <rect x="90" y="50" width="3" height="14" rx="1.5" fill={p} opacity="0.5" />
+          <rect x="99" y="48" width="3" height="16" rx="1.5" fill={p} opacity="0.5" />
+          <rect x="108" y="50" width="3" height="14" rx="1.5" fill={p} opacity="0.5" />
+          <circle cx="76" cy="84" r="7" fill={ch} opacity="0.5" />
+          <circle cx="124" cy="84" r="7" fill={ch} opacity="0.5" />
+          <circle cx="86" cy="72" r="6" fill="#1a1a2e" />
+          <circle cx="114" cy="72" r="6" fill="#1a1a2e" />
+          <circle cx="84" cy="70" r="2.5" fill="white" />
+          <circle cx="112" cy="70" r="2.5" fill="white" />
+          <ellipse cx="100" cy="88" rx="12" ry="9" fill={p} opacity="0.6" />
+          <circle cx="95" cy="88" r="3" fill="#312E81" opacity="0.4" />
+          <circle cx="105" cy="88" r="3" fill="#312E81" opacity="0.4" />
+          <path d="M88,96 L86,102" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M112,96 L114,102" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M94,98 Q100,102 106,98" fill="none" stroke="#312E81" strokeWidth="1.2" strokeLinecap="round" />
+        </g>
+      );
+    default:
+      return null;
+  }
 }
 
 interface ZodiacCharacterProps {
@@ -217,23 +330,18 @@ export function ZodiacCharacter({ shi, size = 'md' }: ZodiacCharacterProps) {
   return (
     <div className="flex flex-col items-center gap-2">
       <div className={`relative ${sizeClasses[size]}`}>
-        {/* シンプルなリング（静的） */}
-        <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full" style={{ opacity: 0.2 }}>
-          <circle cx="100" cy="100" r="97" fill="none" stroke={t.primary} strokeWidth="0.8" />
-        </svg>
-
-        {/* メインアート（フィルターなし） */}
         <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full">
-          <ZodiacArt shi={shi} t={t} />
+          <circle cx="100" cy="100" r="95" fill={`${t.bg}30`} />
+          <circle cx="100" cy="100" r="95" fill="none" stroke={t.primary} strokeWidth="1" opacity="0.25" />
+          <CuteZodiacArt shi={shi} t={t} />
         </svg>
       </div>
 
-      {/* ラベル */}
       <div className="text-center space-y-0.5">
         <p className="text-sm sm:text-base font-black tracking-[0.2em]" style={{ color: t.primary }}>
           {shi} ─ {t.animal}
         </p>
-        <p className="text-[0.55rem] sm:text-[0.6rem] tracking-[0.15em]" style={{ color: `${t.primary}70` }}>
+        <p className="text-[0.55rem] sm:text-[0.6rem] tracking-[0.15em]" style={{ color: `${t.primary}90` }}>
           {t.element}行 / {t.trait}
         </p>
       </div>
@@ -248,8 +356,8 @@ export function ZodiacBadge({ shi }: { shi: Junishi }) {
       className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border"
       style={{
         color: t.primary,
-        borderColor: `${t.primary}30`,
-        backgroundColor: `${t.primary}08`,
+        borderColor: `${t.primary}40`,
+        backgroundColor: `${t.primary}10`,
       }}
     >
       <span className="font-bold">{shi}</span>
