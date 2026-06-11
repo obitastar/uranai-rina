@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { FortuneResult, YearlyFortune, GogyoBalance, ShinsatsuInfo, KyuseiInfo, LuckyInfo } from "@/lib/shichusuimei";
+import type { FortuneResult, YearlyFortune, GogyoBalance, ShinsatsuInfo, KyuseiInfo, LuckyInfo, DaiunResult, DaiunPeriod, StrengthResult, ChishiRelationResult } from "@/lib/shichusuimei";
 import { SlideViewer } from "@/components/SlideViewer";
 import { PillarChart } from "@/components/PillarChart";
 import { ZodiacCharacter, ZodiacBadge } from "@/components/ZodiacCharacter";
@@ -14,7 +14,7 @@ interface ResultScreenProps {
   onAisho?: () => void;
 }
 
-const SLIDE_LABELS = ["命式表", "本質", "恋愛運", "仕事運", "五行", "健康運", "空亡", "神殺", "開運", "今年", "10年運勢", "完了"];
+const SLIDE_LABELS = ["命式表", "本質", "恋愛運", "仕事運", "五行", "身強身弱", "健康運", "空亡", "神殺", "地支", "開運", "大運", "今年", "10年運勢", "完了"];
 
 export function ResultScreen({ result, onRetry, onTop, onAisho }: ResultScreenProps) {
   const { input, fourPillars } = result;
@@ -129,7 +129,10 @@ export function ResultScreen({ result, onRetry, onTop, onAisho }: ResultScreenPr
         {/* ===== スライド5: 五行バランス ===== */}
         <GogyoSlide gogyoBalance={result.gogyoBalance} gogyoReading={result.gogyoReading} />
 
-        {/* ===== スライド6: 健康運 ===== */}
+        {/* ===== スライド6: 身強身弱 ===== */}
+        <StrengthSlide strength={result.strength} />
+
+        {/* ===== スライド7: 健康運 ===== */}
         <SlideContent
           iconType="health"
           title="健康運"
@@ -170,10 +173,16 @@ export function ResultScreen({ result, onRetry, onTop, onAisho }: ResultScreenPr
         {/* ===== スライド8: 神殺 ===== */}
         <ShinsatsuSlide shinsatsu={result.shinsatsu} />
 
-        {/* ===== スライド9: 開運（九星 + ラッキー） ===== */}
+        {/* ===== スライド10: 地支関係 ===== */}
+        <ChishiSlide chishiRelations={result.chishiRelations} />
+
+        {/* ===== スライド11: 開運（九星 + ラッキー） ===== */}
         <LuckySlide kyusei={result.kyusei} lucky={result.lucky} />
 
-        {/* ===== スライド10: 今年の運勢 ===== */}
+        {/* ===== スライド12: 大運 ===== */}
+        <DaiunSlide daiun={result.daiun} />
+
+        {/* ===== スライド13: 今年の運勢 ===== */}
         <SlideContent
           iconType="yearly"
           title={`${currentYear}年の運勢`}
@@ -261,7 +270,7 @@ function SlideContent({
   content,
   extra,
 }: {
-  iconType: 'essence' | 'love' | 'work' | 'yearly' | 'decade' | 'gogyo' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky';
+  iconType: 'essence' | 'love' | 'work' | 'yearly' | 'decade' | 'gogyo' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky' | 'strength' | 'chishi' | 'daiun';
   title: string;
   subtitle: string;
   description: React.ReactNode;
@@ -724,6 +733,252 @@ function LuckySlide({ kyusei, lucky }: { kyusei: KyuseiInfo; lucky: LuckyInfo })
           <div className="p-4 sm:p-5">
             <p className="text-navy-50/90 leading-[1.9] sm:leading-[2] text-sm sm:text-base tracking-wide">
               {lucky.description}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 身強身弱スライド
+function StrengthSlide({ strength }: { strength: StrengthResult }) {
+  const accentColor = SECTION_COLORS.strength.primary;
+  const levelColors: Record<string, string> = {
+    '身強': 'text-red-400 bg-red-500/15 border-red-500/30',
+    'やや身強': 'text-orange-400 bg-orange-500/15 border-orange-500/30',
+    '中和': 'text-emerald-400 bg-emerald-500/15 border-emerald-500/30',
+    'やや身弱': 'text-sky-400 bg-sky-500/15 border-sky-500/30',
+    '身弱': 'text-indigo-400 bg-indigo-500/15 border-indigo-500/30',
+  };
+  const color = levelColors[strength.level] || levelColors['中和'];
+
+  return (
+    <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-5 sm:py-8">
+      <div className="w-full max-w-lg space-y-3 sm:space-y-4">
+        <div className="text-center">
+          <SectionIcon type="strength" size={48} />
+        </div>
+        <div className="text-center space-y-1.5 sm:space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-black text-gold-gradient tracking-[0.2em] sm:tracking-[0.3em]">
+            <ruby>身強身弱<rt className="text-[0.5rem] opacity-60">みきょうみじゃく</rt></ruby>
+          </h2>
+          <p className="text-sm sm:text-base tracking-widest font-medium" style={{ color: `${accentColor}CC` }}>
+            日主のエネルギー強度
+          </p>
+          <div className="w-12 sm:w-16 h-[1px] mx-auto bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
+        </div>
+
+        <p className="text-center text-sm text-navy-300/70 leading-relaxed tracking-wide px-2">
+          命式全体の五行バランスから、あなたの日主（自分自身）の強さを判定します。
+        </p>
+
+        {/* 判定結果 */}
+        <div className="ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-7 text-center space-y-4">
+          <span className={`inline-block text-xl font-bold px-5 py-2 rounded-full border ${color}`}>
+            {strength.level}
+          </span>
+
+          {/* スコアバー */}
+          <div className="space-y-2">
+            <div className="flex justify-between text-xs text-navy-400">
+              <span>身弱</span>
+              <span>中和</span>
+              <span>身強</span>
+            </div>
+            <div className="h-3 rounded-full bg-navy-800/60 overflow-hidden relative">
+              <div
+                className="absolute top-0 h-full rounded-full bg-gradient-to-r from-indigo-500 via-emerald-500 to-red-500 opacity-70"
+                style={{ width: '100%' }}
+              />
+              <div
+                className="absolute top-0 w-1.5 h-full bg-white rounded-full"
+                style={{ left: `${Math.max(5, Math.min(95, ((strength.score + 10) / 20) * 100))}%` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* 用神・喜神・忌神 */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+          <div className="ornament-border rounded-xl bg-navy-900/30 p-3 text-center">
+            <p className="text-xs text-emerald-400/80 tracking-widest mb-1 font-medium">
+              <ruby>用神<rt className="text-[0.45rem]">ようじん</rt></ruby>
+            </p>
+            <span className="text-lg font-bold text-emerald-300">{strength.youjin}</span>
+            <p className="text-[0.6rem] text-navy-400 mt-1">最も必要な五行</p>
+          </div>
+          <div className="ornament-border rounded-xl bg-navy-900/30 p-3 text-center">
+            <p className="text-xs text-sky-400/80 tracking-widest mb-1 font-medium">
+              <ruby>喜神<rt className="text-[0.45rem]">きじん</rt></ruby>
+            </p>
+            <span className="text-lg font-bold text-sky-300">{strength.kijin}</span>
+            <p className="text-[0.6rem] text-navy-400 mt-1">味方の五行</p>
+          </div>
+          <div className="ornament-border rounded-xl bg-navy-900/30 p-3 text-center">
+            <p className="text-xs text-red-400/80 tracking-widest mb-1 font-medium">
+              <ruby>忌神<rt className="text-[0.45rem]">いまがみ</rt></ruby>
+            </p>
+            <span className="text-lg font-bold text-red-300">{strength.kijin_bad}</span>
+            <p className="text-[0.6rem] text-navy-400 mt-1">注意の五行</p>
+          </div>
+        </div>
+
+        {/* 鑑定文 */}
+        <div className="ornament-border rounded-2xl bg-navy-900/40 overflow-hidden">
+          <div className="h-[2px] w-full" style={{ background: `linear-gradient(90deg, transparent, ${accentColor}40, transparent)` }} />
+          <div className="p-4 sm:p-5">
+            <p className="text-navy-50/90 leading-[1.9] sm:leading-[2] text-sm sm:text-base tracking-wide">
+              {strength.reading}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 地支関係スライド
+function ChishiSlide({ chishiRelations }: { chishiRelations: ChishiRelationResult }) {
+  const accentColor = SECTION_COLORS.chishi.primary;
+  const typeColors: Record<string, string> = {
+    '冲': 'text-red-400 bg-red-500/15 border-red-500/25',
+    '刑': 'text-amber-400 bg-amber-500/15 border-amber-500/25',
+    '害': 'text-orange-400 bg-orange-500/15 border-orange-500/25',
+    '破': 'text-yellow-400 bg-yellow-500/15 border-yellow-500/25',
+    '支合': 'text-emerald-400 bg-emerald-500/15 border-emerald-500/25',
+    '三合': 'text-sky-400 bg-sky-500/15 border-sky-500/25',
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-5 sm:py-8">
+      <div className="w-full max-w-lg space-y-3 sm:space-y-4">
+        <div className="text-center">
+          <SectionIcon type="chishi" size={48} />
+        </div>
+        <div className="text-center space-y-1.5 sm:space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-black text-gold-gradient tracking-[0.2em] sm:tracking-[0.3em]">
+            地支の関係
+          </h2>
+          <p className="text-sm sm:text-base tracking-widest font-medium" style={{ color: `${accentColor}CC` }}>
+            冲・合・刑・害・破
+          </p>
+          <div className="w-12 sm:w-16 h-[1px] mx-auto bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
+        </div>
+
+        <p className="text-center text-sm text-navy-300/70 leading-relaxed tracking-wide px-2">
+          命式の地支同士の相互作用から、人生に影響を与える力学を読み解きます。
+        </p>
+
+        {chishiRelations.relations.length > 0 ? (
+          <div className="space-y-2 sm:space-y-3">
+            {chishiRelations.relations.map((rel, i) => {
+              const color = typeColors[rel.type] || typeColors['冲'];
+              return (
+                <div key={i} className={`ornament-border rounded-xl p-3 sm:p-4 border ${color.split(' ').slice(1).join(' ')}`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${color}`}>
+                      {rel.type}
+                    </span>
+                    <span className="text-sm text-navy-200/80 font-medium">
+                      {rel.branches.join('・')}
+                    </span>
+                    <span className="text-xs text-navy-400">
+                      （{rel.positions.join('柱・')}柱）
+                    </span>
+                  </div>
+                  <p className="text-sm text-navy-100/80 leading-[1.8] tracking-wide">
+                    {rel.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="ornament-border rounded-2xl bg-navy-900/40 p-5 text-center">
+            <p className="text-navy-200/70 text-sm">命式の地支に特別な関係は見られません。</p>
+          </div>
+        )}
+
+        {/* 総合鑑定 */}
+        <div className="ornament-border rounded-2xl bg-navy-900/40 overflow-hidden">
+          <div className="h-[2px] w-full" style={{ background: `linear-gradient(90deg, transparent, ${accentColor}40, transparent)` }} />
+          <div className="p-4 sm:p-5">
+            <p className="text-navy-50/90 leading-[1.9] sm:leading-[2] text-sm sm:text-base tracking-wide">
+              {chishiRelations.summary}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 大運スライド
+function DaiunSlide({ daiun }: { daiun: DaiunResult }) {
+  const accentColor = SECTION_COLORS.daiun.primary;
+
+  return (
+    <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-5 sm:py-8">
+      <div className="w-full max-w-lg space-y-3 sm:space-y-4">
+        <div className="text-center">
+          <SectionIcon type="daiun" size={48} />
+        </div>
+        <div className="text-center space-y-1.5 sm:space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-black text-gold-gradient tracking-[0.2em] sm:tracking-[0.3em]">
+            <ruby>大運<rt className="text-[0.5rem] opacity-60">だいうん</rt></ruby>
+          </h2>
+          <p className="text-sm sm:text-base tracking-widest font-medium" style={{ color: `${accentColor}CC` }}>
+            {daiun.direction} ── {daiun.startAge}歳から開始
+          </p>
+          <div className="w-12 sm:w-16 h-[1px] mx-auto bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
+        </div>
+
+        <p className="text-center text-sm text-navy-300/70 leading-relaxed tracking-wide px-2">
+          10年ごとに巡る大きな運気の流れ。人生の転換期や好機を読み解きます。
+        </p>
+
+        {/* 大運タイムライン */}
+        <div className="space-y-1.5 sm:space-y-2">
+          {daiun.periods.map((period, i) => {
+            const isActive = (() => {
+              const currentYear = new Date().getFullYear();
+              // 大まかな年齢判定（正確な誕生日は不要）
+              return false; // 年齢が不明なため、アクティブ判定はしない
+            })();
+            return (
+              <div key={i} className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex-shrink-0 w-20 text-center">
+                    <span className="text-sm font-bold text-gold-300">
+                      {period.startAge}〜{period.endAge}歳
+                    </span>
+                  </div>
+                  <div className="flex-shrink-0 text-center">
+                    <span className="text-lg font-bold text-navy-100">
+                      {period.kanshi.kan}{period.kanshi.shi}
+                    </span>
+                  </div>
+                  <div className="flex-1 flex gap-2">
+                    <span className="px-2 py-0.5 rounded-full text-xs border border-purple-400/20 text-purple-200/90 bg-purple-500/10">
+                      {period.tsuhensei}
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full text-xs border border-sky-400/20 text-sky-200/90 bg-sky-500/10">
+                      {period.juniunsei}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* 鑑定文 */}
+        <div className="ornament-border rounded-2xl bg-navy-900/40 overflow-hidden">
+          <div className="h-[2px] w-full" style={{ background: `linear-gradient(90deg, transparent, ${accentColor}40, transparent)` }} />
+          <div className="p-4 sm:p-5">
+            <p className="text-navy-50/90 leading-[1.9] sm:leading-[2] text-sm sm:text-base tracking-wide">
+              {daiun.reading}
             </p>
           </div>
         </div>

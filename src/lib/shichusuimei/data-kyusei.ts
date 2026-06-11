@@ -99,12 +99,13 @@ const KYUSEI_TABLE: KyuseiData[] = [
 
 /**
  * 生年月日から本命星を算出して九星データを返す
- * 1月1日〜2月3日（節分前）生まれは前年で計算
+ * 立春（通常2月4日）前は前年で計算
+ * ※立春は年によって2/3〜2/4で変動するが、簡易的に2/4を基準とする
  */
 export function getKyusei(year: number, month: number, day: number): KyuseiData {
-  // 節分前は前年扱い
+  // 立春前は前年扱い
   let effectiveYear = year;
-  if (month === 1 || (month === 2 && day <= 3)) {
+  if (month === 1 || (month === 2 && day < 4)) {
     effectiveYear = year - 1;
   }
 

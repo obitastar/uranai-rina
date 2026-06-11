@@ -13,6 +13,9 @@ import { analyzeShinsatsu } from './data-shinsatsu';
 import { getKyusei } from './data-kyusei';
 import { getLuckyData } from './data-lucky';
 import { generateHealthReading } from './data-health';
+import { analyzeChishiRelations } from './data-chishi-relation';
+import { calculateDaiun } from './data-daiun';
+import { analyzeStrength } from './data-strength';
 
 // 通変星のグループ判定
 function tsuhenseiGroup(star: string): string {
@@ -214,6 +217,20 @@ export function calculateFortune(input: FortuneInput): FortuneResult {
   // 健康運
   const healthReading = generateHealthReading(gogyoBalance);
 
+  // 地支関係（冲・合・刑・害・破）
+  const chishiRelations = analyzeChishiRelations(fourPillars);
+
+  // 大運
+  const daiun = calculateDaiun(
+    { year: input.year, month: input.month, day: input.day },
+    fourPillars,
+    nicchu,
+    input.gender,
+  );
+
+  // 身強身弱・用神
+  const strength = analyzeStrength(nicchu, fourPillars, setsuMonth);
+
   return {
     input,
     fourPillars,
@@ -241,5 +258,8 @@ export function calculateFortune(input: FortuneInput): FortuneResult {
     kyusei,
     lucky,
     healthReading,
+    chishiRelations,
+    daiun,
+    strength,
   };
 }

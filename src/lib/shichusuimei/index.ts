@@ -21,4 +21,10 @@ export type {
   ShinsatsuInfo,
   KyuseiInfo,
   LuckyInfo,
+  ChishiRelation,
+  ChishiRelationResult,
+  DaiunPeriod,
+  DaiunResult,
+  StrengthLevel,
+  StrengthResult,
 } from './types';

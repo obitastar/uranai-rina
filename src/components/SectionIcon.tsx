@@ -1,6 +1,6 @@
 "use client";
 
-type IconType = 'essence' | 'love' | 'work' | 'yearly' | 'gogyo' | 'decade' | 'complete' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky';
+type IconType = 'essence' | 'love' | 'work' | 'yearly' | 'gogyo' | 'decade' | 'complete' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky' | 'strength' | 'chishi' | 'daiun';
 
 interface SectionIconProps {
   type: IconType;
@@ -19,6 +19,9 @@ const COLORS: Record<IconType, { primary: string; glow: string }> = {
   kuubou: { primary: '#a78bfa', glow: 'rgba(167,139,250,0.25)' },
   shinsatsu: { primary: '#fbbf24', glow: 'rgba(251,191,36,0.25)' },
   lucky: { primary: '#f472b6', glow: 'rgba(244,114,182,0.25)' },
+  strength: { primary: '#fb923c', glow: 'rgba(251,146,60,0.25)' },
+  chishi: { primary: '#94a3b8', glow: 'rgba(148,163,184,0.25)' },
+  daiun: { primary: '#a3e635', glow: 'rgba(163,230,53,0.25)' },
 };
 
 export function SectionIcon({ type, size = 80 }: SectionIconProps) {
@@ -168,6 +171,37 @@ export function SectionIcon({ type, size = 80 }: SectionIconProps) {
             <circle cx="-7" cy="0" r="6" fill={primary} fillOpacity="0.1" />
             <circle cx="7" cy="0" r="6" fill={primary} fillOpacity="0.1" />
             <circle cx="0" cy="0" r="2" fill={primary} opacity="0.6" />
+          </g>
+        )}
+        {type === 'strength' && (
+          // 身強身弱 - 天秤（バランス）
+          <g transform={`translate(${c},${c})`} stroke={primary} fill="none" strokeWidth="1.2" opacity="0.8">
+            <line x1="0" y1="-12" x2="0" y2="4" />
+            <line x1="-12" y1="-4" x2="12" y2="-4" />
+            <path d="M-12,-4 L-10,4 L-8,-4" fill={primary} fillOpacity="0.15" />
+            <path d="M8,-4 L10,4 L12,-4" fill={primary} fillOpacity="0.15" />
+            <circle cx="0" cy="-12" r="2" fill={primary} opacity="0.5" />
+            <line x1="-4" y1="4" x2="4" y2="4" strokeWidth="1.5" />
+          </g>
+        )}
+        {type === 'chishi' && (
+          // 地支関係 - 二つの矢印が交差
+          <g transform={`translate(${c},${c})`} stroke={primary} fill="none" strokeWidth="1.2" opacity="0.8">
+            <circle cx="-7" cy="0" r="7" />
+            <circle cx="7" cy="0" r="7" />
+            <line x1="-3" y1="-8" x2="3" y2="8" strokeDasharray="2 3" opacity="0.5" />
+            <line x1="3" y1="-8" x2="-3" y2="8" strokeDasharray="2 3" opacity="0.5" />
+            <circle cx="0" cy="0" r="2" fill={primary} opacity="0.5" />
+          </g>
+        )}
+        {type === 'daiun' && (
+          // 大運 - 長い道のり
+          <g transform={`translate(${c},${c})`} stroke={primary} fill="none" strokeWidth="1" opacity="0.8">
+            <path d="M-12,6 Q-6,-6 0,2 Q6,10 12,-6" strokeWidth="1.5" />
+            {[-10, -4, 2, 8].map((x, i) => (
+              <circle key={i} cx={x} cy={i % 2 === 0 ? 4 : -2} r="1.5" fill={primary} opacity={0.3 + i * 0.15} />
+            ))}
+            <text x="0" y="-10" textAnchor="middle" fill={primary} fontSize="8" fontFamily="serif" strokeWidth="0" opacity="0.6">大運</text>
           </g>
         )}
       </svg>

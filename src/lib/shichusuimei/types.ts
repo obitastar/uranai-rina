@@ -149,6 +149,48 @@ export interface LuckyInfo {
   description: string;
 }
 
+// 地支関係
+export interface ChishiRelation {
+  type: '冲' | '支合' | '三合' | '刑' | '害' | '破';
+  branches: string[];
+  positions: string[];
+  result?: string;
+  description: string;
+}
+
+export interface ChishiRelationResult {
+  relations: ChishiRelation[];
+  summary: string;
+}
+
+// 大運
+export interface DaiunPeriod {
+  startAge: number;
+  endAge: number;
+  kanshi: Kanshi;
+  tsuhensei: Tsuhensei;
+  juniunsei: Juniunsei;
+}
+
+export interface DaiunResult {
+  direction: '順行' | '逆行';
+  startAge: number;
+  periods: DaiunPeriod[];
+  reading: string;
+}
+
+// 身強身弱
+export type StrengthLevel = '身強' | 'やや身強' | '中和' | 'やや身弱' | '身弱';
+
+export interface StrengthResult {
+  level: StrengthLevel;
+  score: number;
+  youjin: Gogyo;
+  kijin: Gogyo;
+  kijin_bad: Gogyo;
+  reading: string;
+}
+
 // 鑑定結果
 export interface FortuneResult {
   input: FortuneInput;
@@ -199,4 +241,10 @@ export interface FortuneResult {
   lucky: LuckyInfo;
   // 健康運
   healthReading: string;
+  // 地支関係（冲・合・刑・害・破）
+  chishiRelations: ChishiRelationResult;
+  // 大運
+  daiun: DaiunResult;
+  // 身強身弱・用神
+  strength: StrengthResult;
 }
