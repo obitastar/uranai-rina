@@ -11,11 +11,12 @@ interface ResultScreenProps {
   result: FortuneResult;
   onRetry: () => void;
   onTop: () => void;
+  onAisho?: () => void;
 }
 
 const SLIDE_LABELS = ["命式表", "本質", "恋愛運", "仕事運", "五行", "今年", "10年運勢", "完了"];
 
-export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
+export function ResultScreen({ result, onRetry, onTop, onAisho }: ResultScreenProps) {
   const { input, fourPillars } = result;
   const birthLabel = `${input.year}年${input.month}月${input.day}日${input.hour !== null ? ` ${input.hour}時` : ""}生`;
   const currentYear = new Date().getFullYear();
@@ -172,6 +173,16 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
             </div>
 
             <div className="space-y-3 sm:space-y-4 pt-2 sm:pt-4">
+              {onAisho && (
+                <button onClick={onAisho} className="group relative w-full">
+                  <div className="relative ornament-border rounded-xl px-6 sm:px-8 py-4 sm:py-5 bg-pink-500/10 border border-pink-500/30 active:bg-pink-500/20">
+                    <span className="text-base sm:text-lg tracking-[0.2em] sm:tracking-[0.25em] text-pink-300 font-bold">
+                      相性診断へ
+                    </span>
+                    <p className="text-xs text-navy-400/60 tracking-wider mt-1">あなたの情報はそのまま使えます</p>
+                  </div>
+                </button>
+              )}
               <button
                 onClick={onRetry}
                 className="group relative w-full"

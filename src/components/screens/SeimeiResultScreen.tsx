@@ -7,6 +7,7 @@ interface SeimeiResultScreenProps {
   result: SeimeiResult;
   onRetry: () => void;
   onTop: () => void;
+  onAisho?: () => void;
 }
 
 const SLIDE_LABELS = ["総合", "画数解析", "人格", "地格", "総格", "外格", "三才", "アドバイス"];
@@ -69,7 +70,7 @@ function calcOverallScore(details: GokakuDetail[]): { label: string; stars: numb
   return { label: labels[stars - 1], stars };
 }
 
-export function SeimeiResultScreen({ result, onRetry, onTop }: SeimeiResultScreenProps) {
+export function SeimeiResultScreen({ result, onRetry, onTop, onAisho }: SeimeiResultScreenProps) {
   const { sei, mei, seiStrokes, meiStrokes, gokakuDetails, sansai } = result;
   const overall = calcOverallScore(gokakuDetails);
 
@@ -317,6 +318,16 @@ export function SeimeiResultScreen({ result, onRetry, onTop }: SeimeiResultScree
 
             {/* ボタン */}
             <div className="space-y-3 pt-2">
+              {onAisho && (
+                <button onClick={onAisho} className="group relative w-full">
+                  <div className="relative ornament-border rounded-xl px-6 py-4 bg-pink-500/10 border border-pink-500/30 active:bg-pink-500/20">
+                    <span className="text-base tracking-[0.2em] text-pink-300 font-bold">
+                      相性診断へ
+                    </span>
+                    <p className="text-xs text-navy-400/60 tracking-wider mt-1">あなたの情報はそのまま使えます</p>
+                  </div>
+                </button>
+              )}
               <button
                 onClick={onRetry}
                 className="w-full ornament-border rounded-full px-10 py-3 bg-navy-900/60 text-gold-400 tracking-wider text-sm"
