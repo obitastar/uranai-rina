@@ -47,7 +47,7 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
             </div>
 
             <div className="animate-reveal-up opacity-0 stagger-2">
-              <div className="ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md p-4 sm:p-6">
+              <div className="ornament-border rounded-2xl bg-navy-900/40 p-4 sm:p-6">
                 <h3 className="text-center text-sm sm:text-base text-gold-500/80 tracking-widest mb-3 sm:mb-5">あなたの守護動物</h3>
                 <div className="flex justify-center gap-4 sm:gap-8">
                   <div className="text-center">
@@ -187,8 +187,8 @@ export function ResultScreen({ result, onRetry, onTop }: ResultScreenProps) {
                 onClick={onRetry}
                 className="group relative w-full"
               >
-                <div className="absolute inset-0 rounded-xl bg-gold-500/15 blur-xl group-hover:bg-gold-500/25 transition-all duration-500" />
-                <div className="relative ornament-border rounded-xl px-6 sm:px-8 py-4 sm:py-5 bg-navy-900/50 backdrop-blur-sm hover:bg-navy-800/50 transition-all duration-500">
+                <div className="absolute inset-0 rounded-xl bg-gold-500/15 blur-xl group-hover:bg-gold-500/25 transition-colors duration-150" />
+                <div className="relative ornament-border rounded-xl px-6 sm:px-8 py-4 sm:py-5 bg-navy-900/50 hover:bg-navy-800/50 transition-colors duration-150">
                   <span className="text-base sm:text-lg tracking-[0.2em] sm:tracking-[0.25em] text-gold-gradient-animated font-bold">
                     もう一度鑑定する
                   </span>
@@ -257,7 +257,7 @@ function SlideContent({
         </p>
 
         {/* コンテンツ */}
-        <div className="ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md overflow-hidden">
+        <div className="ornament-border rounded-2xl bg-navy-900/40 overflow-hidden">
           <div
             className="h-[2px] w-full"
             style={{
@@ -321,7 +321,7 @@ function GogyoSlide({ gogyoBalance, gogyoReading }: { gogyoBalance: GogyoBalance
         </p>
 
         {/* バーチャート */}
-        <div className="ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md p-4 sm:p-5 space-y-3 sm:space-y-4">
+        <div className="ornament-border rounded-2xl bg-navy-900/40 p-4 sm:p-5 space-y-3 sm:space-y-4">
           {gogyoBalance.map(({ gogyo, count }) => {
             const colors = GOGYO_COLORS[gogyo];
             const pct = maxCount > 0 ? (count / maxCount) * 100 : 0;
@@ -341,7 +341,7 @@ function GogyoSlide({ gogyoBalance, gogyoReading }: { gogyoBalance: GogyoBalance
         </div>
 
         {/* 鑑定文 */}
-        <div className="ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md overflow-hidden">
+        <div className="ornament-border rounded-2xl bg-navy-900/40 overflow-hidden">
           <div
             className="h-[2px] w-full"
             style={{
@@ -489,7 +489,7 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
               {DETAIL_CATEGORIES.map(cat => (
                 <div
                   key={cat.key}
-                  className={`rounded-xl border border-white/5 bg-gradient-to-r ${cat.gradient} backdrop-blur-sm p-3 sm:p-4`}
+                  className={`rounded-xl border border-white/5 bg-gradient-to-r ${cat.gradient} p-3 sm:p-4`}
                 >
                   <div className="flex items-start gap-3 sm:gap-3.5">
                     <div className="flex-shrink-0 flex flex-col items-center gap-1 pt-0.5">
@@ -515,7 +515,7 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
                 <button
                   key={yf.year}
                   onClick={() => setSelectedYear(yf.year)}
-                  className={`w-full text-left transition-all duration-300 rounded-xl border ${colors.border} ${colors.bg} backdrop-blur-sm ${isCurrent ? 'ring-1 ring-gold-500/30' : ''}`}
+                  className={`w-full text-left transition-all duration-300 rounded-xl border ${colors.border} ${colors.bg} ${isCurrent ? 'ring-1 ring-gold-500/30' : ''}`}
                 >
                   <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3">
                     <div className="flex-shrink-0 w-12 sm:w-14 text-center">

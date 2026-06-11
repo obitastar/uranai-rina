@@ -51,7 +51,7 @@ export function InputScreen({ onSubmit, onBack }: InputScreenProps) {
   };
 
   const selectClass =
-    "w-full rounded-xl bg-navy-800/60 border border-gold-500/20 text-navy-50 px-3 sm:px-4 py-3 sm:py-4 text-base sm:text-lg focus:outline-none focus:border-gold-500/60 focus:bg-navy-800/80 focus:shadow-[0_0_20px_rgba(212,160,23,0.1)] transition-all duration-300 appearance-none backdrop-blur-sm";
+    "w-full rounded-xl bg-navy-800/60 border border-gold-500/20 text-navy-50 px-3 sm:px-4 py-3 sm:py-4 text-base sm:text-lg focus:outline-none focus:border-gold-500/60 focus:bg-navy-800/80 focus:shadow-[0_0_20px_rgba(212,160,23,0.1)] transition-all duration-300 appearance-none";
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 py-6 sm:py-8">
@@ -67,7 +67,7 @@ export function InputScreen({ onSubmit, onBack }: InputScreenProps) {
           </p>
         </div>
 
-        <div className={`ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-8 space-y-5 sm:space-y-7 backdrop-blur-md ${mounted ? 'animate-fade-in-up stagger-1 opacity-0' : 'opacity-0'}`}>
+        <div className={`ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-8 space-y-5 sm:space-y-7 ${mounted ? 'animate-fade-in-up stagger-1 opacity-0' : 'opacity-0'}`}>
           {/* 生年月日 */}
           <div className="space-y-3">
             <label className="flex items-center gap-2 text-sm text-gold-400/80 tracking-widest font-medium">
@@ -117,7 +117,7 @@ export function InputScreen({ onSubmit, onBack }: InputScreenProps) {
                   key={value}
                   type="button"
                   onClick={() => { setGender(value); setError(""); }}
-                  className={`relative py-4 sm:py-5 rounded-xl text-base sm:text-lg font-medium transition-all duration-500 overflow-hidden ${
+                  className={`relative py-4 sm:py-5 rounded-xl text-base sm:text-lg font-medium transition-colors duration-150 overflow-hidden ${
                     gender === value
                       ? "bg-gold-500/15 border-2 border-gold-500/60 text-gold-300 shadow-[0_0_30px_rgba(212,160,23,0.15)]"
                       : "bg-navy-800/40 border border-gold-500/10 text-navy-400 hover:border-gold-500/30 hover:text-navy-300"
@@ -141,9 +141,9 @@ export function InputScreen({ onSubmit, onBack }: InputScreenProps) {
 
           <button
             onClick={handleSubmit}
-            className="group relative w-full py-4 sm:py-5 rounded-xl overflow-hidden text-lg sm:text-xl font-bold tracking-[0.2em] sm:tracking-[0.25em] transition-all duration-500 active:scale-[0.97]"
+            className="group relative w-full py-4 sm:py-5 rounded-xl overflow-hidden text-lg sm:text-xl font-bold tracking-[0.2em] sm:tracking-[0.25em] transition-colors duration-150 active:scale-[0.97]"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-gold-700 via-gold-500 to-gold-700 group-hover:from-gold-600 group-hover:via-gold-400 group-hover:to-gold-600 transition-all duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-r from-gold-700 via-gold-500 to-gold-700 group-hover:from-gold-600 group-hover:via-gold-400 group-hover:to-gold-600 transition-colors duration-150" />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="relative text-navy-950 drop-shadow-sm">鑑定する</span>
           </button>

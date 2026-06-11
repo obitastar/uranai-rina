@@ -33,7 +33,7 @@ export function ResultCard({ title, subtitle, icon, content }: ResultCardProps) 
   return (
     <div
       ref={cardRef}
-      className={`card-glow ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md overflow-hidden transition-all duration-1000 ${
+      className={`card-glow ornament-border rounded-2xl bg-navy-900/40 overflow-hidden transition-all duration-1000 ${
         visible
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-12"

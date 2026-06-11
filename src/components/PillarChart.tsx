@@ -24,7 +24,7 @@ export function PillarChart({ result }: PillarChartProps) {
   ];
 
   return (
-    <div className="card-glow ornament-border rounded-2xl bg-navy-900/40 backdrop-blur-md overflow-hidden">
+    <div className="card-glow ornament-border rounded-2xl bg-navy-900/40 overflow-hidden">
       <div className="h-[1px] w-full animate-glow-line" />
       <div className="p-4 sm:p-6">
         <h2 className="text-center text-xl sm:text-2xl font-bold text-gold-gradient-animated tracking-[0.3em] mb-1">

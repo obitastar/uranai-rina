@@ -587,7 +587,7 @@ export function ZodiacBadge({ shi }: { shi: Junishi }) {
   const t = ZODIAC_MAP[shi];
   return (
     <span
-      className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border backdrop-blur-sm"
+      className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border"
       style={{
         color: t.primary,
         borderColor: `${t.primary}30`,

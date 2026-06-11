@@ -14,14 +14,11 @@ type Screen = "top" | "input" | "loading" | "result";
 export default function App() {
   const [screen, setScreen] = useState<Screen>("top");
   const [result, setResult] = useState<FortuneResult | null>(null);
-  const [fadeOut, setFadeOut] = useState(false);
+  const [key, setKey] = useState(0);
 
   const transition = useCallback((to: Screen) => {
-    setFadeOut(true);
-    setTimeout(() => {
-      setScreen(to);
-      setFadeOut(false);
-    }, 300);
+    setKey(k => k + 1);
+    setScreen(to);
   }, []);
 
   const handleStart = useCallback(() => {
@@ -29,8 +26,7 @@ export default function App() {
   }, [transition]);
 
   const handleSubmit = useCallback((input: FortuneInput) => {
-    setScreen("loading");
-    setFadeOut(false);
+    transition("loading");
 
     // 計算は即座に実行、演出のみ待つ
     let fortune: FortuneResult | null = null;
@@ -42,13 +38,10 @@ export default function App() {
 
     setTimeout(() => {
       setResult(fortune);
-      setFadeOut(true);
-      setTimeout(() => {
-        setScreen("result");
-        setFadeOut(false);
-      }, 300);
-    }, 2500);
-  }, []);
+      setKey(k => k + 1);
+      setScreen("result");
+    }, 2000);
+  }, [transition]);
 
   const handleRetry = useCallback(() => {
     setResult(null);
@@ -64,11 +57,7 @@ export default function App() {
     <div className="relative w-full min-h-screen bg-mystical overflow-hidden">
       <StarField />
 
-      <div
-        className={`relative z-10 w-full min-h-screen transition-all duration-300 will-change-[opacity,transform] ${
-          fadeOut ? "opacity-0 scale-[0.98]" : "opacity-100 scale-100"
-        }`}
-      >
+      <div key={key} className="relative z-10 w-full min-h-screen" style={{ animation: 'fadeIn 0.2s ease-out' }}>
         {screen === "top" && <TopScreen onStart={handleStart} />}
         {screen === "input" && (
           <InputScreen onSubmit={handleSubmit} onBack={handleTop} />

@@ -38,15 +38,17 @@ export function SlideViewer({ children, onSlideChange }: SlideViewerProps) {
           return (
             <div
               key={i}
-              className="absolute inset-0 w-full h-full transition-all duration-400 ease-out"
+              className="absolute inset-0 w-full h-full"
               style={{
                 transform: `translateX(${offset * 100}%)`,
                 opacity: isActive ? 1 : 0,
                 pointerEvents: isActive ? 'auto' : 'none',
                 zIndex: isActive ? 10 : 0,
+                transition: 'transform 200ms ease-out, opacity 150ms ease-out',
+                willChange: isActive ? 'auto' : 'transform',
               }}
             >
-              <div className="h-full pb-20 sm:pb-24 overflow-y-auto overscroll-contain">
+              <div className="h-full pb-16 sm:pb-20 overflow-y-auto overscroll-contain">
                 {child}
               </div>
             </div>
@@ -55,16 +57,16 @@ export function SlideViewer({ children, onSlideChange }: SlideViewerProps) {
       </div>
 
       {/* 下部ナビゲーション */}
-      <div className="absolute bottom-3 sm:bottom-5 left-0 right-0 z-20 px-4">
+      <div className="absolute bottom-2 sm:bottom-4 left-0 right-0 z-20 px-4">
         <div className="flex items-center justify-between max-w-md mx-auto">
           {/* 戻るボタン */}
           <button
             onClick={() => goTo(current - 1)}
             disabled={current === 0}
-            className={`flex items-center gap-1 px-4 py-2.5 rounded-full text-sm font-medium tracking-wider transition-all duration-300 ${
+            className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium tracking-wider transition-opacity duration-150 ${
               current === 0
                 ? 'opacity-0 pointer-events-none'
-                : 'bg-navy-800/70 border border-gold-500/20 text-gold-400/80 hover:text-gold-300 hover:border-gold-500/40 active:scale-95 backdrop-blur-sm'
+                : 'bg-navy-800/80 border border-gold-500/20 text-gold-400/80 active:opacity-70'
             }`}
             aria-label="前へ"
           >
@@ -72,12 +74,12 @@ export function SlideViewer({ children, onSlideChange }: SlideViewerProps) {
             戻る
           </button>
 
-          {/* ドットインジケータ��� */}
+          {/* ドットインジケーター */}
           <div className="flex gap-1.5">
             {Array.from({ length: total }).map((_, i) => (
               <div
                 key={i}
-                className={`transition-all duration-300 rounded-full ${
+                className={`rounded-full transition-all duration-150 ${
                   i === current
                     ? 'w-5 h-1.5 bg-gold-500'
                     : 'w-1.5 h-1.5 bg-navy-600'
@@ -90,10 +92,10 @@ export function SlideViewer({ children, onSlideChange }: SlideViewerProps) {
           <button
             onClick={() => goTo(current + 1)}
             disabled={current === total - 1}
-            className={`flex items-center gap-1 px-4 py-2.5 rounded-full text-sm font-medium tracking-wider transition-all duration-300 ${
+            className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium tracking-wider transition-opacity duration-150 ${
               current === total - 1
                 ? 'opacity-0 pointer-events-none'
-                : 'bg-gold-500/15 border border-gold-500/30 text-gold-300 hover:bg-gold-500/25 hover:border-gold-500/50 active:scale-95 backdrop-blur-sm'
+                : 'bg-gold-500/15 border border-gold-500/30 text-gold-300 active:opacity-70'
             }`}
             aria-label="次へ"
           >

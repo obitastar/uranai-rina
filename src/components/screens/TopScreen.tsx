@@ -241,7 +241,7 @@ export function TopScreen({ onStart }: TopScreenProps) {
           className={`group relative mt-4 ${mounted ? 'animate-fade-in-up stagger-5 opacity-0' : 'opacity-0'}`}
         >
           <div className="absolute inset-0 rounded-full bg-gold-500/15 blur-2xl group-hover:bg-gold-500/30 group-hover:blur-3xl transition-all duration-700" />
-          <div className="relative ornament-border rounded-full px-10 sm:px-16 py-4 sm:py-5 bg-navy-900/50 backdrop-blur-sm hover:bg-navy-800/50 transition-all duration-500 animate-breathe">
+          <div className="relative ornament-border rounded-full px-10 sm:px-16 py-4 sm:py-5 bg-navy-900/50 hover:bg-navy-800/50 transition-colors duration-150 animate-breathe">
             <span className="text-base sm:text-xl tracking-[0.25em] sm:tracking-[0.35em] text-gold-gradient-animated font-bold">
               鑑定を始める
             </span>
