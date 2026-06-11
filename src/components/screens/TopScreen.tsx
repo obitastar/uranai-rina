@@ -25,12 +25,13 @@ export function TopScreen({ onSelect }: TopScreenProps) {
       </div>
 
       <div className="relative z-10 flex flex-col items-center gap-6 sm:gap-10">
-        {/* メイン：八卦曼荼羅 - 簡略版 */}
+        {/* メイン：八卦曼荼羅 */}
         <div className={`relative ${mounted ? 'animate-fade-in-scale' : 'opacity-0'}`}>
-          <div className="relative w-40 h-40 sm:w-52 sm:h-52 flex items-center justify-center">
-            {/* 八卦リング（1つだけ回転） */}
-            <svg viewBox="0 0 320 320" className="absolute w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] animate-slow-spin">
-              <circle cx="160" cy="160" r="145" fill="none" stroke="rgba(212,160,23,0.2)" strokeWidth="0.5" />
+          <div className="relative w-48 h-48 sm:w-60 sm:h-60 flex items-center justify-center">
+            {/* 外側の八卦リング（ゆっくり回転） */}
+            <svg viewBox="0 0 320 320" className="absolute w-[280px] h-[280px] sm:w-[340px] sm:h-[340px] animate-slow-spin">
+              <circle cx="160" cy="160" r="150" fill="none" stroke="rgba(212,160,23,0.15)" strokeWidth="0.5" strokeDasharray="4 8" />
+              <circle cx="160" cy="160" r="145" fill="none" stroke="rgba(212,160,23,0.25)" strokeWidth="0.5" />
               {BAGUA.map((symbol, i) => {
                 const angle = (i * Math.PI * 2) / 8 - Math.PI / 2;
                 const x = 160 + Math.cos(angle) * 145;
@@ -43,8 +44,8 @@ export function TopScreen({ onSelect }: TopScreenProps) {
                     textAnchor="middle"
                     dominantBaseline="central"
                     fill="#d4a017"
-                    opacity="0.4"
-                    fontSize="14"
+                    opacity="0.5"
+                    fontSize="15"
                     fontFamily="serif"
                   >
                     {symbol}
@@ -53,30 +54,64 @@ export function TopScreen({ onSelect }: TopScreenProps) {
               })}
             </svg>
 
-            {/* 内側の静的リング */}
-            <svg viewBox="0 0 200 200" className="absolute w-40 h-40 sm:w-44 sm:h-44">
-              <circle cx="100" cy="100" r="65" fill="none" stroke="#d4a017" strokeWidth="0.3" opacity="0.2" />
+            {/* 中間リング（逆回転） */}
+            <svg viewBox="0 0 240 240" className="absolute w-[180px] h-[180px] sm:w-[220px] sm:h-[220px]" style={{ animation: 'slowSpin 30s linear infinite reverse' }}>
+              <circle cx="120" cy="120" r="105" fill="none" stroke="rgba(212,160,23,0.12)" strokeWidth="0.8" strokeDasharray="2 6" />
+              {/* 十二支の記号（小さく配置） */}
+              {['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'].map((shi, i) => {
+                const angle = (i * Math.PI * 2) / 12 - Math.PI / 2;
+                const x = 120 + Math.cos(angle) * 105;
+                const y = 120 + Math.sin(angle) * 105;
+                return (
+                  <text
+                    key={i}
+                    x={x}
+                    y={y}
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fill="#d4a017"
+                    opacity="0.25"
+                    fontSize="9"
+                    fontFamily="serif"
+                  >
+                    {shi}
+                  </text>
+                );
+              })}
             </svg>
 
-            {/* 中央の陰陽太極図 */}
+            {/* 内側グロー */}
+            <div className="absolute w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gold-500/[0.04] blur-[20px]" />
+
+            {/* 中央の陰陽太極図（拡大・回転） */}
             <div className="absolute flex items-center justify-center">
-              <svg viewBox="0 0 100 100" className="w-16 h-16 sm:w-20 sm:h-20">
+              <svg viewBox="0 0 100 100" className="w-20 h-20 sm:w-24 sm:h-24" style={{ animation: 'slowSpin 25s linear infinite reverse' }}>
                 <defs>
                   <linearGradient id="yinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#fbe799" stopOpacity="0.9" />
-                    <stop offset="100%" stopColor="#d4a017" stopOpacity="0.7" />
+                    <stop offset="0%" stopColor="#fbe799" stopOpacity="0.95" />
+                    <stop offset="100%" stopColor="#d4a017" stopOpacity="0.8" />
                   </linearGradient>
+                  <radialGradient id="yinGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#fbe799" stopOpacity="0.15" />
+                    <stop offset="100%" stopColor="#d4a017" stopOpacity="0" />
+                  </radialGradient>
                   <clipPath id="yinClip">
-                    <circle cx="50" cy="50" r="38" />
+                    <circle cx="50" cy="50" r="40" />
                   </clipPath>
                 </defs>
-                <circle cx="50" cy="50" r="38" fill="none" stroke="#d4a017" strokeWidth="0.8" opacity="0.5" />
+                {/* グロー */}
+                <circle cx="50" cy="50" r="48" fill="url(#yinGlow)" />
+                {/* 外枠 */}
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#d4a017" strokeWidth="1" opacity="0.6" />
+                {/* 陰陽 */}
                 <g clipPath="url(#yinClip)">
-                  <path d="M50,12 A38,38 0 0,1 50,88 A19,19 0 0,0 50,50 A19,19 0 0,1 50,12" fill="url(#yinGrad)" />
-                  <path d="M50,12 A38,38 0 0,0 50,88 A19,19 0 0,1 50,50 A19,19 0 0,0 50,12" fill="#0a0d1c" stroke="#d4a017" strokeWidth="0.3" />
-                  <circle cx="50" cy="31" r="5" fill="#0a0d1c" />
-                  <circle cx="50" cy="69" r="5" fill="url(#yinGrad)" />
+                  <path d="M50,10 A40,40 0 0,1 50,90 A20,20 0 0,0 50,50 A20,20 0 0,1 50,10" fill="url(#yinGrad)" />
+                  <path d="M50,10 A40,40 0 0,0 50,90 A20,20 0 0,1 50,50 A20,20 0 0,0 50,10" fill="#0a0d1c" />
+                  <circle cx="50" cy="30" r="6" fill="#0a0d1c" />
+                  <circle cx="50" cy="70" r="6" fill="url(#yinGrad)" />
                 </g>
+                {/* 外枠のキラリ */}
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#fbe799" strokeWidth="0.3" opacity="0.3" />
               </svg>
             </div>
           </div>
@@ -91,8 +126,8 @@ export function TopScreen({ onSelect }: TopScreenProps) {
             </h1>
           </div>
           <div className={`${mounted ? 'animate-fade-in-up stagger-3 opacity-0' : 'opacity-0'}`}>
-            <p className="text-sm sm:text-base text-navy-100/60 tracking-[0.3em] sm:tracking-[0.4em] font-medium">
-              鑑 定 メ ニ ュ ー を 選 択
+            <p className="text-sm sm:text-base text-navy-100/60 tracking-[0.2em] sm:tracking-[0.3em] font-medium">
+              鑑定メニューを選択
             </p>
           </div>
           <div className={`w-24 sm:w-40 h-px mx-auto bg-gradient-to-r from-transparent via-gold-500/40 to-transparent ${mounted ? 'animate-fade-in stagger-3 opacity-0' : 'opacity-0'}`} />
@@ -120,8 +155,7 @@ export function TopScreen({ onSelect }: TopScreenProps) {
                     四柱推命<rp>(</rp><rt className="text-xs text-gold-300/70">しちゅうすいめい</rt><rp>)</rp>
                   </ruby>
                   <p className="text-xs sm:text-sm text-navy-300/60 leading-relaxed tracking-wider">
-                    生年月日と出生時刻から<ruby className="text-navy-300/60">天干地支<rp>(</rp><rt className="text-[0.6rem] text-navy-400/50">てんかんちし</rt><rp>)</rp></ruby>を導き、<br className="hidden sm:block" />
-                    あなたの本質・運勢を読み解く
+                    生年月日から<ruby className="text-navy-300/60">命式<rp>(</rp><rt className="text-[0.6rem] text-navy-400/50">めいしき</rt><rp>)</rp></ruby>を導き、あなたの本質・運勢を読み解きます
                   </p>
                 </div>
                 {/* 矢印 */}
@@ -152,8 +186,7 @@ export function TopScreen({ onSelect }: TopScreenProps) {
                     姓名判断<rp>(</rp><rt className="text-xs text-gold-300/70">せいめいはんだん</rt><rp>)</rp>
                   </ruby>
                   <p className="text-xs sm:text-sm text-navy-300/60 leading-relaxed tracking-wider">
-                    お名前の画数から<ruby className="text-navy-300/60">五行<rp>(</rp><rt className="text-[0.6rem] text-navy-400/50">ごぎょう</rt><rp>)</rp></ruby>のバランスを読み、<br className="hidden sm:block" />
-                    運勢の流れを鑑定する
+                    お名前の画数から<ruby className="text-navy-300/60">五格<rp>(</rp><rt className="text-[0.6rem] text-navy-400/50">ごかく</rt><rp>)</rp></ruby>と<ruby className="text-navy-300/60">三才<rp>(</rp><rt className="text-[0.6rem] text-navy-400/50">さんさい</rt><rp>)</rp></ruby>を読み解きます
                   </p>
                 </div>
                 {/* 矢印 */}
