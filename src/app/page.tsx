@@ -21,7 +21,7 @@ export default function App() {
     setTimeout(() => {
       setScreen(to);
       setFadeOut(false);
-    }, 500);
+    }, 300);
   }, []);
 
   const handleStart = useCallback(() => {
@@ -32,19 +32,22 @@ export default function App() {
     setScreen("loading");
     setFadeOut(false);
 
+    // 計算は即座に実行、演出のみ待つ
+    let fortune: FortuneResult | null = null;
+    try {
+      fortune = calculateFortune(input);
+    } catch {
+      fortune = null;
+    }
+
     setTimeout(() => {
-      try {
-        const fortune = calculateFortune(input);
-        setResult(fortune);
-      } catch {
-        setResult(null);
-      }
+      setResult(fortune);
       setFadeOut(true);
       setTimeout(() => {
         setScreen("result");
         setFadeOut(false);
-      }, 500);
-    }, 4000);
+      }, 300);
+    }, 2500);
   }, []);
 
   const handleRetry = useCallback(() => {
@@ -62,8 +65,8 @@ export default function App() {
       <StarField />
 
       <div
-        className={`relative z-10 w-full min-h-screen transition-all duration-500 ${
-          fadeOut ? "opacity-0 scale-[0.97]" : "opacity-100 scale-100"
+        className={`relative z-10 w-full min-h-screen transition-all duration-300 will-change-[opacity,transform] ${
+          fadeOut ? "opacity-0 scale-[0.98]" : "opacity-100 scale-100"
         }`}
       >
         {screen === "top" && <TopScreen onStart={handleStart} />}
