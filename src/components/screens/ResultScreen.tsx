@@ -362,18 +362,26 @@ function GogyoSlide({ gogyoBalance, gogyoReading }: { gogyoBalance: GogyoBalance
 }
 
 // 運勢レベルの色
-function fortuneColor(juniunsei: string): { bg: string; border: string; text: string; dot: string } {
-  const good = ['長生', '冠帯', '建禄', '帝旺'];
-  const caution = ['病', '死', '絶'];
-  if (good.includes(juniunsei)) return { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400', dot: 'bg-emerald-400' };
-  if (caution.includes(juniunsei)) return { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-amber-400', dot: 'bg-amber-400' };
-  return { bg: 'bg-sky-500/10', border: 'border-sky-500/30', text: 'text-sky-400', dot: 'bg-sky-400' };
-}
+const LEVEL_COLORS = {
+  good: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400', dot: 'bg-emerald-400', label: '好調', labelBg: 'bg-emerald-500/20' },
+  neutral: { bg: 'bg-sky-500/10', border: 'border-sky-500/30', text: 'text-sky-400', dot: 'bg-sky-400', label: '平穏', labelBg: 'bg-sky-500/20' },
+  caution: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-amber-400', dot: 'bg-amber-400', label: '注意', labelBg: 'bg-amber-500/20' },
+};
+
+// カテゴリアイコンと色
+const DETAIL_CATEGORIES = [
+  { key: 'work' as const, label: '仕事運', color: 'text-blue-400', icon: '💼' },
+  { key: 'love' as const, label: '恋愛運', color: 'text-pink-400', icon: '💕' },
+  { key: 'money' as const, label: '金運', color: 'text-yellow-400', icon: '💰' },
+  { key: 'marriage' as const, label: '結婚運', color: 'text-rose-300', icon: '💍' },
+  { key: 'children' as const, label: '子供運', color: 'text-green-400', icon: '👶' },
+  { key: 'health' as const, label: '健康運', color: 'text-cyan-400', icon: '🏥' },
+];
 
 // 10年運勢スライド
 function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
   const [visible, setVisible] = useState(false);
-  const [expanded, setExpanded] = useState<number | null>(null);
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 100);
     return () => clearTimeout(t);
@@ -381,6 +389,7 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
 
   const currentYear = new Date().getFullYear();
   const accentColor = SECTION_COLORS.decade.primary;
+  const selectedFortune = tenYearFortune.find(yf => yf.year === selectedYear);
 
   return (
     <div className="flex flex-col items-center justify-start h-full px-4 sm:px-6 py-5 sm:py-8 overflow-y-auto">
@@ -398,58 +407,130 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
           <div className="w-12 sm:w-16 h-[1px] mx-auto animate-glow-line" />
         </div>
 
-        {/* 説明文 */}
-        <p className="text-center text-sm sm:text-base text-navy-300/70 leading-relaxed tracking-wide px-2">
-          毎年の星の巡りから、向こう10年間の運気の波を一覧で表示しています。
+        <p className="text-center text-xs sm:text-sm text-navy-300/70 leading-relaxed tracking-wide px-2">
+          各年をタップすると、仕事・恋愛・金運など詳しい運勢が見られます
         </p>
 
-        <div className="space-y-1.5 sm:space-y-2 pb-2 sm:pb-4">
-          {tenYearFortune.map((yf, idx) => {
-            const colors = fortuneColor(yf.juniunsei);
-            const isExpanded = expanded === idx;
-            const isCurrentYear = yf.year === currentYear;
+        {/* 年タイムライン */}
+        <div className="grid grid-cols-5 gap-1.5 sm:gap-2 pb-1">
+          {tenYearFortune.map((yf) => {
+            const colors = LEVEL_COLORS[yf.level];
+            const isSelected = selectedYear === yf.year;
+            const isCurrent = yf.year === currentYear;
 
             return (
               <button
                 key={yf.year}
-                onClick={() => setExpanded(isExpanded ? null : idx)}
-                className={`w-full text-left transition-all duration-300 rounded-xl border ${colors.border} ${colors.bg} backdrop-blur-sm ${isCurrentYear ? 'ring-1 ring-gold-500/30' : ''}`}
+                onClick={() => setSelectedYear(isSelected ? null : yf.year)}
+                className={`relative rounded-lg py-2 sm:py-2.5 transition-all duration-300 border ${
+                  isSelected
+                    ? `${colors.border} ${colors.bg} ring-1 ring-gold-500/40 scale-105`
+                    : `border-navy-700/30 bg-navy-900/30 hover:bg-navy-800/40`
+                }`}
               >
-                <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3">
-                  <div className="flex-shrink-0 w-12 sm:w-14 text-center">
-                    <span className={`text-sm sm:text-base font-bold ${isCurrentYear ? 'text-gold-400' : 'text-navy-100/90'}`}>
-                      {yf.year}
-                    </span>
-                  </div>
-                  <div className={`flex-shrink-0 w-2 h-2 rounded-full ${colors.dot}`} />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                      <span className="text-navy-50/90 text-sm sm:text-base font-medium">
-                        {kanshiName(yf.kanshi)}
-                      </span>
-                      <span className={`text-xs sm:text-sm ${colors.text}`}>
-                        {yf.tsuhensei}
-                      </span>
-                      <span className="text-navy-400 text-xs sm:text-sm">
-                        {yf.juniunsei}
-                      </span>
-                    </div>
-                  </div>
-                  <div className={`flex-shrink-0 text-navy-400 text-xs sm:text-sm transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
-                    ▼
-                  </div>
+                <div className="text-center">
+                  <span className={`block text-xs sm:text-sm font-bold ${
+                    isCurrent ? 'text-gold-400' : isSelected ? 'text-navy-50' : 'text-navy-200/80'
+                  }`}>
+                    {yf.year}
+                  </span>
+                  <div className={`mx-auto mt-1 w-1.5 h-1.5 rounded-full ${colors.dot}`} />
                 </div>
-                <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
-                  <div className="px-3 sm:px-4 pb-3 pt-1 border-t border-navy-700/30">
-                    <p className="text-navy-100/90 text-sm sm:text-base leading-[1.9] sm:leading-[2] tracking-wide">
-                      {yf.reading}
-                    </p>
+                {isCurrent && (
+                  <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[0.5rem] text-gold-400 tracking-wider whitespace-nowrap">
+                    今年
                   </div>
-                </div>
+                )}
               </button>
             );
           })}
         </div>
+
+        {/* 選択された年の詳細 */}
+        {selectedFortune ? (
+          <div className="space-y-3 animate-fade-in-up">
+            {/* 年ヘッダー */}
+            <div className={`ornament-border rounded-xl ${LEVEL_COLORS[selectedFortune.level].bg} p-3 sm:p-4`}>
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg sm:text-xl font-black text-navy-50">
+                  {selectedFortune.year}年
+                  {selectedFortune.year === currentYear && (
+                    <span className="ml-2 text-xs sm:text-sm text-gold-400 font-medium">（今年）</span>
+                  )}
+                </h3>
+                <span className={`px-2.5 py-0.5 rounded-full text-xs sm:text-sm font-medium ${LEVEL_COLORS[selectedFortune.level].labelBg} ${LEVEL_COLORS[selectedFortune.level].text}`}>
+                  {LEVEL_COLORS[selectedFortune.level].label}
+                </span>
+              </div>
+              <p className="text-navy-100/90 text-sm sm:text-base leading-[1.9] tracking-wide">
+                {selectedFortune.reading}
+              </p>
+            </div>
+
+            {/* カテゴリ別詳細 */}
+            <div className="grid grid-cols-1 gap-2 sm:gap-2.5">
+              {DETAIL_CATEGORIES.map(cat => (
+                <div
+                  key={cat.key}
+                  className="ornament-border rounded-xl bg-navy-900/40 backdrop-blur-sm p-3 sm:p-4"
+                >
+                  <div className="flex items-start gap-2.5 sm:gap-3">
+                    <div className="flex-shrink-0 w-8 sm:w-9 text-center">
+                      <span className="text-lg sm:text-xl">{cat.icon}</span>
+                      <p className={`text-[0.6rem] sm:text-xs font-bold mt-0.5 ${cat.color} tracking-wider`}>{cat.label}</p>
+                    </div>
+                    <p className="flex-1 text-navy-100/90 text-sm sm:text-base leading-[1.8] sm:leading-[2] tracking-wide">
+                      {selectedFortune.detail[cat.key]}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          /* 未選択時のプレビュー一覧 */
+          <div className="space-y-1.5 sm:space-y-2 pb-2 sm:pb-4">
+            {tenYearFortune.map((yf) => {
+              const colors = LEVEL_COLORS[yf.level];
+              const isCurrent = yf.year === currentYear;
+
+              return (
+                <button
+                  key={yf.year}
+                  onClick={() => setSelectedYear(yf.year)}
+                  className={`w-full text-left transition-all duration-300 rounded-xl border ${colors.border} ${colors.bg} backdrop-blur-sm ${isCurrent ? 'ring-1 ring-gold-500/30' : ''}`}
+                >
+                  <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3">
+                    <div className="flex-shrink-0 w-12 sm:w-14 text-center">
+                      <span className={`text-sm sm:text-base font-bold ${isCurrent ? 'text-gold-400' : 'text-navy-100/90'}`}>
+                        {yf.year}
+                      </span>
+                    </div>
+                    <div className={`flex-shrink-0 w-2 h-2 rounded-full ${colors.dot}`} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-navy-100/80 text-xs sm:text-sm leading-relaxed line-clamp-1">
+                        {yf.reading}
+                      </p>
+                    </div>
+                    <span className={`flex-shrink-0 px-2 py-0.5 rounded-full text-[0.6rem] sm:text-xs font-medium ${colors.labelBg} ${colors.text}`}>
+                      {colors.label}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* 戻るボタン（詳細表示時） */}
+        {selectedFortune && (
+          <button
+            onClick={() => setSelectedYear(null)}
+            className="w-full text-center py-2 text-sm text-navy-400 hover:text-gold-500/60 tracking-widest transition-colors"
+          >
+            一覧に戻る
+          </button>
+        )}
       </div>
     </div>
   );

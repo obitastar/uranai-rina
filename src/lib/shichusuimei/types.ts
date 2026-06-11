@@ -58,13 +58,25 @@ export interface FortuneInput {
   gender: Gender;
 }
 
+// 年ごとの詳細運勢
+export interface YearlyFortuneDetail {
+  work: string;
+  love: string;
+  money: string;
+  marriage: string;
+  children: string;
+  health: string;
+}
+
 // 年ごとの運勢
 export interface YearlyFortune {
   year: number;
   kanshi: Kanshi;
   tsuhensei: Tsuhensei;
   juniunsei: Juniunsei;
+  level: 'good' | 'neutral' | 'caution';
   reading: string;
+  detail: YearlyFortuneDetail;
 }
 
 // 五行バランス

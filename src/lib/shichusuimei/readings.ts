@@ -1,4 +1,5 @@
-import type { Jikkan, Tsuhensei, Juniunsei, Gender, Kanshi } from './types';
+import type { Jikkan, Tsuhensei, Juniunsei, Gender, Kanshi, YearlyFortuneDetail } from './types';
+import { YEARLY_DETAIL } from './data-yearly-detail';
 
 interface ReadingParams {
   nicchu: Jikkan;
@@ -171,6 +172,21 @@ const JUNIUN_LEVEL: Record<Juniunsei, 'good' | 'neutral' | 'caution'> = {
 export function getTenYearReading(tsuhensei: Tsuhensei, juniunsei: Juniunsei): string {
   const level = JUNIUN_LEVEL[juniunsei];
   return TEN_YEAR_READINGS[tsuhensei][level];
+}
+
+/**
+ * 十二運の運勢レベルを取得
+ */
+export function getJuniunLevel(juniunsei: Juniunsei): 'good' | 'neutral' | 'caution' {
+  return JUNIUN_LEVEL[juniunsei];
+}
+
+/**
+ * 10年運勢の詳細鑑定を取得
+ */
+export function getTenYearDetail(tsuhensei: Tsuhensei, juniunsei: Juniunsei): YearlyFortuneDetail {
+  const level = JUNIUN_LEVEL[juniunsei];
+  return YEARLY_DETAIL[tsuhensei][level];
 }
 
 /**

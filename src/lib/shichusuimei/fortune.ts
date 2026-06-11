@@ -4,7 +4,7 @@ import { getYearPillar, getMonthPillar, getDayPillar, getHourPillar, getSetsuMon
 import { getTsuhensei, getJuniunsei, getZokanTsuhensei } from './stars';
 import { getKanshi } from './kanshi';
 import { kanGogyo, shiGogyo } from './gogyo';
-import { getReadings, getTenYearReading } from './readings';
+import { getReadings, getTenYearReading, getTenYearDetail, getJuniunLevel } from './readings';
 import { NISSHU } from './data-nisshu';
 import { TSUHENSEI as TSUHENSEI_DATA } from './data-tsuhensei';
 import { JUNIUNSEI as JUNIUNSEI_DATA, GOGYO_BALANCE, NENUN } from './data-interpretation';
@@ -151,12 +151,16 @@ export function calculateFortune(input: FortuneInput): FortuneResult {
     const yearTsuhensei = getTsuhensei(nicchu, yearKanshi.kan);
     const yearJuniunsei = getJuniunsei(nicchu, yearKanshi.shi);
     const reading = getTenYearReading(yearTsuhensei, yearJuniunsei);
+    const detail = getTenYearDetail(yearTsuhensei, yearJuniunsei);
+    const level = getJuniunLevel(yearJuniunsei);
     tenYearFortune.push({
       year: targetYear,
       kanshi: yearKanshi,
       tsuhensei: yearTsuhensei,
       juniunsei: yearJuniunsei,
+      level,
       reading,
+      detail,
     });
   }
 

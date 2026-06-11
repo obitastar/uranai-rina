@@ -11,6 +11,7 @@ export type {
   Juniunsei,
   Gender,
   YearlyFortune,
+  YearlyFortuneDetail,
   GogyoBalance,
   NisshuDetail,
   TsuhenseiDetail,
