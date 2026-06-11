@@ -368,14 +368,31 @@ const LEVEL_COLORS = {
   caution: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-amber-400', dot: 'bg-amber-400', label: '注意', labelBg: 'bg-amber-500/20' },
 };
 
-// カテゴリアイコンと色
+// カテゴリSVGアイコン
+function CategoryIcon({ type, color }: { type: string; color: string }) {
+  const paths: Record<string, string> = {
+    work: 'M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4zM2 4v16h20V4H2zm2 2h16v12H4V6z M9 9l2 2 4-4',
+    love: 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z',
+    money: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v1.5h1c1.1 0 2 .9 2 2s-.9 2-2 2h-1V14h1.5v-1h.5c1.93 0 3.5-1.57 3.5-3.5S14.43 6 12.5 6zM11 15h2v2h-2z',
+    marriage: 'M12 2L9 9H2l5.5 4-2 7L12 16l6.5 4-2-7L22 9h-7L12 2z',
+    children: 'M12 3c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 4c-2.21 0-4 1.79-4 4v3h2v5h4v-5h2v-3c0-2.21-1.79-4-4-4z M7 3c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm10 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z',
+    health: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v4h4v2h-4v4h-2v-4H7v-2h4V7z',
+  };
+  return (
+    <svg viewBox="0 0 24 24" className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d={paths[type] || ''} fill={color} fillOpacity="0.15" stroke={color} />
+    </svg>
+  );
+}
+
+// カテゴリ定義
 const DETAIL_CATEGORIES = [
-  { key: 'work' as const, label: '仕事運', color: 'text-blue-400', icon: '💼' },
-  { key: 'love' as const, label: '恋愛運', color: 'text-pink-400', icon: '💕' },
-  { key: 'money' as const, label: '金運', color: 'text-yellow-400', icon: '💰' },
-  { key: 'marriage' as const, label: '結婚運', color: 'text-rose-300', icon: '💍' },
-  { key: 'children' as const, label: '子供運', color: 'text-green-400', icon: '👶' },
-  { key: 'health' as const, label: '健康運', color: 'text-cyan-400', icon: '🏥' },
+  { key: 'work' as const, label: '仕事運', color: '#60a5fa', gradient: 'from-blue-500/20 to-blue-400/5' },
+  { key: 'love' as const, label: '恋愛運', color: '#f472b6', gradient: 'from-pink-500/20 to-pink-400/5' },
+  { key: 'money' as const, label: '金運', color: '#fbbf24', gradient: 'from-yellow-500/20 to-yellow-400/5' },
+  { key: 'marriage' as const, label: '結婚運', color: '#fb923c', gradient: 'from-orange-500/20 to-orange-400/5' },
+  { key: 'children' as const, label: '子供運', color: '#4ade80', gradient: 'from-green-500/20 to-green-400/5' },
+  { key: 'health' as const, label: '健康運', color: '#22d3ee', gradient: 'from-cyan-500/20 to-cyan-400/5' },
 ];
 
 // 10年運勢スライド
@@ -472,12 +489,12 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
               {DETAIL_CATEGORIES.map(cat => (
                 <div
                   key={cat.key}
-                  className="ornament-border rounded-xl bg-navy-900/40 backdrop-blur-sm p-3 sm:p-4"
+                  className={`rounded-xl border border-white/5 bg-gradient-to-r ${cat.gradient} backdrop-blur-sm p-3 sm:p-4`}
                 >
-                  <div className="flex items-start gap-2.5 sm:gap-3">
-                    <div className="flex-shrink-0 w-8 sm:w-9 text-center">
-                      <span className="text-lg sm:text-xl">{cat.icon}</span>
-                      <p className={`text-[0.6rem] sm:text-xs font-bold mt-0.5 ${cat.color} tracking-wider`}>{cat.label}</p>
+                  <div className="flex items-start gap-3 sm:gap-3.5">
+                    <div className="flex-shrink-0 flex flex-col items-center gap-1 pt-0.5">
+                      <CategoryIcon type={cat.key} color={cat.color} />
+                      <p className="text-[0.55rem] sm:text-[0.6rem] font-bold tracking-wider" style={{ color: cat.color }}>{cat.label}</p>
                     </div>
                     <p className="flex-1 text-navy-100/90 text-xs sm:text-sm leading-[1.8] sm:leading-[1.9] tracking-wide">
                       {selectedFortune.detail[cat.key]}
