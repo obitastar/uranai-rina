@@ -58,10 +58,10 @@ export function InputScreen({ onSubmit, onBack }: InputScreenProps) {
       <div className="relative z-10 w-full max-w-md space-y-5 sm:space-y-8">
         <div className={`text-center space-y-2 sm:space-y-3 ${mounted ? 'animate-fade-in-down' : 'opacity-0'}`}>
           <div className="text-gold-500/60 text-2xl sm:text-3xl mb-1 sm:mb-2">☰</div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-[0.2em] sm:tracking-[0.3em] text-gold-gradient-animated">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-[0.2em] sm:tracking-[0.3em] text-gold-gradient">
             生年月日入力
           </h1>
-          <div className="w-16 sm:w-20 h-px mx-auto animate-glow-line" />
+          <div className="w-16 sm:w-20 h-px mx-auto bg-gradient-to-r from-transparent via-gold-500/40 to-transparent" />
           <p className="text-[0.65rem] sm:text-xs text-navy-400 tracking-widest">
             あなたの運命を読み解くための情報を入力してください
           </p>

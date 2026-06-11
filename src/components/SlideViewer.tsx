@@ -4,10 +4,11 @@ import { useState, useCallback, useEffect } from "react";
 
 interface SlideViewerProps {
   children: React.ReactNode[];
+  slideLabels?: string[];
   onSlideChange?: (index: number) => void;
 }
 
-export function SlideViewer({ children, onSlideChange }: SlideViewerProps) {
+export function SlideViewer({ children, slideLabels, onSlideChange }: SlideViewerProps) {
   const [current, setCurrent] = useState(0);
   const total = children.length;
 
@@ -29,10 +30,12 @@ export function SlideViewer({ children, onSlideChange }: SlideViewerProps) {
 
   return (
     <div className="relative w-full h-full overflow-hidden">
-      {/* スライドコンテナ */}
+      {/* スライドコンテナ - 現在±1のみレンダリング */}
       <div className="h-full">
         {children.map((child, i) => {
-          const offset = i - current;
+          // 現在のスライドと前後1枚のみDOMに存在させる
+          if (Math.abs(i - current) > 1) return null;
+
           const isActive = i === current;
 
           return (
@@ -40,15 +43,13 @@ export function SlideViewer({ children, onSlideChange }: SlideViewerProps) {
               key={i}
               className="absolute inset-0 w-full h-full"
               style={{
-                transform: `translateX(${offset * 100}%)`,
                 opacity: isActive ? 1 : 0,
                 pointerEvents: isActive ? 'auto' : 'none',
                 zIndex: isActive ? 10 : 0,
-                transition: 'transform 200ms ease-out, opacity 150ms ease-out',
-                willChange: isActive ? 'auto' : 'transform',
+                transition: 'opacity 200ms ease-out',
               }}
             >
-              <div className="h-full pb-16 sm:pb-20 overflow-y-auto overscroll-contain">
+              <div className="h-full pb-20 overflow-y-auto overscroll-contain">
                 {child}
               </div>
             </div>
@@ -57,16 +58,16 @@ export function SlideViewer({ children, onSlideChange }: SlideViewerProps) {
       </div>
 
       {/* 下部ナビゲーション */}
-      <div className="absolute bottom-2 sm:bottom-4 left-0 right-0 z-20 px-4">
-        <div className="flex items-center justify-between max-w-md mx-auto">
+      <div className="absolute bottom-0 left-0 right-0 z-20 bg-navy-950/90 border-t border-gold-500/10 safe-area-bottom">
+        <div className="flex items-center justify-between max-w-md mx-auto px-4 py-2.5">
           {/* 戻るボタン */}
           <button
             onClick={() => goTo(current - 1)}
             disabled={current === 0}
-            className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium tracking-wider transition-opacity duration-150 ${
+            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-medium tracking-wider ${
               current === 0
                 ? 'opacity-0 pointer-events-none'
-                : 'bg-navy-800/80 border border-gold-500/20 text-gold-400/80 active:opacity-70'
+                : 'bg-navy-800/80 border border-gold-500/20 text-gold-400/80 active:bg-navy-700/80'
             }`}
             aria-label="前へ"
           >
@@ -74,28 +75,26 @@ export function SlideViewer({ children, onSlideChange }: SlideViewerProps) {
             戻る
           </button>
 
-          {/* ドットインジケーター */}
-          <div className="flex gap-1.5">
-            {Array.from({ length: total }).map((_, i) => (
-              <div
-                key={i}
-                className={`rounded-full transition-all duration-150 ${
-                  i === current
-                    ? 'w-5 h-1.5 bg-gold-500'
-                    : 'w-1.5 h-1.5 bg-navy-600'
-                }`}
-              />
-            ))}
+          {/* ページ表示 */}
+          <div className="text-center">
+            <span className="text-sm text-gold-400/80 font-medium">
+              {current + 1} / {total}
+            </span>
+            {slideLabels && slideLabels[current] && (
+              <span className="block text-[0.6rem] text-navy-400 tracking-widest mt-0.5">
+                {slideLabels[current]}
+              </span>
+            )}
           </div>
 
           {/* 次へボタン */}
           <button
             onClick={() => goTo(current + 1)}
             disabled={current === total - 1}
-            className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium tracking-wider transition-opacity duration-150 ${
+            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-medium tracking-wider ${
               current === total - 1
                 ? 'opacity-0 pointer-events-none'
-                : 'bg-gold-500/15 border border-gold-500/30 text-gold-300 active:opacity-70'
+                : 'bg-gold-500/15 border border-gold-500/30 text-gold-300 active:bg-gold-500/25'
             }`}
             aria-label="次へ"
           >

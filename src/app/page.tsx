@@ -6,7 +6,6 @@ import { TopScreen } from "@/components/screens/TopScreen";
 import { InputScreen } from "@/components/screens/InputScreen";
 import { LoadingScreen } from "@/components/screens/LoadingScreen";
 import { ResultScreen } from "@/components/screens/ResultScreen";
-import { StarField } from "@/components/StarField";
 import { calculateFortune } from "@/lib/shichusuimei";
 
 type Screen = "top" | "input" | "loading" | "result";
@@ -14,21 +13,15 @@ type Screen = "top" | "input" | "loading" | "result";
 export default function App() {
   const [screen, setScreen] = useState<Screen>("top");
   const [result, setResult] = useState<FortuneResult | null>(null);
-  const [key, setKey] = useState(0);
-
-  const transition = useCallback((to: Screen) => {
-    setKey(k => k + 1);
-    setScreen(to);
-  }, []);
 
   const handleStart = useCallback(() => {
-    transition("input");
-  }, [transition]);
+    setScreen("input");
+  }, []);
 
   const handleSubmit = useCallback((input: FortuneInput) => {
-    transition("loading");
+    setScreen("loading");
 
-    // 計算は即座に実行、演出のみ待つ
+    // 計算は即座に実行
     let fortune: FortuneResult | null = null;
     try {
       fortune = calculateFortune(input);
@@ -36,48 +29,44 @@ export default function App() {
       fortune = null;
     }
 
+    // 演出を最小限に（1.5秒）
     setTimeout(() => {
       setResult(fortune);
-      setKey(k => k + 1);
       setScreen("result");
-    }, 2000);
-  }, [transition]);
+    }, 1500);
+  }, []);
 
   const handleRetry = useCallback(() => {
     setResult(null);
-    transition("input");
-  }, [transition]);
+    setScreen("input");
+  }, []);
 
   const handleTop = useCallback(() => {
     setResult(null);
-    transition("top");
-  }, [transition]);
+    setScreen("top");
+  }, []);
 
   return (
-    <div className="relative w-full min-h-screen bg-mystical overflow-hidden">
-      <StarField />
-
-      <div key={key} className="relative z-10 w-full min-h-screen" style={{ animation: 'fadeIn 0.2s ease-out' }}>
-        {screen === "top" && <TopScreen onStart={handleStart} />}
-        {screen === "input" && (
-          <InputScreen onSubmit={handleSubmit} onBack={handleTop} />
-        )}
-        {screen === "loading" && <LoadingScreen />}
-        {screen === "result" && result && (
-          <ResultScreen result={result} onRetry={handleRetry} onTop={handleTop} />
-        )}
-        {screen === "result" && !result && (
-          <div className="flex flex-col items-center justify-center min-h-screen gap-6">
-            <p className="text-red-400/80 text-lg">鑑定中にエラーが発生しました</p>
-            <button
-              onClick={handleRetry}
-              className="ornament-border rounded-full px-10 py-3 bg-navy-900/60 text-gold-400 tracking-wider"
-            >
-              もう一度入力する
-            </button>
-          </div>
-        )}
-      </div>
+    <div className="relative w-full min-h-screen bg-mystical touch-manipulation">
+      {screen === "top" && <TopScreen onStart={handleStart} />}
+      {screen === "input" && (
+        <InputScreen onSubmit={handleSubmit} onBack={handleTop} />
+      )}
+      {screen === "loading" && <LoadingScreen />}
+      {screen === "result" && result && (
+        <ResultScreen result={result} onRetry={handleRetry} onTop={handleTop} />
+      )}
+      {screen === "result" && !result && (
+        <div className="flex flex-col items-center justify-center min-h-screen gap-6">
+          <p className="text-red-400/80 text-lg">鑑定中にエラーが発生しました</p>
+          <button
+            onClick={handleRetry}
+            className="ornament-border rounded-full px-10 py-3 bg-navy-900/60 text-gold-400 tracking-wider"
+          >
+            もう一度入力する
+          </button>
+        </div>
+      )}
     </div>
   );
 }

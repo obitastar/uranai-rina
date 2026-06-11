@@ -37,6 +37,11 @@ body {
   overflow-x: hidden;
 }
 
+/* タッチ操作の300ms遅延を除去 */
+button, a, [role="button"] {
+  touch-action: manipulation;
+}
+
 /* タブレット縦持ち最適化 */
 @media (max-width: 1024px) {
   html {
@@ -59,14 +64,11 @@ body {
 
 /* 和風装飾ボーダー */
 .ornament-border {
-  border: 1px solid rgba(212, 160, 23, 0.4);
-  box-shadow:
-    inset 0 0 30px rgba(212, 160, 23, 0.06),
-    0 0 40px rgba(212, 160, 23, 0.1),
-    0 0 80px rgba(212, 160, 23, 0.03);
+  border: 1px solid rgba(212, 160, 23, 0.35);
+  box-shadow: 0 0 20px rgba(212, 160, 23, 0.06);
 }
 
-/* 金色グラデーションテキスト */
+/* 金色グラデーションテキスト（静的） */
 .text-gold-gradient {
   background: linear-gradient(
     135deg,
@@ -80,21 +82,36 @@ body {
   background-clip: text;
 }
 
-/* 金色グラデーション - アニメーション付き */
+/* 金色グラデーション - アニメーション付き（PC向け、スマホでは静的） */
 .text-gold-gradient-animated {
   background: linear-gradient(
-    90deg,
+    135deg,
     #fbe799 0%,
-    #d4a017 25%,
-    #f9db66 50%,
-    #d4a017 75%,
-    #fbe799 100%
+    #d4a017 40%,
+    #f9db66 60%,
+    #d4a017 100%
   );
-  background-size: 200% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: goldShift 4s ease-in-out infinite;
+}
+
+@media (min-width: 769px) {
+  .text-gold-gradient-animated {
+    background: linear-gradient(
+      90deg,
+      #fbe799 0%,
+      #d4a017 25%,
+      #f9db66 50%,
+      #d4a017 75%,
+      #fbe799 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: goldShift 4s ease-in-out infinite;
+  }
 }
 
 @keyframes goldShift {
@@ -102,177 +119,71 @@ body {
   50% { background-position: 100% 50%; }
 }
 
-/* ===== 入場アニメーション ===== */
+/* ===== 入場アニメーション（軽量・1回のみ） ===== */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(40px); }
+  from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-30px); }
+  from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes fadeInScale {
-  from { opacity: 0; transform: scale(0.8); }
+  from { opacity: 0; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1); }
 }
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-60px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(60px); }
-  to { opacity: 1; transform: translateX(0); }
-}
 @keyframes revealUp {
-  from { opacity: 0; transform: translateY(60px) scale(0.95); filter: blur(8px); }
-  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px); }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fade-in-up { animation: fadeInUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-.animate-fade-in-down { animation: fadeInDown 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-.animate-fade-in-scale { animation: fadeInScale 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-.animate-fade-in { animation: fadeIn 1.2s ease-out forwards; }
-.animate-slide-in-left { animation: slideInLeft 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-.animate-slide-in-right { animation: slideInRight 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-.animate-reveal-up { animation: revealUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-fade-in-down { animation: fadeInDown 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-fade-in-scale { animation: fadeInScale 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+.animate-reveal-up { animation: revealUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 
 /* スタガーディレイ */
-.stagger-1 { animation-delay: 0.15s; }
-.stagger-2 { animation-delay: 0.4s; }
-.stagger-3 { animation-delay: 0.65s; }
-.stagger-4 { animation-delay: 0.9s; }
-.stagger-5 { animation-delay: 1.15s; }
-.stagger-6 { animation-delay: 1.4s; }
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.25s; }
+.stagger-3 { animation-delay: 0.4s; }
+.stagger-4 { animation-delay: 0.55s; }
+.stagger-5 { animation-delay: 0.7s; }
+.stagger-6 { animation-delay: 0.85s; }
 
-/* ===== 永続アニメーション ===== */
-@keyframes shimmer {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 1; }
-}
-.animate-shimmer { animation: shimmer 3s ease-in-out infinite; }
-
+/* ===== 永続アニメーション（最小限） ===== */
 @keyframes slowSpin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 .animate-slow-spin { animation: slowSpin 20s linear infinite; }
 
-@keyframes slowSpinReverse {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
+/* グラデーション背景 */
+.bg-mystical {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(30, 20, 60, 0.5) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(20, 25, 56, 0.4) 0%, transparent 50%),
+    linear-gradient(to bottom, #05060e, #0a0d1c, #05060e);
 }
-.animate-slow-spin-reverse { animation: slowSpinReverse 15s linear infinite; }
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-12px); }
-}
-.animate-float { animation: float 4s ease-in-out infinite; }
-
-@keyframes gentlePulse {
-  0%, 100% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.05); opacity: 1; }
-}
-.animate-gentle-pulse { animation: gentlePulse 2s ease-in-out infinite; }
-
-@keyframes breathe {
-  0%, 100% { box-shadow: 0 0 20px rgba(212, 160, 23, 0.1), 0 0 60px rgba(212, 160, 23, 0.05); }
-  50% { box-shadow: 0 0 40px rgba(212, 160, 23, 0.2), 0 0 80px rgba(212, 160, 23, 0.1); }
-}
-.animate-breathe { animation: breathe 3s ease-in-out infinite; }
-
-@keyframes glowLine {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-.animate-glow-line {
-  background: linear-gradient(90deg, transparent, rgba(212, 160, 23, 0.6), transparent);
-  background-size: 200% 100%;
-  animation: glowLine 3s ease-in-out infinite;
-}
-
-/* 漢字が浮かぶエフェクト */
-@keyframes kanjiFloat {
-  0% { opacity: 0; transform: translateY(20px) scale(0.5); }
-  20% { opacity: 0.7; }
-  80% { opacity: 0.7; }
-  100% { opacity: 0; transform: translateY(-100px) scale(1.2); }
-}
-
-/* カード光彩ホバー */
-.card-glow {
-  position: relative;
-  transition: all 0.4s ease;
-}
-.card-glow::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, transparent 30%, rgba(212, 160, 23, 0.3) 50%, transparent 70%);
-  background-size: 300% 300%;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: cardShine 6s ease-in-out infinite;
-}
-@keyframes cardShine {
-  0%, 100% { background-position: 0% 0%; }
-  50% { background-position: 100% 100%; }
-}
-
-/* ===== ページ遷移 ===== */
-@keyframes pageEnter {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.page-enter { animation: pageEnter 0.6s ease-out; }
 
 /* スクロールバー非表示（店頭用途） */
 ::-webkit-scrollbar { display: none; }
 body { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* ===== 干支キャラアニメーション ===== */
-@keyframes zodiacFloat {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  25% { transform: translateY(-6px) rotate(0.5deg); }
-  75% { transform: translateY(4px) rotate(-0.5deg); }
-}
-.animate-zodiac-float { animation: zodiacFloat 5s ease-in-out infinite; }
-
-@keyframes zodiacGlow {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.08); }
-}
-.animate-zodiac-glow { animation: zodiacGlow 3s ease-in-out infinite; }
-
-@keyframes zodiacBreath {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-}
-.animate-zodiac-breath { animation: zodiacBreath 4s ease-in-out infinite; }
-
-@keyframes zodiacEyeGlow {
-  0%, 100% { filter: drop-shadow(0 0 2px currentColor); }
-  50% { filter: drop-shadow(0 0 8px currentColor); }
+/* safe-area対応 */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-@keyframes zodiacTailWag {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(3deg); }
-  75% { transform: rotate(-3deg); }
-}
-
-/* グラデーション背景 */
-.bg-mystical {
-  background:
-    radial-gradient(ellipse at 20% 50%, rgba(30, 20, 60, 0.8) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(20, 25, 56, 0.6) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(40, 20, 50, 0.4) 0%, transparent 50%),
-    linear-gradient(to bottom, #05060e, #0a0d1c, #05060e);
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

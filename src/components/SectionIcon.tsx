@@ -24,9 +24,9 @@ export function SectionIcon({ type, size = 80 }: SectionIconProps) {
 
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
-      {/* グロー */}
+      {/* 静的な軽いグロー */}
       <div
-        className="absolute inset-0 rounded-full blur-2xl scale-[2] animate-gentle-pulse"
+        className="absolute inset-0 rounded-full opacity-30"
         style={{ backgroundColor: glow }}
       />
 

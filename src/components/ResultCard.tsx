@@ -33,14 +33,14 @@ export function ResultCard({ title, subtitle, icon, content }: ResultCardProps) 
   return (
     <div
       ref={cardRef}
-      className={`card-glow ornament-border rounded-2xl bg-navy-900/40 overflow-hidden transition-all duration-1000 ${
+      className={`ornament-border rounded-2xl bg-navy-900/40 overflow-hidden transition-opacity duration-700 ${
         visible
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-12"
       }`}
     >
       {/* 上部のアクセントライン */}
-      <div className="h-[1px] w-full animate-glow-line" />
+      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
 
       <div className="p-7">
         <div className="flex items-center gap-4 mb-5">

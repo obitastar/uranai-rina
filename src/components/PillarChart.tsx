@@ -24,8 +24,8 @@ export function PillarChart({ result }: PillarChartProps) {
   ];
 
   return (
-    <div className="card-glow ornament-border rounded-2xl bg-navy-900/40 overflow-hidden">
-      <div className="h-[1px] w-full animate-glow-line" />
+    <div className="ornament-border rounded-2xl bg-navy-900/40 overflow-hidden">
+      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
       <div className="p-4 sm:p-6">
         <h2 className="text-center text-xl sm:text-2xl font-bold text-gold-gradient-animated tracking-[0.3em] mb-1">
           あなたの星の配置
