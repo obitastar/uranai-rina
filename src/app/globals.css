@@ -162,6 +162,23 @@ button, a, [role="button"] {
 }
 .animate-slow-spin { animation: slowSpin 20s linear infinite; }
 
+/* 干支キャラクター浮遊アニメーション */
+@keyframes zodiacFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+.animate-zodiac-float {
+  animation: zodiacFloat 4s ease-in-out infinite;
+}
+
+@keyframes constellationPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+.animate-constellation-pulse {
+  animation: constellationPulse 3s ease-in-out infinite;
+}
+
 /* グラデーション背景 */
 .bg-mystical {
   background:
