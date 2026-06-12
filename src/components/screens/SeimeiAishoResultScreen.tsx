@@ -14,6 +14,7 @@ interface Props {
   onAnotherPartner: () => void;
   onBackToResult: () => void;
   onTop: () => void;
+  viewOnly?: boolean;
 }
 
 function gogyoColor(gogyo: string): string {
@@ -118,7 +119,7 @@ function Divider() {
   return <div className="w-full h-px bg-gradient-to-r from-transparent via-gold-500/20 to-transparent my-2" />;
 }
 
-export function SeimeiAishoResultScreen({ myResult, partnerResult, compatibility, onAnotherPartner, onBackToResult, onTop }: Props) {
+export function SeimeiAishoResultScreen({ myResult, partnerResult, compatibility, onAnotherPartner, onBackToResult, onTop, viewOnly }: Props) {
   const myJinkaku = myResult.gokakuDetails.find(d => d.key === 'jinkaku')!;
   const pJinkaku = partnerResult.gokakuDetails.find(d => d.key === 'jinkaku')!;
   const myGogyo = kakuToGogyo(myJinkaku.kaku);
@@ -311,27 +312,31 @@ export function SeimeiAishoResultScreen({ myResult, partnerResult, compatibility
             </p>
           </div>
 
-          <ShareButtons
-            resultUrl={encodeSeimeiAisho(myResult.sei, myResult.mei, partnerResult.sei, partnerResult.mei)}
-          />
+          {!viewOnly && (
+            <>
+              <ShareButtons
+                resultUrl={encodeSeimeiAisho(myResult.sei, myResult.mei, partnerResult.sei, partnerResult.mei)}
+              />
 
-          <button onClick={onAnotherPartner} className="group relative w-full max-w-sm mx-auto block">
-            <div className="relative ornament-border rounded-xl px-6 py-4 bg-pink-500/10 border border-pink-500/30 active:bg-pink-500/20">
-              <span className="text-base tracking-[0.2em] text-pink-300 font-bold">
-                別の相手と相性診断
-              </span>
-            </div>
-          </button>
-          <button onClick={onBackToResult} className="group relative w-full max-w-sm mx-auto block">
-            <div className="relative ornament-border rounded-xl px-6 py-4 bg-navy-900/50 active:bg-navy-800/60">
-              <span className="text-base tracking-[0.2em] text-gold-gradient font-bold">
-                自分の鑑定結果に戻る
-              </span>
-            </div>
-          </button>
-          <button onClick={onTop} className="text-navy-400 hover:text-gold-500/60 text-sm tracking-widest">
-            トップに戻る
-          </button>
+              <button onClick={onAnotherPartner} className="group relative w-full max-w-sm mx-auto block">
+                <div className="relative ornament-border rounded-xl px-6 py-4 bg-pink-500/10 border border-pink-500/30 active:bg-pink-500/20">
+                  <span className="text-base tracking-[0.2em] text-pink-300 font-bold">
+                    別の相手と相性診断
+                  </span>
+                </div>
+              </button>
+              <button onClick={onBackToResult} className="group relative w-full max-w-sm mx-auto block">
+                <div className="relative ornament-border rounded-xl px-6 py-4 bg-navy-900/50 active:bg-navy-800/60">
+                  <span className="text-base tracking-[0.2em] text-gold-gradient font-bold">
+                    自分の鑑定結果に戻る
+                  </span>
+                </div>
+              </button>
+              <button onClick={onTop} className="text-navy-400 hover:text-gold-500/60 text-sm tracking-widest">
+                トップに戻る
+              </button>
+            </>
+          )}
         </div>
 
       </div>

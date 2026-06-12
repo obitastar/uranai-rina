@@ -14,6 +14,7 @@ interface Props {
   onAnotherPartner: () => void;
   onBackToResult: () => void;
   onTop: () => void;
+  viewOnly?: boolean;
 }
 
 function ScoreCircle({ score, size = "lg" }: { score: number; size?: "sm" | "lg" }) {
@@ -99,7 +100,7 @@ function Divider() {
   return <div className="w-full h-px bg-gradient-to-r from-transparent via-gold-500/20 to-transparent my-2" />;
 }
 
-export function ShichusuimeiAishoResultScreen({ myResult, partnerResult, compatibility, onAnotherPartner, onBackToResult, onTop }: Props) {
+export function ShichusuimeiAishoResultScreen({ myResult, partnerResult, compatibility, onAnotherPartner, onBackToResult, onTop, viewOnly }: Props) {
   const myInput = myResult.input;
   const pInput = partnerResult.input;
   const myLabel = `${myInput.year}年${myInput.month}月${myInput.day}日生`;
@@ -299,30 +300,34 @@ export function ShichusuimeiAishoResultScreen({ myResult, partnerResult, compati
             </p>
           </div>
 
-          <ShareButtons
-            resultUrl={encodeShichusuimeiAisho(
-              myResult.input.year, myResult.input.month, myResult.input.day, myResult.input.hour, myResult.input.gender,
-              partnerResult.input.year, partnerResult.input.month, partnerResult.input.day, partnerResult.input.hour, partnerResult.input.gender,
-            )}
-          />
+          {!viewOnly && (
+            <>
+              <ShareButtons
+                resultUrl={encodeShichusuimeiAisho(
+                  myResult.input.year, myResult.input.month, myResult.input.day, myResult.input.hour, myResult.input.gender,
+                  partnerResult.input.year, partnerResult.input.month, partnerResult.input.day, partnerResult.input.hour, partnerResult.input.gender,
+                )}
+              />
 
-          <button onClick={onAnotherPartner} className="group relative w-full max-w-sm mx-auto block">
-            <div className="relative ornament-border rounded-xl px-6 py-4 bg-pink-500/10 border border-pink-500/30 active:bg-pink-500/20">
-              <span className="text-base tracking-[0.2em] text-pink-300 font-bold">
-                別の相手と相性診断
-              </span>
-            </div>
-          </button>
-          <button onClick={onBackToResult} className="group relative w-full max-w-sm mx-auto block">
-            <div className="relative ornament-border rounded-xl px-6 py-4 bg-navy-900/50 active:bg-navy-800/60">
-              <span className="text-base tracking-[0.2em] text-gold-gradient font-bold">
-                自分の鑑定結果に戻る
-              </span>
-            </div>
-          </button>
-          <button onClick={onTop} className="text-navy-400 hover:text-gold-500/60 text-sm tracking-widest">
-            トップに戻る
-          </button>
+              <button onClick={onAnotherPartner} className="group relative w-full max-w-sm mx-auto block">
+                <div className="relative ornament-border rounded-xl px-6 py-4 bg-pink-500/10 border border-pink-500/30 active:bg-pink-500/20">
+                  <span className="text-base tracking-[0.2em] text-pink-300 font-bold">
+                    別の相手と相性診断
+                  </span>
+                </div>
+              </button>
+              <button onClick={onBackToResult} className="group relative w-full max-w-sm mx-auto block">
+                <div className="relative ornament-border rounded-xl px-6 py-4 bg-navy-900/50 active:bg-navy-800/60">
+                  <span className="text-base tracking-[0.2em] text-gold-gradient font-bold">
+                    自分の鑑定結果に戻る
+                  </span>
+                </div>
+              </button>
+              <button onClick={onTop} className="text-navy-400 hover:text-gold-500/60 text-sm tracking-widest">
+                トップに戻る
+              </button>
+            </>
+          )}
         </div>
 
       </div>

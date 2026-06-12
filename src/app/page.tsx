@@ -45,6 +45,7 @@ export default function App() {
   const [shichuCompatibility, setShichuCompatibility] = useState<ShichusuimeiCompatibility | null>(null);
   const [seimeiCompatibility, setSeimeiCompatibility] = useState<SeimeiCompatibility | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [viewOnly, setViewOnly] = useState(false);
 
   const handleSelect = useCallback((type: DivinationType) => {
     if (type === "shichusuimei") {
@@ -209,6 +210,7 @@ export default function App() {
 
     // ハッシュを消す（履歴に残さない）
     history.replaceState(null, "", window.location.pathname);
+    setViewOnly(true);
 
     try {
       if (params.type === "shichusuimei") {
@@ -264,7 +266,7 @@ export default function App() {
       {screen === "loading" && <LoadingScreen />}
 
       {screen === "shichusuimei-result" && result && (
-        <ResultScreen result={result} onRetry={handleRetry} onTop={handleTop} onAisho={handleShichuAisho} />
+        <ResultScreen result={result} onRetry={handleRetry} onTop={handleTop} onAisho={handleShichuAisho} viewOnly={viewOnly} />
       )}
       {screen === "shichusuimei-result" && !result && (
         <div className="flex flex-col items-center justify-center min-h-screen gap-6">
@@ -279,7 +281,7 @@ export default function App() {
       )}
 
       {screen === "seimei-result" && seimeiResult && (
-        <SeimeiResultScreen result={seimeiResult} onRetry={handleSeimeiRetry} onTop={handleTop} onAisho={handleSeimeiAisho} />
+        <SeimeiResultScreen result={seimeiResult} onRetry={handleSeimeiRetry} onTop={handleTop} onAisho={handleSeimeiAisho} viewOnly={viewOnly} />
       )}
       {screen === "seimei-result" && !seimeiResult && (
         <div className="flex flex-col items-center justify-center min-h-screen gap-6 px-6">
@@ -312,6 +314,7 @@ export default function App() {
           onAnotherPartner={handleShichuAishoAnother}
           onBackToResult={handleShichuAishoBackToResult}
           onTop={handleTop}
+          viewOnly={viewOnly}
         />
       )}
       {screen === "shichusuimei-aisho-result" && (!partnerResult || !shichuCompatibility) && (
@@ -342,6 +345,7 @@ export default function App() {
           onAnotherPartner={handleSeimeiAishoAnother}
           onBackToResult={handleSeimeiAishoBackToResult}
           onTop={handleTop}
+          viewOnly={viewOnly}
         />
       )}
       {screen === "seimei-aisho-result" && (!partnerSeimeiResult || !seimeiCompatibility) && (
