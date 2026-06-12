@@ -27,9 +27,9 @@ export function TopScreen({ onSelect }: TopScreenProps) {
       <div className="relative z-10 flex flex-col items-center gap-6 sm:gap-10">
         {/* メイン：八卦曼荼羅 */}
         <div className={`relative ${mounted ? 'animate-fade-in-scale' : 'opacity-0'}`}>
-          <div className="relative w-48 h-48 sm:w-60 sm:h-60 flex items-center justify-center">
+          <div className="relative w-40 h-40 sm:w-60 sm:h-60 flex items-center justify-center">
             {/* 外側の八卦リング（ゆっくり回転） */}
-            <svg viewBox="0 0 320 320" className="absolute w-[280px] h-[280px] sm:w-[340px] sm:h-[340px] animate-slow-spin">
+            <svg viewBox="0 0 320 320" className="absolute w-[240px] h-[240px] sm:w-[340px] sm:h-[340px] animate-slow-spin">
               <circle cx="160" cy="160" r="150" fill="none" stroke="rgba(212,160,23,0.15)" strokeWidth="0.5" strokeDasharray="4 8" />
               <circle cx="160" cy="160" r="145" fill="none" stroke="rgba(212,160,23,0.25)" strokeWidth="0.5" />
               {BAGUA.map((symbol, i) => {
@@ -55,7 +55,7 @@ export function TopScreen({ onSelect }: TopScreenProps) {
             </svg>
 
             {/* 中間リング（逆回転） */}
-            <svg viewBox="0 0 240 240" className="absolute w-[180px] h-[180px] sm:w-[220px] sm:h-[220px]" style={{ animation: 'slowSpin 30s linear infinite reverse' }}>
+            <svg viewBox="0 0 240 240" className="absolute w-[150px] h-[150px] sm:w-[220px] sm:h-[220px]" style={{ animation: 'slowSpin 30s linear infinite reverse' }}>
               <circle cx="120" cy="120" r="105" fill="none" stroke="rgba(212,160,23,0.12)" strokeWidth="0.8" strokeDasharray="2 6" />
               {/* 十二支の記号（小さく配置） */}
               {['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'].map((shi, i) => {
@@ -81,11 +81,11 @@ export function TopScreen({ onSelect }: TopScreenProps) {
             </svg>
 
             {/* 内側グロー */}
-            <div className="absolute w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gold-500/[0.04] blur-[20px]" />
+            <div className="absolute w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-gold-500/[0.04] blur-[20px]" />
 
             {/* 中央の陰陽太極図（拡大・回転） */}
             <div className="absolute flex items-center justify-center">
-              <svg viewBox="0 0 100 100" className="w-20 h-20 sm:w-24 sm:h-24" style={{ animation: 'slowSpin 25s linear infinite reverse' }}>
+              <svg viewBox="0 0 100 100" className="w-16 h-16 sm:w-24 sm:h-24" style={{ animation: 'slowSpin 25s linear infinite reverse' }}>
                 <defs>
                   <linearGradient id="yinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#fbe799" stopOpacity="0.95" />

@@ -185,12 +185,12 @@ function generateChildrenText(aGogyo: Gogyo, bGogyo: Gogyo, rel: GogyoRelation, 
   const hasWater = aGogyo === '水' || bGogyo === '水';
 
   if (score >= 75) {
-    return `子宝運は大変恵まれています。${isGenerative ? `「${aGogyo}」と「${bGogyo}」の相生の流れが、新しい命を育む力を高めています。` : ''}${hasEarth ? '「土」の持つ大地の力が、温かく子供を包み込みます。' : hasWater ? '「水」の流れる力が、命の循環を促してくれます。' : ''}子供にも良い名前の運気が受け継がれるでしょう。`;
+    return `妊娠・出産の運勢は大変恵まれています。${isGenerative ? `「${aGogyo}」と「${bGogyo}」の相生の流れが、新しい命を授かる力を高めています。` : ''}${hasEarth ? '「土」の持つ大地の力が、妊娠期の心身を安定させてくれます。' : hasWater ? '「水」の流れる力が、命の循環を促し授かりやすい体質へ導きます。' : ''}安産の運気にも恵まれ、母子ともに健やかな経過が期待できるでしょう。`;
   }
   if (score >= 55) {
-    return `子宝運は良好です。二人の名前が持つ異なる五行が子供に多彩な才能を授けるでしょう。子育てでは、お互いの得意分野を活かした役割分担がうまくいきます。子供を通じて夫婦の絆も一層深まります。`;
+    return `妊娠・出産の運勢は良好です。二人の名前が持つ五行のバランスが、授かりの気を後押ししてくれます。妊娠期はパートナーの支えが安定の鍵。お互いを労わり合うことで、穏やかな出産を迎えられるでしょう。`;
   }
-  return `子宝に関しては焦らず、まず二人の関係をしっかり築くことが先決です。名前の五行の違いは、子供にとって多様な価値観に触れる恵みとなります。教育方針を話し合い、温かい家庭の土台を整えることが子宝運を高める鍵です。`;
+  return `妊娠・出産に関しては焦らず、まず二人の心身の調和を整えることが大切です。名前の五行の違いを活かし、お互いの体調を気遣いながらリラックスできる環境を整えましょう。穏やかな気持ちが授かりの運気を高める鍵です。`;
 }
 
 function generateAdvice(aGogyo: Gogyo, bGogyo: Gogyo, overall: number): string {
@@ -250,7 +250,7 @@ export function calculateSeimeiCompatibility(
   const workScore = Math.round(Math.min(100, gaikakuScore * 0.35 + jinkakuScore * 0.30 + harmonyScore * 0.20 + sansaiBonus * 0.5 + chikakuScore * 0.15));
   // 結婚運: 人格（性格の一致）+ 地格（内面）+ 三才ボーナス重視
   const marriageScore = Math.round(Math.min(100, jinkakuScore * 0.30 + chikakuScore * 0.30 + harmonyScore * 0.15 + sansaiBonus * 1.0 + gaikakuScore * 0.25));
-  // 子宝運: 地格（若年期・潜在力）+ 人格（相生=生む力）+ 三才
+  // 妊娠・出産運: 地格（若年期・潜在力）+ 人格（相生=生む力）+ 三才
   const childrenScore = Math.round(Math.min(100, chikakuScore * 0.35 + jinkakuScore * 0.30 + harmonyScore * 0.15 + sansaiBonus * 0.8 + gaikakuScore * 0.20));
 
   // テキスト

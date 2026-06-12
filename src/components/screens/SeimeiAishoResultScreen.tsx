@@ -4,6 +4,8 @@ import type { SeimeiResult } from "@/lib/seimei";
 import type { SeimeiCompatibility } from "@/lib/seimei/compatibility";
 import { kakuToGogyo } from "@/lib/seimei";
 import { AishoIcon } from "@/components/AishoIcons";
+import { ShareButtons } from "@/components/ShareButtons";
+import { encodeSeimeiAisho } from "@/lib/share";
 
 interface Props {
   myResult: SeimeiResult;
@@ -169,15 +171,15 @@ export function SeimeiAishoResultScreen({ myResult, partnerResult, compatibility
         </section>
 
         {/* ===== カテゴリサマリー（グリッド） ===== */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-3">
           {[
             { label: "恋愛", score: compatibility.love.score, color: "#f472b6", icon: 'love' as const },
             { label: "結婚", score: compatibility.marriage.score, color: "#fb923c", icon: 'marriage' as const },
-            { label: "子宝", score: compatibility.children.score, color: "#4ade80", icon: 'children' as const },
+            { label: "妊娠・出産", score: compatibility.children.score, color: "#4ade80", icon: 'children' as const },
           ].map(({ label, score, color, icon }) => (
-            <div key={label} className="ornament-border rounded-xl bg-navy-900/30 p-3 text-center space-y-2">
-              <div className="flex justify-center"><AishoIcon type={icon} size={32} /></div>
-              <p className="text-xs tracking-widest" style={{ color }}>{label}</p>
+            <div key={label} className="ornament-border rounded-xl bg-navy-900/30 p-2 sm:p-3 text-center space-y-1.5 sm:space-y-2">
+              <div className="flex justify-center"><AishoIcon type={icon} size={28} /></div>
+              <p className="text-[0.6rem] sm:text-xs tracking-wider sm:tracking-widest" style={{ color }}>{label}</p>
               <ScoreCircle score={score} size="sm" />
             </div>
           ))}
@@ -195,7 +197,7 @@ export function SeimeiAishoResultScreen({ myResult, partnerResult, compatibility
         <Divider />
         <CategorySection iconType="marriage" title="結婚運" category={compatibility.marriage} accentColor="#fb923c" />
         <Divider />
-        <CategorySection iconType="children" title="子宝運" category={compatibility.children} accentColor="#4ade80" />
+        <CategorySection iconType="children" title="妊娠・出産運" category={compatibility.children} accentColor="#4ade80" />
         <Divider />
         <CategorySection iconType="work" title="仕事相性" category={compatibility.work} accentColor="#60a5fa" />
 
@@ -308,6 +310,10 @@ export function SeimeiAishoResultScreen({ myResult, partnerResult, compatibility
               お二人の名前が紡ぐ<br />素敵なご縁をお祈りいたします
             </p>
           </div>
+
+          <ShareButtons
+            resultUrl={encodeSeimeiAisho(myResult.sei, myResult.mei, partnerResult.sei, partnerResult.mei)}
+          />
 
           <button onClick={onAnotherPartner} className="group relative w-full max-w-sm mx-auto block">
             <div className="relative ornament-border rounded-xl px-6 py-4 bg-pink-500/10 border border-pink-500/30 active:bg-pink-500/20">

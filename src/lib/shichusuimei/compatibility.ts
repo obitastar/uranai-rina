@@ -295,15 +295,15 @@ function generateChildrenText(a: FortuneResult, b: FortuneResult, score: number)
   const hasEarth = aGogyo === '土' || bGogyo === '土';
 
   if (score >= 80) {
-    return `子宝運は大変恵まれています。${isGenerative ? '相生の関係が「生み育てる」力を強めており、子宝に恵まれやすい組み合わせです。' : ''}${hasNurture ? '水と木の組み合わせは、新しい命を育む最良の象徴。' : hasEarth ? '土の気が大地のように温かく子供を育む力を与えてくれます。' : ''}子供との相性も良く、明るく健やかな家庭を築けるでしょう。`;
+    return `妊娠・出産の運勢は大変恵まれています。${isGenerative ? '相生の関係が「生み出す」力を強めており、授かりやすい組み合わせです。' : ''}${hasNurture ? '水と木の組み合わせは、新しい命を宿す最良の象徴。妊娠期も安定しやすいでしょう。' : hasEarth ? '土の気が大地のように温かく、妊娠期の体調を安定させる力を与えてくれます。' : ''}出産も順調に進みやすく、母子ともに健やかな経過が期待できます。`;
   }
   if (score >= 60) {
-    return `子宝運は良好です。${isGenerative ? '相生の流れが子育てに良い影響を与えます。' : ''}二人の異なる個性が子供に多様な刺激を与え、バランスの取れた育児ができる組み合わせです。子供を通じて夫婦の絆もさらに深まるでしょう。`;
+    return `妊娠・出産の運勢は良好です。${isGenerative ? '相生の流れが授かる力を高めてくれます。' : ''}二人の気のバランスが良く、妊娠期を穏やかに過ごせる組み合わせです。パートナーのサポートが安産の鍵となるでしょう。`;
   }
   if (score >= 45) {
-    return `子宝運は標準的です。子育てにおいては方針の違いが出やすいですが、それは子供にとって「両方の視点」を得られるメリットにもなります。教育方針を事前に話し合い、一貫性を持たせることが大切です。`;
+    return `妊娠・出産の運勢は標準的です。授かりのタイミングは焦らず、二人の体調とリズムを大切にしましょう。妊娠期はストレスを溜めないことが重要。パートナーと協力して穏やかな環境を整えることで、出産運が高まります。`;
   }
-  return `子宝に関しては焦らないことが大切です。二人の関係をまず安定させることが、巡り巡って子宝運を高めます。${rel === '相剋' || rel === '被剋' ? '異なる気質の親を持つ子供は、多様な才能に恵まれる可能性があります。' : ''}二人で子供の未来をじっくり話し合い、温かい家庭の土台を作りましょう。`;
+  return `妊娠・出産に関しては、まず二人の心身の調和を整えることが大切です。${rel === '相剋' || rel === '被剋' ? '五行の緊張関係がありますが、お互いを労わることで気の巡りが良くなります。' : ''}焦らず体を整え、リラックスできる環境を作ることが授かりへの近道です。`;
 }
 
 function generateAdvice(a: FortuneResult, b: FortuneResult, overall: number): string {
@@ -366,7 +366,7 @@ export function calculateShichusuimeiCompatibility(
   const moneyScore = Math.round(nisshuScore * 0.35 + workTsuhenScore * 0.35 + junishiScore * 0.30);
   // 結婚運: 日支の相性（家庭）を最重視 + 日主の五行 + 年支
   const marriageScore = Math.round(junishiScore * 0.45 + nisshuScore * 0.30 + yearShiScore * 0.25);
-  // 子宝運: 相生関係（生む力）を重視 + 日支 + 年支
+  // 妊娠・出産運: 相生関係（生む力）を重視 + 日支 + 年支
   const childrenScore = Math.round(nisshuScore * 0.40 + junishiScore * 0.35 + yearShiScore * 0.25);
 
   // 日主関係

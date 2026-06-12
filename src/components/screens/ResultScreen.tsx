@@ -6,6 +6,8 @@ import { SlideViewer } from "@/components/SlideViewer";
 import { PillarChart } from "@/components/PillarChart";
 import { ZodiacCharacter, ZodiacBadge } from "@/components/ZodiacCharacter";
 import { SectionIcon, SECTION_COLORS } from "@/components/SectionIcon";
+import { ShareButtons } from "@/components/ShareButtons";
+import { encodeShichusuimei } from "@/lib/share";
 
 interface ResultScreenProps {
   result: FortuneResult;
@@ -231,6 +233,10 @@ export function ResultScreen({ result, onRetry, onTop, onAisho }: ResultScreenPr
               </p>
             </div>
 
+            <ShareButtons
+              resultUrl={encodeShichusuimei(input.year, input.month, input.day, input.hour, input.gender)}
+            />
+
             <div className="space-y-3 sm:space-y-4 pt-2 sm:pt-4">
               {onAisho && (
                 <button onClick={onAisho} className="group relative w-full">
@@ -432,7 +438,7 @@ const DETAIL_CATEGORIES = [
   { key: 'love' as const, label: '恋愛運', color: '#f472b6', gradient: 'from-pink-500/20 to-pink-400/5' },
   { key: 'money' as const, label: '金運', color: '#fbbf24', gradient: 'from-yellow-500/20 to-yellow-400/5' },
   { key: 'marriage' as const, label: '結婚運', color: '#fb923c', gradient: 'from-orange-500/20 to-orange-400/5' },
-  { key: 'children' as const, label: '子供運', color: '#4ade80', gradient: 'from-green-500/20 to-green-400/5' },
+  { key: 'children' as const, label: '妊娠・出産', color: '#4ade80', gradient: 'from-green-500/20 to-green-400/5' },
   { key: 'health' as const, label: '健康運', color: '#22d3ee', gradient: 'from-cyan-500/20 to-cyan-400/5' },
 ];
 
@@ -464,7 +470,7 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
         </p>
 
         {/* 年タイムライン */}
-        <div className="grid grid-cols-5 gap-1.5 sm:gap-2 pb-1">
+        <div className="grid grid-cols-5 gap-1 sm:gap-2 pb-1">
           {tenYearFortune.map((yf) => {
             const colors = LEVEL_COLORS[yf.level];
             const isSelected = selectedYear === yf.year;
@@ -474,22 +480,22 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
               <button
                 key={yf.year}
                 onClick={() => setSelectedYear(isSelected ? null : yf.year)}
-                className={`relative rounded-lg py-2 sm:py-2.5 border ${
+                className={`relative rounded-lg py-1.5 sm:py-2.5 border ${
                   isSelected
                     ? `${colors.border} ${colors.bg}`
                     : `border-navy-700/30 bg-navy-900/30 active:bg-navy-800/40`
                 }`}
               >
                 <div className="text-center">
-                  <span className={`block text-xs sm:text-sm font-bold ${
+                  <span className={`block text-[0.65rem] sm:text-sm font-bold ${
                     isCurrent ? 'text-gold-400' : isSelected ? 'text-navy-50' : 'text-navy-200/80'
                   }`}>
                     {yf.year}
                   </span>
-                  <div className={`mx-auto mt-1 w-1.5 h-1.5 rounded-full ${colors.dot}`} />
+                  <div className={`mx-auto mt-0.5 sm:mt-1 w-1.5 h-1.5 rounded-full ${colors.dot}`} />
                 </div>
                 {isCurrent && (
-                  <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[0.5rem] text-gold-400 tracking-wider whitespace-nowrap">
+                  <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[0.45rem] sm:text-[0.5rem] text-gold-400 tracking-wider whitespace-nowrap">
                     今年
                   </div>
                 )}
@@ -559,19 +565,19 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
                   onClick={() => setSelectedYear(yf.year)}
                   className={`w-full text-left rounded-xl border ${colors.border} ${colors.bg} ${isCurrent ? 'ring-1 ring-gold-500/30' : ''} active:opacity-80`}
                 >
-                  <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3">
-                    <div className="flex-shrink-0 w-12 sm:w-14 text-center">
-                      <span className={`text-sm sm:text-base font-bold ${isCurrent ? 'text-gold-400' : 'text-navy-100/90'}`}>
+                  <div className="flex items-center gap-1.5 sm:gap-3 px-2.5 sm:px-4 py-2 sm:py-3">
+                    <div className="flex-shrink-0 w-10 sm:w-14 text-center">
+                      <span className={`text-xs sm:text-base font-bold ${isCurrent ? 'text-gold-400' : 'text-navy-100/90'}`}>
                         {yf.year}
                       </span>
                     </div>
-                    <div className={`flex-shrink-0 w-2 h-2 rounded-full ${colors.dot}`} />
+                    <div className={`flex-shrink-0 w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${colors.dot}`} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-navy-100/80 text-xs sm:text-sm leading-relaxed line-clamp-1">
+                      <p className="text-navy-100/80 text-[0.65rem] sm:text-sm leading-relaxed line-clamp-1">
                         {yf.reading}
                       </p>
                     </div>
-                    <span className={`flex-shrink-0 px-2 py-0.5 rounded-full text-[0.6rem] sm:text-xs font-medium ${colors.labelBg} ${colors.text}`}>
+                    <span className={`flex-shrink-0 px-1.5 sm:px-2 py-0.5 rounded-full text-[0.55rem] sm:text-xs font-medium ${colors.labelBg} ${colors.text}`}>
                       {colors.label}
                     </span>
                   </div>
@@ -790,7 +796,7 @@ function LuckySlide({ kyusei, lucky }: { kyusei: KyuseiInfo; lucky: LuckyInfo })
         </div>
 
         {/* ラッキーアイテム一覧 */}
-        <div className="grid grid-cols-2 gap-2 sm:gap-3">
+        <div className="grid grid-cols-2 gap-1.5 sm:gap-3">
           <div className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4">
             <p className="text-xs text-pink-400/80 tracking-widest mb-2 text-center font-medium">ラッキーカラー</p>
             <div className="flex flex-wrap justify-center gap-1.5">
@@ -921,27 +927,27 @@ function StrengthSlide({ strength }: { strength: StrengthResult }) {
         </div>
 
         {/* 用神・喜神・忌神 */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-3">
-          <div className="ornament-border rounded-xl bg-navy-900/30 p-3 text-center">
-            <p className="text-xs text-emerald-400/80 tracking-widest mb-1 font-medium">
-              <ruby>用神<rt className="text-[0.45rem]">ようじん</rt></ruby>
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-3">
+          <div className="ornament-border rounded-xl bg-navy-900/30 p-2 sm:p-3 text-center">
+            <p className="text-[0.6rem] sm:text-xs text-emerald-400/80 tracking-wider sm:tracking-widest mb-1 font-medium">
+              <ruby>用神<rt className="text-[0.4rem] sm:text-[0.45rem]">ようじん</rt></ruby>
             </p>
-            <span className="text-lg font-bold text-emerald-300">{strength.youjin}</span>
-            <p className="text-[0.6rem] text-navy-400 mt-1">最も必要な五行</p>
+            <span className="text-base sm:text-lg font-bold text-emerald-300">{strength.youjin}</span>
+            <p className="text-[0.5rem] sm:text-[0.6rem] text-navy-400 mt-0.5 sm:mt-1">最も必要な五行</p>
           </div>
-          <div className="ornament-border rounded-xl bg-navy-900/30 p-3 text-center">
-            <p className="text-xs text-sky-400/80 tracking-widest mb-1 font-medium">
-              <ruby>喜神<rt className="text-[0.45rem]">きじん</rt></ruby>
+          <div className="ornament-border rounded-xl bg-navy-900/30 p-2 sm:p-3 text-center">
+            <p className="text-[0.6rem] sm:text-xs text-sky-400/80 tracking-wider sm:tracking-widest mb-1 font-medium">
+              <ruby>喜神<rt className="text-[0.4rem] sm:text-[0.45rem]">きじん</rt></ruby>
             </p>
-            <span className="text-lg font-bold text-sky-300">{strength.kijin}</span>
-            <p className="text-[0.6rem] text-navy-400 mt-1">味方の五行</p>
+            <span className="text-base sm:text-lg font-bold text-sky-300">{strength.kijin}</span>
+            <p className="text-[0.5rem] sm:text-[0.6rem] text-navy-400 mt-0.5 sm:mt-1">味方の五行</p>
           </div>
-          <div className="ornament-border rounded-xl bg-navy-900/30 p-3 text-center">
-            <p className="text-xs text-red-400/80 tracking-widest mb-1 font-medium">
-              <ruby>忌神<rt className="text-[0.45rem]">いまがみ</rt></ruby>
+          <div className="ornament-border rounded-xl bg-navy-900/30 p-2 sm:p-3 text-center">
+            <p className="text-[0.6rem] sm:text-xs text-red-400/80 tracking-wider sm:tracking-widest mb-1 font-medium">
+              <ruby>忌神<rt className="text-[0.4rem] sm:text-[0.45rem]">いまがみ</rt></ruby>
             </p>
-            <span className="text-lg font-bold text-red-300">{strength.kijin_bad}</span>
-            <p className="text-[0.6rem] text-navy-400 mt-1">注意の五行</p>
+            <span className="text-base sm:text-lg font-bold text-red-300">{strength.kijin_bad}</span>
+            <p className="text-[0.5rem] sm:text-[0.6rem] text-navy-400 mt-0.5 sm:mt-1">注意の五行</p>
           </div>
         </div>
 
@@ -996,15 +1002,15 @@ function ChishiSlide({ chishiRelations }: { chishiRelations: ChishiRelationResul
             {chishiRelations.relations.map((rel, i) => {
               const color = typeColors[rel.type] || typeColors['冲'];
               return (
-                <div key={i} className={`ornament-border rounded-xl p-3 sm:p-4 border ${color.split(' ').slice(1).join(' ')}`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${color}`}>
+                <div key={i} className={`ornament-border rounded-xl p-2.5 sm:p-4 border ${color.split(' ').slice(1).join(' ')}`}>
+                  <div className="flex items-center gap-1.5 sm:gap-2 mb-2 flex-wrap">
+                    <span className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[0.6rem] sm:text-xs font-bold ${color}`}>
                       {rel.type}
                     </span>
-                    <span className="text-sm text-navy-200/80 font-medium">
+                    <span className="text-xs sm:text-sm text-navy-200/80 font-medium">
                       {rel.branches.join('・')}
                     </span>
-                    <span className="text-xs text-navy-400">
+                    <span className="text-[0.6rem] sm:text-xs text-navy-400">
                       （{rel.positions.join('柱・')}柱）
                     </span>
                   </div>
@@ -1068,23 +1074,23 @@ function DaiunSlide({ daiun }: { daiun: DaiunResult }) {
               return false; // 年齢が不明なため、アクティブ判定はしない
             })();
             return (
-              <div key={i} className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex-shrink-0 w-20 text-center">
-                    <span className="text-sm font-bold text-gold-300">
+              <div key={i} className="ornament-border rounded-xl bg-navy-900/30 p-2.5 sm:p-4">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="flex-shrink-0 w-[4.5rem] sm:w-20 text-center">
+                    <span className="text-xs sm:text-sm font-bold text-gold-300">
                       {period.startAge}〜{period.endAge}歳
                     </span>
                   </div>
                   <div className="flex-shrink-0 text-center">
-                    <span className="text-lg font-bold text-navy-100">
+                    <span className="text-base sm:text-lg font-bold text-navy-100">
                       {period.kanshi.kan}{period.kanshi.shi}
                     </span>
                   </div>
-                  <div className="flex-1 flex gap-2">
-                    <span className="px-2 py-0.5 rounded-full text-xs border border-purple-400/20 text-purple-200/90 bg-purple-500/10">
+                  <div className="flex-1 flex gap-1 sm:gap-2 flex-wrap">
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded-full text-[0.6rem] sm:text-xs border border-purple-400/20 text-purple-200/90 bg-purple-500/10">
                       {period.tsuhensei}
                     </span>
-                    <span className="px-2 py-0.5 rounded-full text-xs border border-sky-400/20 text-sky-200/90 bg-sky-500/10">
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded-full text-[0.6rem] sm:text-xs border border-sky-400/20 text-sky-200/90 bg-sky-500/10">
                       {period.juniunsei}
                     </span>
                   </div>

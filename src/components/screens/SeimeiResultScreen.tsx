@@ -2,6 +2,8 @@
 
 import type { SeimeiResult, GokakuDetail } from "@/lib/seimei";
 import { SlideViewer } from "@/components/SlideViewer";
+import { ShareButtons } from "@/components/ShareButtons";
+import { encodeSeimei } from "@/lib/share";
 
 interface SeimeiResultScreenProps {
   result: SeimeiResult;
@@ -398,6 +400,11 @@ export function SeimeiResultScreen({ result, onRetry, onTop, onAisho }: SeimeiRe
                 {getAdvice(jinkaku, sansai)}
               </p>
             </div>
+
+            {/* 共有ボタン */}
+            <ShareButtons
+              resultUrl={encodeSeimei(result.sei, result.mei)}
+            />
 
             {/* ボタン */}
             <div className="space-y-3 pt-2">

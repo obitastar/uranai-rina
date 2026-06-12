@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { FortuneInput, FortuneResult } from "@/lib/shichusuimei";
 import { TopScreen } from "@/components/screens/TopScreen";
 import { InputScreen } from "@/components/screens/InputScreen";
@@ -20,6 +20,7 @@ import type { ShichusuimeiCompatibility } from "@/lib/shichusuimei/compatibility
 import { calculateSeimeiCompatibility } from "@/lib/seimei/compatibility";
 import type { SeimeiCompatibility } from "@/lib/seimei/compatibility";
 import type { DivinationType } from "@/lib/types";
+import { parseHash } from "@/lib/share";
 
 type Screen =
   | "top"
@@ -197,6 +198,47 @@ export default function App() {
     setShichuCompatibility(null);
     setSeimeiCompatibility(null);
     setScreen("top");
+  }, []);
+
+  // --- URLハッシュから結果を復元 ---
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash) return;
+    const params = parseHash(hash);
+    if (!params) return;
+
+    // ハッシュを消す（履歴に残さない）
+    history.replaceState(null, "", window.location.pathname);
+
+    try {
+      if (params.type === "shichusuimei") {
+        const fortune = calculateFortune(params);
+        setResult(fortune);
+        setScreen("shichusuimei-result");
+      } else if (params.type === "seimei") {
+        const seimei = calculateSeimei(params.sei, params.mei);
+        setSeimeiResult(seimei);
+        setScreen("seimei-result");
+      } else if (params.type === "shichusuimei-aisho") {
+        const my = calculateFortune(params.person1);
+        const partner = calculateFortune(params.person2);
+        const compat = calculateShichusuimeiCompatibility(my, partner);
+        setResult(my);
+        setPartnerResult(partner);
+        setShichuCompatibility(compat);
+        setScreen("shichusuimei-aisho-result");
+      } else if (params.type === "seimei-aisho") {
+        const my = calculateSeimei(params.person1.sei, params.person1.mei);
+        const partner = calculateSeimei(params.person2.sei, params.person2.mei);
+        const compat = calculateSeimeiCompatibility(my, partner);
+        setSeimeiResult(my);
+        setPartnerSeimeiResult(partner);
+        setSeimeiCompatibility(compat);
+        setScreen("seimei-aisho-result");
+      }
+    } catch (e) {
+      console.error("URLからの復元に失敗:", e);
+    }
   }, []);
 
   // 生年月日ラベル

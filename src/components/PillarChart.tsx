@@ -33,7 +33,7 @@ export function PillarChart({ result }: PillarChartProps) {
         <p className="text-center text-sm sm:text-base text-navy-300/70 tracking-wide mb-2 sm:mb-3">
           生年月日から導き出された、あなただけの星の配置です
         </p>
-        <div className="flex justify-center gap-3 sm:gap-4 text-[0.6rem] sm:text-xs text-navy-400/60 tracking-wider mb-3 sm:mb-4">
+        <div className="flex justify-center gap-2 sm:gap-4 text-[0.55rem] sm:text-xs text-navy-400/60 tracking-wider mb-3 sm:mb-4">
           <span><ruby>通変星<rt className="text-[0.5rem] opacity-60">つうへんせい</rt></ruby></span>
           <span><ruby>天干<rt className="text-[0.5rem] opacity-60">てんかん</rt></ruby></span>
           <span><ruby>地支<rt className="text-[0.5rem] opacity-60">ちし</rt></ruby></span>
@@ -41,7 +41,7 @@ export function PillarChart({ result }: PillarChartProps) {
         </div>
         <div className="w-full h-px bg-gradient-to-r from-transparent via-gold-500/20 to-transparent mb-4 sm:mb-6" />
 
-        <div className="grid grid-cols-4 gap-2 sm:gap-3 text-center">
+        <div className="grid grid-cols-4 gap-1 sm:gap-3 text-center">
           {/* ヘッダー */}
           {pillars.map((p, i) => (
             <div
@@ -51,7 +51,7 @@ export function PillarChart({ result }: PillarChartProps) {
               }`}
               style={{ transitionDelay: `${i * 100}ms` }}
             >
-              <span className="text-sm sm:text-base text-navy-200/90 tracking-widest font-medium">{p.label}</span>
+              <span className="text-xs sm:text-base text-navy-200/90 tracking-wider sm:tracking-widest font-medium">{p.label}</span>
               <br />
               <span className="text-[0.6rem] sm:text-xs text-navy-400/70">{p.subLabel}</span>
             </div>

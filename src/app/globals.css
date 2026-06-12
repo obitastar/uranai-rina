@@ -195,6 +195,24 @@ body { -ms-overflow-style: none; scrollbar-width: none; }
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* iOS select要素の見た目調整 */
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23d4a017' opacity='0.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px !important;
+}
+
+/* 極小画面（SE等320px）での追加調整 */
+@media (max-width: 350px) {
+  html {
+    font-size: 14px;
+  }
+}
 
 /* prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {

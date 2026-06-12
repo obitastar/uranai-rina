@@ -66,7 +66,7 @@ export function AishoIcon({ type, size = 56 }: AishoIconProps) {
           </g>
         )}
         {type === 'children' && (
-          // 子宝 - 大きい円と小さい円（親子）
+          // 妊娠・出産 - 大きい円と小さい円（母子）
           <g transform={`translate(${c},${c})`} stroke={primary} fill="none" strokeWidth="1.1" opacity="0.85">
             <circle cx="-3" cy="0" r="10" />
             <circle cx="7" cy="5" r="5" />
