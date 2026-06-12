@@ -156,6 +156,7 @@ export interface ChishiRelation {
   positions: string[];
   result?: string;
   description: string;
+  pillarDesc?: string;
 }
 
 export interface ChishiRelationResult {

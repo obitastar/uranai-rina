@@ -1173,6 +1173,16 @@ function ChishiSlide({ chishiRelations }: { chishiRelations: ChishiRelationResul
                   <p className="text-sm text-navy-100/80 leading-[1.8] tracking-wide">
                     {rel.description}
                   </p>
+                  {rel.pillarDesc && (
+                    <div className="rounded-lg bg-gold-500/5 border border-gold-500/15 px-3 py-2 mt-2">
+                      <p className="text-[0.65rem] sm:text-xs text-gold-400/80 tracking-wider mb-0.5 font-medium">
+                        {rel.positions.join('柱と')}柱の関係
+                      </p>
+                      <p className="text-[0.65rem] sm:text-xs text-navy-50/90 leading-[1.7]">
+                        {rel.pillarDesc}
+                      </p>
+                    </div>
+                  )}
                 </div>
               );
             })}
