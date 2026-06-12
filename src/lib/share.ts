@@ -9,26 +9,27 @@ export type ShareType = "shichusuimei" | "seimei" | "shichusuimei-aisho" | "seim
 
 // --- エンコード ---
 
-export function encodeShichusuimei(year: number, month: number, day: number, hour: number | null, gender: string): string {
+export function encodeShichusuimei(year: number, month: number, day: number, hour: number | null, gender: string, full = false): string {
   const h = hour !== null ? String(hour) : "x";
-  return `${BASE_URL}#s=${year}.${month}.${day}.${h}.${gender === "male" ? "m" : "f"}`;
+  return `${BASE_URL}#s=${year}.${month}.${day}.${h}.${gender === "male" ? "m" : "f"}${full ? "&f" : ""}`;
 }
 
-export function encodeSeimei(sei: string, mei: string): string {
-  return `${BASE_URL}#n=${encodeURIComponent(sei)}.${encodeURIComponent(mei)}`;
+export function encodeSeimei(sei: string, mei: string, full = false): string {
+  return `${BASE_URL}#n=${encodeURIComponent(sei)}.${encodeURIComponent(mei)}${full ? "&f" : ""}`;
 }
 
 export function encodeShichusuimeiAisho(
   y1: number, m1: number, d1: number, h1: number | null, g1: string,
   y2: number, m2: number, d2: number, h2: number | null, g2: string,
+  full = false,
 ): string {
   const h1s = h1 !== null ? String(h1) : "x";
   const h2s = h2 !== null ? String(h2) : "x";
-  return `${BASE_URL}#sa=${y1}.${m1}.${d1}.${h1s}.${g1 === "male" ? "m" : "f"}_${y2}.${m2}.${d2}.${h2s}.${g2 === "male" ? "m" : "f"}`;
+  return `${BASE_URL}#sa=${y1}.${m1}.${d1}.${h1s}.${g1 === "male" ? "m" : "f"}_${y2}.${m2}.${d2}.${h2s}.${g2 === "male" ? "m" : "f"}${full ? "&f" : ""}`;
 }
 
-export function encodeSeimeiAisho(sei1: string, mei1: string, sei2: string, mei2: string): string {
-  return `${BASE_URL}#na=${encodeURIComponent(sei1)}.${encodeURIComponent(mei1)}_${encodeURIComponent(sei2)}.${encodeURIComponent(mei2)}`;
+export function encodeSeimeiAisho(sei1: string, mei1: string, sei2: string, mei2: string, full = false): string {
+  return `${BASE_URL}#na=${encodeURIComponent(sei1)}.${encodeURIComponent(mei1)}_${encodeURIComponent(sei2)}.${encodeURIComponent(mei2)}${full ? "&f" : ""}`;
 }
 
 // --- デコード ---
@@ -55,7 +56,7 @@ interface SeimeiAishoParams {
   person2: { sei: string; mei: string };
 }
 
-export type ShareParams = ShichusuimeiParams | SeimeiParams | ShichusuimeiAishoParams | SeimeiAishoParams;
+export type ShareParams = (ShichusuimeiParams | SeimeiParams | ShichusuimeiAishoParams | SeimeiAishoParams) & { full: boolean };
 
 function parseShichuPart(part: string): { year: number; month: number; day: number; hour: number | null; gender: "male" | "female" } | null {
   const segments = part.split(".");
@@ -81,20 +82,23 @@ function parseSeimeiPart(part: string): { sei: string; mei: string } | null {
 
 export function parseHash(hash: string): ShareParams | null {
   if (!hash || !hash.startsWith("#")) return null;
-  const body = hash.slice(1);
+
+  // &f フラグの検出と除去
+  const full = hash.includes("&f");
+  const body = hash.slice(1).replace("&f", "");
 
   // 四柱推命
   if (body.startsWith("s=")) {
     const p = parseShichuPart(body.slice(2));
     if (!p) return null;
-    return { type: "shichusuimei", ...p };
+    return { type: "shichusuimei", ...p, full };
   }
 
   // 姓名判断
   if (body.startsWith("n=")) {
     const p = parseSeimeiPart(body.slice(2));
     if (!p) return null;
-    return { type: "seimei", ...p };
+    return { type: "seimei", ...p, full };
   }
 
   // 四柱推命相性
@@ -104,7 +108,7 @@ export function parseHash(hash: string): ShareParams | null {
     const p1 = parseShichuPart(parts[0]);
     const p2 = parseShichuPart(parts[1]);
     if (!p1 || !p2) return null;
-    return { type: "shichusuimei-aisho", person1: p1, person2: p2 };
+    return { type: "shichusuimei-aisho", person1: p1, person2: p2, full };
   }
 
   // 姓名判断相性
@@ -114,9 +118,8 @@ export function parseHash(hash: string): ShareParams | null {
     const p1 = parseSeimeiPart(parts[0]);
     const p2 = parseSeimeiPart(parts[1]);
     if (!p1 || !p2) return null;
-    return { type: "seimei-aisho", person1: p1, person2: p2 };
+    return { type: "seimei-aisho", person1: p1, person2: p2, full };
   }
 
   return null;
 }
-

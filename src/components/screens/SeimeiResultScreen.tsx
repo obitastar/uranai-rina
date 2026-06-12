@@ -11,9 +11,13 @@ interface SeimeiResultScreenProps {
   onTop: () => void;
   onAisho?: () => void;
   viewOnly?: boolean;
+  full?: boolean;
 }
 
 const SLIDE_LABELS = ["総合", "画数解析", "人格", "地格", "総格", "外格", "三才", "陰陽", "アドバイス"];
+
+// 簡易版で表示するスライド（総合〜総格の5枚）
+const FREE_SLIDE_INDICES = [0, 1, 2, 3, 4];
 
 // 吉凶のカラー
 function kikkyoColor(kikkyo: string): string {
@@ -75,7 +79,8 @@ function calcOverallScore(details: GokakuDetail[]): { label: string; stars: numb
   return { label: labels[stars - 1], stars };
 }
 
-export function SeimeiResultScreen({ result, onRetry, onTop, onAisho, viewOnly }: SeimeiResultScreenProps) {
+export function SeimeiResultScreen({ result, onRetry, onTop, onAisho, viewOnly, full }: SeimeiResultScreenProps) {
+  const isLimited = viewOnly && !full;
   const { sei, mei, seiStrokes, meiStrokes, gokakuDetails, sansai } = result;
   const overall = calcOverallScore(gokakuDetails);
 
@@ -88,7 +93,7 @@ export function SeimeiResultScreen({ result, onRetry, onTop, onAisho, viewOnly }
 
   return (
     <div className="w-full h-screen">
-      <SlideViewer slideLabels={SLIDE_LABELS}>
+      <SlideViewer slideLabels={SLIDE_LABELS} visibleIndices={isLimited ? FREE_SLIDE_INDICES : undefined}>
         {/* ===== スライド1: 総合結果 ===== */}
         <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-6 sm:py-10">
           <div className="w-full max-w-md space-y-5 sm:space-y-7">
@@ -406,7 +411,8 @@ export function SeimeiResultScreen({ result, onRetry, onTop, onAisho, viewOnly }
               <>
                 {/* 共有ボタン */}
                 <ShareButtons
-                  resultUrl={encodeSeimei(result.sei, result.mei)}
+                  freeUrl={encodeSeimei(result.sei, result.mei)}
+                  fullUrl={encodeSeimei(result.sei, result.mei, true)}
                 />
 
                 {/* ボタン */}

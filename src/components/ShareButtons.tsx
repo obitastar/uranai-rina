@@ -4,50 +4,70 @@ import { useState, useCallback } from "react";
 import { LINE_ADD_FRIEND_URL } from "@/lib/share";
 
 interface ShareButtonsProps {
-  resultUrl: string;
+  freeUrl: string;
+  fullUrl: string;
 }
 
-export function ShareButtons({ resultUrl }: ShareButtonsProps) {
+function useCopyButton() {
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = useCallback(async () => {
+  const copy = useCallback(async (text: string) => {
     try {
-      await navigator.clipboard.writeText(resultUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      await navigator.clipboard.writeText(text);
     } catch {
       const input = document.createElement("input");
-      input.value = resultUrl;
+      input.value = text;
       document.body.appendChild(input);
       input.select();
       document.execCommand("copy");
       document.body.removeChild(input);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     }
-  }, [resultUrl]);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }, []);
+
+  return { copied, copy };
+}
+
+export function ShareButtons({ freeUrl, fullUrl }: ShareButtonsProps) {
+  const free = useCopyButton();
+  const full = useCopyButton();
 
   return (
     <div className="space-y-3 w-full max-w-sm mx-auto">
       <div className="text-center space-y-1">
-        <p className="text-sm text-gold-400/70 tracking-widest">診断結果を保存</p>
-        <p className="text-xs text-navy-300/60 leading-relaxed">
-          URLをコピーして、いつでも見返せます
-        </p>
+        <p className="text-sm text-gold-400/70 tracking-widest">診断結果URLを発行</p>
       </div>
 
-      {/* URLをコピー */}
-      <button onClick={handleCopy} className="w-full">
+      {/* 簡易版URLをコピー */}
+      <button onClick={() => free.copy(freeUrl)} className="w-full">
         <div className={`relative ornament-border rounded-xl px-6 py-4 active:bg-navy-800/50 flex items-center justify-center gap-2 transition-colors duration-300 ${
-          copied ? "bg-emerald-500/10 border border-emerald-500/30" : "bg-navy-900/40"
+          free.copied ? "bg-emerald-500/10 border border-emerald-500/30" : "bg-navy-900/40"
         }`}>
-          {copied ? (
+          {free.copied ? (
             <span className="text-base tracking-[0.15em] text-emerald-300 font-bold">
               コピーしました
             </span>
           ) : (
             <span className="text-base tracking-[0.15em] text-gold-gradient font-bold">
-              結果URLをコピー
+              簡易版URLをコピー
+            </span>
+          )}
+        </div>
+      </button>
+
+      {/* 完全版URLをコピー */}
+      <button onClick={() => full.copy(fullUrl)} className="w-full">
+        <div className={`relative ornament-border rounded-xl px-6 py-4 active:bg-navy-800/50 flex items-center justify-center gap-2 transition-colors duration-300 ${
+          full.copied ? "bg-emerald-500/10 border border-emerald-500/30" : "bg-gold-500/10 border border-gold-500/30"
+        }`}>
+          {full.copied ? (
+            <span className="text-base tracking-[0.15em] text-emerald-300 font-bold">
+              コピーしました
+            </span>
+          ) : (
+            <span className="text-base tracking-[0.15em] text-gold-gradient font-bold">
+              完全版URLをコピー
             </span>
           )}
         </div>

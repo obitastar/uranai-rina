@@ -15,6 +15,7 @@ interface Props {
   onBackToResult: () => void;
   onTop: () => void;
   viewOnly?: boolean;
+  full?: boolean;
 }
 
 function ScoreCircle({ score, size = "lg" }: { score: number; size?: "sm" | "lg" }) {
@@ -100,7 +101,8 @@ function Divider() {
   return <div className="w-full h-px bg-gradient-to-r from-transparent via-gold-500/20 to-transparent my-2" />;
 }
 
-export function ShichusuimeiAishoResultScreen({ myResult, partnerResult, compatibility, onAnotherPartner, onBackToResult, onTop, viewOnly }: Props) {
+export function ShichusuimeiAishoResultScreen({ myResult, partnerResult, compatibility, onAnotherPartner, onBackToResult, onTop, viewOnly, full }: Props) {
+  const isLimited = viewOnly && !full;
   const myInput = myResult.input;
   const pInput = partnerResult.input;
   const myLabel = `${myInput.year}年${myInput.month}月${myInput.day}日生`;
@@ -175,122 +177,130 @@ export function ShichusuimeiAishoResultScreen({ myResult, partnerResult, compati
           ))}
         </div>
 
-        <Divider />
+        {!isLimited && (
+          <>
+            <Divider />
 
-        {/* ===== 各カテゴリ詳細 ===== */}
-        <CategorySection iconType="love" title="恋愛相性" category={compatibility.love} accentColor="#f472b6" />
-        <Divider />
-        <CategorySection iconType="marriage" title="結婚運" category={compatibility.marriage} accentColor="#fb923c" />
-        <Divider />
-        <CategorySection iconType="children" title="妊娠・出産運" category={compatibility.children} accentColor="#4ade80" />
-        <Divider />
-        <CategorySection iconType="work" title="仕事相性" category={compatibility.work} accentColor="#60a5fa" />
-        <Divider />
-        <CategorySection iconType="money" title="金運相性" category={compatibility.money} accentColor="#fbbf24" />
+            {/* ===== 各カテゴリ詳細 ===== */}
+            <CategorySection iconType="love" title="恋愛相性" category={compatibility.love} accentColor="#f472b6" />
+            <Divider />
+            <CategorySection iconType="marriage" title="結婚運" category={compatibility.marriage} accentColor="#fb923c" />
+            <Divider />
+            <CategorySection iconType="children" title="妊娠・出産運" category={compatibility.children} accentColor="#4ade80" />
+            <Divider />
+            <CategorySection iconType="work" title="仕事相性" category={compatibility.work} accentColor="#60a5fa" />
+            <Divider />
+            <CategorySection iconType="money" title="金運相性" category={compatibility.money} accentColor="#fbbf24" />
+          </>
+        )}
 
-        <Divider />
+        {!isLimited && (
+          <>
+            <Divider />
 
-        {/* ===== 日主の関係 ===== */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <AishoIcon type="nisshu" size={44} />
-            <div>
-              <h2 className="text-lg sm:text-xl font-black tracking-[0.15em] text-gold-gradient">
-                <ruby>日主<rp>(</rp><rt className="text-[0.5rem] opacity-60">にっしゅ</rt><rp>)</rp></ruby>の関係
-              </h2>
-              <p className="text-xs text-navy-300/60">お二人の本質的な相性</p>
-            </div>
-          </div>
-          <div className="ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-7 space-y-4">
-            <div className="flex items-center justify-around">
-              <div className="text-center">
-                <p className="text-xs text-gold-400/60 tracking-widest mb-1">あなた</p>
-                <p className="text-3xl font-black text-gold-gradient">{myResult.nicchu}</p>
+            {/* ===== 日主の関係 ===== */}
+            <section className="space-y-4">
+              <div className="flex items-center gap-3">
+                <AishoIcon type="nisshu" size={44} />
+                <div>
+                  <h2 className="text-lg sm:text-xl font-black tracking-[0.15em] text-gold-gradient">
+                    <ruby>日主<rp>(</rp><rt className="text-[0.5rem] opacity-60">にっしゅ</rt><rp>)</rp></ruby>の関係
+                  </h2>
+                  <p className="text-xs text-navy-300/60">お二人の本質的な相性</p>
+                </div>
               </div>
-              <div className="text-xl text-pink-400/40">×</div>
-              <div className="text-center">
-                <p className="text-xs text-pink-300/60 tracking-widest mb-1">相手</p>
-                <p className="text-3xl font-black text-gold-gradient">{partnerResult.nicchu}</p>
+              <div className="ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-7 space-y-4">
+                <div className="flex items-center justify-around">
+                  <div className="text-center">
+                    <p className="text-xs text-gold-400/60 tracking-widest mb-1">あなた</p>
+                    <p className="text-3xl font-black text-gold-gradient">{myResult.nicchu}</p>
+                  </div>
+                  <div className="text-xl text-pink-400/40">×</div>
+                  <div className="text-center">
+                    <p className="text-xs text-pink-300/60 tracking-widest mb-1">相手</p>
+                    <p className="text-3xl font-black text-gold-gradient">{partnerResult.nicchu}</p>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <span className="inline-block px-4 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10 text-gold-300 text-sm font-bold tracking-wider">
+                    {compatibility.nisshuRelation.type}
+                  </span>
+                </div>
               </div>
-            </div>
-            <div className="text-center">
-              <span className="inline-block px-4 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10 text-gold-300 text-sm font-bold tracking-wider">
-                {compatibility.nisshuRelation.type}
-              </span>
-            </div>
-          </div>
-          <div className="ornament-border rounded-2xl bg-navy-900/40 p-4 sm:p-5">
-            <p className="text-navy-50/90 text-sm leading-[1.9] tracking-wide">
-              {compatibility.nisshuRelation.description}
-            </p>
-          </div>
-        </section>
-
-        <Divider />
-
-        {/* ===== 十二支の相性 ===== */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <AishoIcon type="junishi" size={44} />
-            <div>
-              <h2 className="text-lg sm:text-xl font-black tracking-[0.15em] text-gold-gradient">
-                <ruby>十二支<rp>(</rp><rt className="text-[0.5rem] opacity-60">じゅうにし</rt><rp>)</rp></ruby>の相性
-              </h2>
-              <p className="text-xs text-navy-300/60">生まれ日の支が示す縁の深さ</p>
-            </div>
-          </div>
-          <div className="ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-7">
-            <div className="flex items-center justify-around mb-5">
-              <div className="text-center">
-                <p className="text-xs text-gold-400/60 tracking-widest mb-2">あなた</p>
-                <ZodiacCharacter shi={myResult.fourPillars.day.shi} size="md" />
+              <div className="ornament-border rounded-2xl bg-navy-900/40 p-4 sm:p-5">
+                <p className="text-navy-50/90 text-sm leading-[1.9] tracking-wide">
+                  {compatibility.nisshuRelation.description}
+                </p>
               </div>
-              <div className="text-xl text-pink-400/40">×</div>
-              <div className="text-center">
-                <p className="text-xs text-pink-300/60 tracking-widest mb-2">相手</p>
-                <ZodiacCharacter shi={partnerResult.fourPillars.day.shi} size="md" />
+            </section>
+
+            <Divider />
+
+            {/* ===== 十二支の相性 ===== */}
+            <section className="space-y-4">
+              <div className="flex items-center gap-3">
+                <AishoIcon type="junishi" size={44} />
+                <div>
+                  <h2 className="text-lg sm:text-xl font-black tracking-[0.15em] text-gold-gradient">
+                    <ruby>十二支<rp>(</rp><rt className="text-[0.5rem] opacity-60">じゅうにし</rt><rp>)</rp></ruby>の相性
+                  </h2>
+                  <p className="text-xs text-navy-300/60">生まれ日の支が示す縁の深さ</p>
+                </div>
               </div>
-            </div>
-            <div className="text-center">
-              <span className="inline-block px-4 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10 text-gold-300 text-sm font-bold tracking-wider">
-                {compatibility.junishiRelation.type}
-              </span>
-            </div>
-          </div>
-          <div className="ornament-border rounded-2xl bg-navy-900/40 p-4 sm:p-5">
-            <p className="text-navy-50/90 text-sm leading-[1.9] tracking-wide">
-              {compatibility.junishiRelation.description}
-            </p>
-          </div>
-        </section>
+              <div className="ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-7">
+                <div className="flex items-center justify-around mb-5">
+                  <div className="text-center">
+                    <p className="text-xs text-gold-400/60 tracking-widest mb-2">あなた</p>
+                    <ZodiacCharacter shi={myResult.fourPillars.day.shi} size="md" />
+                  </div>
+                  <div className="text-xl text-pink-400/40">×</div>
+                  <div className="text-center">
+                    <p className="text-xs text-pink-300/60 tracking-widest mb-2">相手</p>
+                    <ZodiacCharacter shi={partnerResult.fourPillars.day.shi} size="md" />
+                  </div>
+                </div>
+                <div className="text-center">
+                  <span className="inline-block px-4 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10 text-gold-300 text-sm font-bold tracking-wider">
+                    {compatibility.junishiRelation.type}
+                  </span>
+                </div>
+              </div>
+              <div className="ornament-border rounded-2xl bg-navy-900/40 p-4 sm:p-5">
+                <p className="text-navy-50/90 text-sm leading-[1.9] tracking-wide">
+                  {compatibility.junishiRelation.description}
+                </p>
+              </div>
+            </section>
 
-        <Divider />
+            <Divider />
 
-        {/* ===== 五行の調和 + アドバイス ===== */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <AishoIcon type="gogyo" size={44} />
-            <div>
-              <h2 className="text-lg sm:text-xl font-black tracking-[0.15em] text-gold-gradient">
-                <ruby>五行<rp>(</rp><rt className="text-[0.5rem] opacity-60">ごぎょう</rt><rp>)</rp></ruby>の調和
-              </h2>
-              <p className="text-xs text-navy-300/60">二人の五行バランスの相性</p>
-            </div>
-          </div>
-          <div className="ornament-border rounded-2xl bg-navy-900/40 p-4 sm:p-5">
-            <p className="text-navy-50/90 text-sm leading-[1.9] tracking-wide">
-              {compatibility.gogyoBalance.description}
-            </p>
-          </div>
-          <div className="ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-6">
-            <h3 className="text-center text-sm text-gold-400/70 tracking-widest mb-4">開運アドバイス</h3>
-            <p className="text-navy-50/90 text-sm leading-[1.9] tracking-wide">
-              {compatibility.advice}
-            </p>
-          </div>
-        </section>
+            {/* ===== 五行の調和 + アドバイス ===== */}
+            <section className="space-y-4">
+              <div className="flex items-center gap-3">
+                <AishoIcon type="gogyo" size={44} />
+                <div>
+                  <h2 className="text-lg sm:text-xl font-black tracking-[0.15em] text-gold-gradient">
+                    <ruby>五行<rp>(</rp><rt className="text-[0.5rem] opacity-60">ごぎょう</rt><rp>)</rp></ruby>の調和
+                  </h2>
+                  <p className="text-xs text-navy-300/60">二人の五行バランスの相性</p>
+                </div>
+              </div>
+              <div className="ornament-border rounded-2xl bg-navy-900/40 p-4 sm:p-5">
+                <p className="text-navy-50/90 text-sm leading-[1.9] tracking-wide">
+                  {compatibility.gogyoBalance.description}
+                </p>
+              </div>
+              <div className="ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-6">
+                <h3 className="text-center text-sm text-gold-400/70 tracking-widest mb-4">開運アドバイス</h3>
+                <p className="text-navy-50/90 text-sm leading-[1.9] tracking-wide">
+                  {compatibility.advice}
+                </p>
+              </div>
+            </section>
 
-        <Divider />
+            <Divider />
+          </>
+        )}
 
         {/* ===== フッターボタン ===== */}
         <div className="text-center space-y-3 pt-4">
@@ -303,9 +313,14 @@ export function ShichusuimeiAishoResultScreen({ myResult, partnerResult, compati
           {!viewOnly && (
             <>
               <ShareButtons
-                resultUrl={encodeShichusuimeiAisho(
+                freeUrl={encodeShichusuimeiAisho(
                   myResult.input.year, myResult.input.month, myResult.input.day, myResult.input.hour, myResult.input.gender,
                   partnerResult.input.year, partnerResult.input.month, partnerResult.input.day, partnerResult.input.hour, partnerResult.input.gender,
+                )}
+                fullUrl={encodeShichusuimeiAisho(
+                  myResult.input.year, myResult.input.month, myResult.input.day, myResult.input.hour, myResult.input.gender,
+                  partnerResult.input.year, partnerResult.input.month, partnerResult.input.day, partnerResult.input.hour, partnerResult.input.gender,
+                  true,
                 )}
               />
 

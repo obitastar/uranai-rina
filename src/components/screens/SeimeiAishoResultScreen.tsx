@@ -15,6 +15,7 @@ interface Props {
   onBackToResult: () => void;
   onTop: () => void;
   viewOnly?: boolean;
+  full?: boolean;
 }
 
 function gogyoColor(gogyo: string): string {
@@ -119,7 +120,8 @@ function Divider() {
   return <div className="w-full h-px bg-gradient-to-r from-transparent via-gold-500/20 to-transparent my-2" />;
 }
 
-export function SeimeiAishoResultScreen({ myResult, partnerResult, compatibility, onAnotherPartner, onBackToResult, onTop, viewOnly }: Props) {
+export function SeimeiAishoResultScreen({ myResult, partnerResult, compatibility, onAnotherPartner, onBackToResult, onTop, viewOnly, full }: Props) {
+  const isLimited = viewOnly && !full;
   const myJinkaku = myResult.gokakuDetails.find(d => d.key === 'jinkaku')!;
   const pJinkaku = partnerResult.gokakuDetails.find(d => d.key === 'jinkaku')!;
   const myGogyo = kakuToGogyo(myJinkaku.kaku);
@@ -191,20 +193,22 @@ export function SeimeiAishoResultScreen({ myResult, partnerResult, compatibility
           <ScoreCircle score={compatibility.work.score} size="sm" />
         </div>
 
-        <Divider />
+        {!isLimited && (
+          <>
+            <Divider />
 
-        {/* ===== 各カテゴリ詳細 ===== */}
-        <CategorySection iconType="love" title="恋愛相性" category={compatibility.love} accentColor="#f472b6" />
-        <Divider />
-        <CategorySection iconType="marriage" title="結婚運" category={compatibility.marriage} accentColor="#fb923c" />
-        <Divider />
-        <CategorySection iconType="children" title="妊娠・出産運" category={compatibility.children} accentColor="#4ade80" />
-        <Divider />
-        <CategorySection iconType="work" title="仕事相性" category={compatibility.work} accentColor="#60a5fa" />
+            {/* ===== 各カテゴリ詳細 ===== */}
+            <CategorySection iconType="love" title="恋愛相性" category={compatibility.love} accentColor="#f472b6" />
+            <Divider />
+            <CategorySection iconType="marriage" title="結婚運" category={compatibility.marriage} accentColor="#fb923c" />
+            <Divider />
+            <CategorySection iconType="children" title="妊娠・出産運" category={compatibility.children} accentColor="#4ade80" />
+            <Divider />
+            <CategorySection iconType="work" title="仕事相性" category={compatibility.work} accentColor="#60a5fa" />
 
-        <Divider />
+            <Divider />
 
-        {/* ===== 人格の関係 ===== */}
+            {/* ===== 人格の関係 ===== */}
         <section className="space-y-4">
           <div className="flex items-center gap-3">
             <AishoIcon type="jinkaku" size={44} />
@@ -302,7 +306,9 @@ export function SeimeiAishoResultScreen({ myResult, partnerResult, compatibility
           </div>
         </section>
 
-        <Divider />
+            <Divider />
+          </>
+        )}
 
         {/* ===== フッターボタン ===== */}
         <div className="text-center space-y-3 pt-4">
@@ -315,7 +321,8 @@ export function SeimeiAishoResultScreen({ myResult, partnerResult, compatibility
           {!viewOnly && (
             <>
               <ShareButtons
-                resultUrl={encodeSeimeiAisho(myResult.sei, myResult.mei, partnerResult.sei, partnerResult.mei)}
+                freeUrl={encodeSeimeiAisho(myResult.sei, myResult.mei, partnerResult.sei, partnerResult.mei)}
+                fullUrl={encodeSeimeiAisho(myResult.sei, myResult.mei, partnerResult.sei, partnerResult.mei, true)}
               />
 
               <button onClick={onAnotherPartner} className="group relative w-full max-w-sm mx-auto block">

@@ -6,11 +6,20 @@ interface SlideViewerProps {
   children: React.ReactNode[];
   slideLabels?: string[];
   onSlideChange?: (index: number) => void;
+  visibleIndices?: number[];
 }
 
-export function SlideViewer({ children, slideLabels, onSlideChange }: SlideViewerProps) {
+export function SlideViewer({ children, slideLabels, onSlideChange, visibleIndices }: SlideViewerProps) {
   const [current, setCurrent] = useState(0);
-  const total = children.length;
+
+  // visibleIndicesが指定されたら、そのインデックスのスライドだけ表示
+  const slides = visibleIndices
+    ? visibleIndices.map(i => children[i]).filter(Boolean)
+    : children;
+  const labels = visibleIndices && slideLabels
+    ? visibleIndices.map(i => slideLabels[i]).filter(Boolean) as string[]
+    : slideLabels;
+  const total = slides.length;
 
   // スワイプ用
   const touchStartX = useRef(0);
@@ -73,7 +82,7 @@ export function SlideViewer({ children, slideLabels, onSlideChange }: SlideViewe
     >
       {/* スライドコンテナ - 現在±1のみレンダリング */}
       <div className="h-full">
-        {children.map((child, i) => {
+        {slides.map((child, i) => {
           // 現在のスライドと前後1枚のみDOMに存在させる
           if (Math.abs(i - current) > 1) return null;
 
@@ -121,9 +130,9 @@ export function SlideViewer({ children, slideLabels, onSlideChange }: SlideViewe
             <span className="text-xs sm:text-sm text-gold-400/80 font-medium">
               {current + 1} / {total}
             </span>
-            {slideLabels && slideLabels[current] && (
+            {labels && labels[current] && (
               <span className="block text-[0.55rem] sm:text-[0.6rem] text-navy-400 tracking-widest mt-0.5 truncate max-w-[100px] sm:max-w-none mx-auto">
-                {slideLabels[current]}
+                {labels[current]}
               </span>
             )}
           </div>

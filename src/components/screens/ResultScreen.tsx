@@ -15,18 +15,23 @@ interface ResultScreenProps {
   onTop: () => void;
   onAisho?: () => void;
   viewOnly?: boolean;
+  full?: boolean;
 }
 
 const SLIDE_LABELS = ["命式表", "本質", "恋愛運", "仕事運", "五行", "格局", "身強身弱", "納音", "健康運", "空亡", "神殺", "地支", "開運", "大運", "今年", "10年運勢", "完了"];
 
-export function ResultScreen({ result, onRetry, onTop, onAisho, viewOnly }: ResultScreenProps) {
+// 簡易版で表示するスライド（1〜5枚目 + 今年の運勢）
+const FREE_SLIDE_INDICES = [0, 1, 2, 3, 4, 14];
+
+export function ResultScreen({ result, onRetry, onTop, onAisho, viewOnly, full }: ResultScreenProps) {
+  const isLimited = viewOnly && !full;
   const { input, fourPillars } = result;
   const birthLabel = `${input.year}年${input.month}月${input.day}日${input.hour !== null ? ` ${input.hour}時` : ""}生`;
   const currentYear = new Date().getFullYear();
 
   return (
     <div className="w-full h-screen">
-      <SlideViewer slideLabels={SLIDE_LABELS}>
+      <SlideViewer slideLabels={SLIDE_LABELS} visibleIndices={isLimited ? FREE_SLIDE_INDICES : undefined}>
         {/* ===== スライド1: 命式表 + 干支キャラ ===== */}
         <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-6 sm:py-10">
           <div className="w-full max-w-lg space-y-4 sm:space-y-6">
@@ -237,7 +242,8 @@ export function ResultScreen({ result, onRetry, onTop, onAisho, viewOnly }: Resu
             {!viewOnly && (
               <>
                 <ShareButtons
-                  resultUrl={encodeShichusuimei(input.year, input.month, input.day, input.hour, input.gender)}
+                  freeUrl={encodeShichusuimei(input.year, input.month, input.day, input.hour, input.gender)}
+                  fullUrl={encodeShichusuimei(input.year, input.month, input.day, input.hour, input.gender, true)}
                 />
 
                 <div className="space-y-3 sm:space-y-4 pt-2 sm:pt-4">
