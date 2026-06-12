@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "四柱推命 - 運命鑑定",
+  title: "占い - 運命鑑定",
   description: "生年月日から読み解く、あなたの運命の物語",
 };
 
