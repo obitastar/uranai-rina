@@ -1216,6 +1216,16 @@ const TSUHENSEI_DESC: Record<string, string> = {
   '印綬': '知性と教養が深まり、資格取得や学問に最適な時期。目上からの引き立てに恵まれる。',
 };
 
+// 十干・十二支の読み
+const JIKKAN_YOMI: Record<string, string> = {
+  '甲': 'きのえ', '乙': 'きのと', '丙': 'ひのえ', '丁': 'ひのと', '戊': 'つちのえ',
+  '己': 'つちのと', '庚': 'かのえ', '辛': 'かのと', '壬': 'みずのえ', '癸': 'みずのと',
+};
+const JUNISHI_YOMI: Record<string, string> = {
+  '子': 'ね', '丑': 'うし', '寅': 'とら', '卯': 'う', '辰': 'たつ', '巳': 'み',
+  '午': 'うま', '未': 'ひつじ', '申': 'さる', '酉': 'とり', '戌': 'いぬ', '亥': 'い',
+};
+
 // 通変星×十二運 組み合わせ説明（大運用）
 const DAIUN_COMBINED: Record<string, Record<string, string>> = {
   '比肩': {
@@ -1416,7 +1426,7 @@ function DaiunSlide({ daiun }: { daiun: DaiunResult }) {
                   </div>
                   <div className="flex-shrink-0 text-center">
                     <span className="text-base sm:text-lg font-bold text-navy-100">
-                      {period.kanshi.kan}{period.kanshi.shi}
+                      <ruby>{period.kanshi.kan}<rt className="text-[0.4rem] opacity-60">{JIKKAN_YOMI[period.kanshi.kan]}</rt></ruby><ruby>{period.kanshi.shi}<rt className="text-[0.4rem] opacity-60">{JUNISHI_YOMI[period.kanshi.shi]}</rt></ruby>
                     </span>
                   </div>
                   <div className="flex-1 flex gap-1 sm:gap-2 flex-wrap">
