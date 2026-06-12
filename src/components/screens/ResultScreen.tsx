@@ -747,6 +747,15 @@ function DecadeSlide({ tenYearFortune }: { tenYearFortune: YearlyFortune[] }) {
   );
 }
 
+// 格局名の読み
+const KAKKYOKU_YOMI: Record<string, string> = {
+  '建禄格': 'けんろくかく', '羊刃格': 'ようじんかく', '食神格': 'しょくじんかく',
+  '傷官格': 'しょうかんかく', '偏財格': 'へんざいかく', '正財格': 'せいざいかく',
+  '偏官格': 'へんかんかく', '正官格': 'せいかんかく', '偏印格': 'へんいんかく',
+  '印綬格': 'いんじゅかく', '従旺格': 'じゅうおうかく', '従児格': 'じゅうじかく',
+  '従財格': 'じゅうざいかく', '従殺格': 'じゅうさつかく', '従勢格': 'じゅうせいかく',
+};
+
 // 格局スライド
 function KakkyokuSlide({ kakkyoku }: { kakkyoku: KakkyokuInfo }) {
   const accentColor = SECTION_COLORS.kakkyoku.primary;
@@ -762,7 +771,7 @@ function KakkyokuSlide({ kakkyoku }: { kakkyoku: KakkyokuInfo }) {
             <ruby>格局<rt className="text-[0.5rem] opacity-60">かっきょく</rt></ruby>
           </h2>
           <p className="text-sm sm:text-base tracking-widest font-medium" style={{ color: `${accentColor}CC` }}>
-            {kakkyoku.name}（{kakkyoku.category}）
+            <ruby>{kakkyoku.name}<rt className="text-[0.5rem] opacity-60">{KAKKYOKU_YOMI[kakkyoku.name] || ''}</rt></ruby>（{kakkyoku.category}）
           </p>
           <div className="w-12 sm:w-16 h-[1px] mx-auto bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
         </div>
@@ -774,7 +783,7 @@ function KakkyokuSlide({ kakkyoku }: { kakkyoku: KakkyokuInfo }) {
         {/* 格局名と説明 */}
         <div className="ornament-border rounded-2xl bg-navy-900/40 p-5 sm:p-7 text-center space-y-3">
           <span className="inline-block text-xl font-bold px-5 py-2 rounded-full border border-sky-400/30 text-sky-300 bg-sky-500/10">
-            {kakkyoku.name}
+            <ruby>{kakkyoku.name}<rt className="text-[0.5rem] opacity-60">{KAKKYOKU_YOMI[kakkyoku.name] || ''}</rt></ruby>
           </span>
           <p className="text-navy-200/80 text-sm tracking-wider">{kakkyoku.description}</p>
         </div>
