@@ -1198,6 +1198,36 @@ function ChishiSlide({ chishiRelations }: { chishiRelations: ChishiRelationResul
 }
 
 // 大運スライド
+// 通変星の説明（大運用）
+const TSUHENSEI_DESC: Record<string, string> = {
+  '比肩': '自立心が高まり、独立や新しい挑戦に向く時期。競争意識が強まるが、孤立に注意。',
+  '劫財': '人との関わりが増え、協力や共同事業に縁がある時期。散財や対人トラブルに注意。',
+  '食神': '才能が開花し、表現力・創造力が豊かになる時期。食や趣味を通じた充実の時。',
+  '傷官': '感性が鋭くなり、技術や専門性が磨かれる時期。批判的になりやすく、人間関係に注意。',
+  '偏財': '商才・社交運が高まり、人脈や収入が広がる時期。投機的な判断は慎重に。',
+  '正財': '堅実な財運に恵まれ、地道な努力が実を結ぶ時期。安定した収入と貯蓄のチャンス。',
+  '偏官': '行動力と決断力が増し、大きな変革や挑戦に向く時期。無理や衝突に注意。',
+  '正官': '社会的な信用・地位が高まり、昇進や責任ある立場に就く時期。規律と秩序を重んじる時。',
+  '偏印': '学びや研究に没頭しやすく、独創的なアイデアが湧く時期。気まぐれや方向転換に注意。',
+  '印綬': '知性と教養が深まり、資格取得や学問に最適な時期。目上からの引き立てに恵まれる。',
+};
+
+// 十二運の説明（大運用）
+const JUNIUNSEI_DESC: Record<string, string> = {
+  '長生': 'エネルギーが芽吹く時期。成長の始まりで、新しいことを始めるのに最適。',
+  '沐浴': '感受性が高まり、変化の多い時期。迷いやすいが、自分磨きには好機。',
+  '冠帯': '社会的に認められ始める時期。自信がつき、活躍の場が広がる。',
+  '建禄': '実力が安定し、着実に成果を積み上げる時期。最も堅実な運気。',
+  '帝旺': 'エネルギーが最も強い時期。大きな成功のチャンスだが、強引さに注意。',
+  '衰': 'ピークを過ぎ、落ち着きと円熟を迎える時期。経験を活かした判断が吉。',
+  '病': 'エネルギーが低下し、心身のケアが必要な時期。内面を見つめ直す好機。',
+  '死': '一つの周期が終わる時期。古いものを手放し、再生への準備をする時。',
+  '墓': '蓄積・保存の時期。成果をまとめ、次の飛躍に備えて力を蓄える。',
+  '絶': '転換期。すべてがリセットされ、まったく新しい流れが始まる。',
+  '胎': '新しい命が宿る時期。将来の可能性が芽生え、直感が冴える。',
+  '養': '力を養い育てる時期。焦らず準備を進めることで、大きな実りにつながる。',
+};
+
 function DaiunSlide({ daiun }: { daiun: DaiunResult }) {
   const accentColor = SECTION_COLORS.daiun.primary;
 
@@ -1221,29 +1251,11 @@ function DaiunSlide({ daiun }: { daiun: DaiunResult }) {
           10年ごとに巡る大きな運気の流れ。人生の転換期や好機を読み解きます。
         </p>
 
-        {/* 凡例 */}
-        <div className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4 space-y-2">
-          <p className="text-xs text-gold-500/70 tracking-widest font-medium text-center">各項目の見方</p>
-          <div className="grid grid-cols-1 gap-1.5 text-xs sm:text-sm">
-            <div className="flex items-start gap-2">
-              <span className="flex-shrink-0 font-bold text-navy-100 w-14 sm:w-16">干支</span>
-              <span className="text-navy-200/80">その年代を支配する天干・地支の組み合わせ</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="flex-shrink-0 px-1.5 py-0.5 rounded-full border border-purple-400/20 text-purple-200/90 bg-purple-500/10 text-[0.6rem]">通変星</span>
-              <span className="text-navy-200/80">その時期のテーマや運気の質を表す星</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="flex-shrink-0 px-1.5 py-0.5 rounded-full border border-sky-400/20 text-sky-200/90 bg-sky-500/10 text-[0.6rem]">十二運</span>
-              <span className="text-navy-200/80">その時期のエネルギーの強弱を表す指標</span>
-            </div>
-          </div>
-        </div>
-
         {/* 大運タイムライン */}
-        <div className="space-y-1.5 sm:space-y-2">
+        <div className="space-y-2 sm:space-y-3">
           {daiun.periods.map((period, i) => (
-              <div key={i} className="ornament-border rounded-xl bg-navy-900/30 p-2.5 sm:p-4">
+              <div key={i} className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4 space-y-2">
+                {/* ヘッダー行 */}
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className="flex-shrink-0 w-[4.5rem] sm:w-20 text-center">
                     <span className="text-xs sm:text-sm font-bold text-gold-300">
@@ -1263,6 +1275,20 @@ function DaiunSlide({ daiun }: { daiun: DaiunResult }) {
                       {period.juniunsei}
                     </span>
                   </div>
+                </div>
+                {/* 通変星の説明 */}
+                <div className="rounded-lg bg-purple-500/5 border border-purple-400/10 px-3 py-2">
+                  <p className="text-[0.65rem] sm:text-xs text-purple-300/80 tracking-wider mb-0.5 font-medium">通変星「{period.tsuhensei}」</p>
+                  <p className="text-[0.65rem] sm:text-xs text-navy-100/80 leading-[1.7]">
+                    {TSUHENSEI_DESC[period.tsuhensei] || ''}
+                  </p>
+                </div>
+                {/* 十二運の説明 */}
+                <div className="rounded-lg bg-sky-500/5 border border-sky-400/10 px-3 py-2">
+                  <p className="text-[0.65rem] sm:text-xs text-sky-300/80 tracking-wider mb-0.5 font-medium">十二運「{period.juniunsei}」</p>
+                  <p className="text-[0.65rem] sm:text-xs text-navy-100/80 leading-[1.7]">
+                    {JUNIUNSEI_DESC[period.juniunsei] || ''}
+                  </p>
                 </div>
               </div>
           ))}
