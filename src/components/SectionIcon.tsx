@@ -1,6 +1,6 @@
 "use client";
 
-type IconType = 'essence' | 'love' | 'work' | 'yearly' | 'gogyo' | 'decade' | 'complete' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky' | 'strength' | 'chishi' | 'daiun' | 'nacchin' | 'kakkyoku';
+type IconType = 'essence' | 'love' | 'work' | 'yearly' | 'gogyo' | 'decade' | 'complete' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky' | 'strength' | 'chishi' | 'daiun' | 'nacchin' | 'kakkyoku' | 'pillars';
 
 interface SectionIconProps {
   type: IconType;
@@ -24,6 +24,7 @@ const COLORS: Record<IconType, { primary: string; glow: string }> = {
   daiun: { primary: '#a3e635', glow: 'rgba(163,230,53,0.25)' },
   nacchin: { primary: '#e879f9', glow: 'rgba(232,121,249,0.25)' },
   kakkyoku: { primary: '#38bdf8', glow: 'rgba(56,189,248,0.25)' },
+  pillars: { primary: '#c084fc', glow: 'rgba(192,132,252,0.25)' },
 };
 
 export function SectionIcon({ type, size = 80 }: SectionIconProps) {
@@ -231,6 +232,18 @@ export function SectionIcon({ type, size = 80 }: SectionIconProps) {
             <line x1="-11" y1="6.5" x2="11" y2="-6.5" strokeWidth="0.5" opacity="0.3" />
             <circle cx="0" cy="0" r="4" fill={primary} opacity="0.3" />
             <text x="0" y="2" textAnchor="middle" fill={primary} fontSize="6" fontFamily="serif" strokeWidth="0" opacity="0.8">格</text>
+          </g>
+        )}
+        {type === 'pillars' && (
+          // 四柱詳解 - 四本の柱
+          <g transform={`translate(${c},${c})`} stroke={primary} fill="none" strokeWidth="1" opacity="0.8">
+            {[-9, -3, 3, 9].map((x, i) => (
+              <g key={i}>
+                <rect x={x - 2} y={-12} width={4} height={24} rx="1" fill={primary} fillOpacity={0.08 + i * 0.04} stroke={primary} strokeWidth="0.8" />
+                <circle cx={x} cy={-6 + i * 3} r="1.5" fill={primary} opacity={0.4 + i * 0.1} />
+              </g>
+            ))}
+            <line x1="-13" y1="14" x2="13" y2="14" strokeWidth="1.2" opacity="0.4" />
           </g>
         )}
       </svg>

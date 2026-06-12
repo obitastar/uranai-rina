@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { FortuneResult, YearlyFortune, GogyoBalance, ShinsatsuInfo, KyuseiInfo, LuckyInfo, DaiunResult, DaiunPeriod, StrengthResult, ChishiRelationResult, NacchinInfo, KakkyokuInfo } from "@/lib/shichusuimei";
+import type { FortuneResult, YearlyFortune, GogyoBalance, ShinsatsuInfo, KyuseiInfo, LuckyInfo, DaiunResult, DaiunPeriod, StrengthResult, ChishiRelationResult, NacchinInfo, KakkyokuInfo, ZokanDetail, Tsuhensei, Juniunsei } from "@/lib/shichusuimei";
 import { SlideViewer } from "@/components/SlideViewer";
 import { PillarChart } from "@/components/PillarChart";
 import { ZodiacCharacter, ZodiacBadge } from "@/components/ZodiacCharacter";
@@ -18,10 +18,10 @@ interface ResultScreenProps {
   full?: boolean;
 }
 
-const SLIDE_LABELS = ["命式表", "本質", "恋愛運", "仕事運", "五行", "格局", "身強身弱", "納音", "健康運", "空亡", "神殺", "地支", "開運", "大運", "今年", "10年運勢", "完了"];
+const SLIDE_LABELS = ["命式表", "本質", "恋愛運", "仕事運", "四柱詳解", "五行", "格局", "身強身弱", "納音", "健康運", "空亡", "神殺", "地支", "開運", "大運", "今年", "10年運勢", "完了"];
 
 // 簡易版で表示するスライド（1〜5枚目 + 今年の運勢）
-const FREE_SLIDE_INDICES = [0, 1, 2, 3, 4, 14];
+const FREE_SLIDE_INDICES = [0, 1, 2, 3, 5, 15];
 
 export function ResultScreen({ result, onRetry, onTop, onAisho, viewOnly, full }: ResultScreenProps) {
   const isLimited = viewOnly && !full;
@@ -134,7 +134,10 @@ export function ResultScreen({ result, onRetry, onTop, onAisho, viewOnly, full }
           }
         />
 
-        {/* ===== スライド5: 五行バランス ===== */}
+        {/* ===== スライド5: 四柱詳解 ===== */}
+        <PillarsDetailSlide result={result} />
+
+        {/* ===== スライド6: 五行バランス ===== */}
         <GogyoSlide gogyoBalance={result.gogyoBalance} gogyoReading={result.gogyoReading} />
 
         {/* ===== スライド6: 格局 ===== */}
@@ -293,7 +296,7 @@ function SlideContent({
   content,
   extra,
 }: {
-  iconType: 'essence' | 'love' | 'work' | 'yearly' | 'decade' | 'gogyo' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky' | 'strength' | 'chishi' | 'daiun' | 'nacchin' | 'kakkyoku';
+  iconType: 'essence' | 'love' | 'work' | 'yearly' | 'decade' | 'gogyo' | 'health' | 'kuubou' | 'shinsatsu' | 'lucky' | 'strength' | 'chishi' | 'daiun' | 'nacchin' | 'kakkyoku' | 'pillars';
   title: string;
   subtitle: string;
   description: React.ReactNode;
@@ -341,6 +344,148 @@ function SlideContent({
         </div>
 
         {extra}
+      </div>
+    </div>
+  );
+}
+
+// 四柱詳解スライド
+function PillarsDetailSlide({ result }: { result: FortuneResult }) {
+  const accentColor = SECTION_COLORS.pillars.primary;
+  const { fourPillars, zokanDetails, nicchu } = result;
+
+  const pillarsData: {
+    key: string;
+    label: string;
+    meaning: string;
+    color: string;
+    kan: string;
+    shi: string;
+    tsuhensei: Tsuhensei | null;
+    juniunsei: Juniunsei;
+    zokan: ZokanDetail;
+  }[] = [
+    {
+      key: 'year', label: '年柱', meaning: '先祖運・幼少期', color: '#4ade80',
+      kan: fourPillars.year.kan, shi: fourPillars.year.shi,
+      tsuhensei: result.tpiYear, juniunsei: result.juniunYear,
+      zokan: zokanDetails.year,
+    },
+    {
+      key: 'month', label: '月柱', meaning: '社会運・壮年期', color: '#60a5fa',
+      kan: fourPillars.month.kan, shi: fourPillars.month.shi,
+      tsuhensei: result.tpiMonth, juniunsei: result.juniunMonth,
+      zokan: zokanDetails.month,
+    },
+    {
+      key: 'day', label: '日柱', meaning: '自分自身・配偶者', color: '#f472b6',
+      kan: fourPillars.day.kan, shi: fourPillars.day.shi,
+      tsuhensei: null, juniunsei: result.juniunDay,
+      zokan: zokanDetails.day,
+    },
+    ...(fourPillars.hour && zokanDetails.hour ? [{
+      key: 'hour', label: '時柱', meaning: '晩年運・子供運', color: '#fbbf24',
+      kan: fourPillars.hour.kan, shi: fourPillars.hour.shi,
+      tsuhensei: result.tpiHour, juniunsei: result.juniunHour!,
+      zokan: zokanDetails.hour,
+    }] : []),
+  ];
+
+  return (
+    <div className="flex flex-col items-center justify-start min-h-full px-4 sm:px-6 py-5 sm:py-8">
+      <div className="w-full max-w-lg space-y-3 sm:space-y-4">
+        <div className="text-center">
+          <SectionIcon type="pillars" size={48} />
+        </div>
+        <div className="text-center space-y-1.5 sm:space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-black text-gold-gradient tracking-[0.2em] sm:tracking-[0.3em]">
+            <ruby>四柱詳解<rt className="text-[0.5rem] opacity-60">しちゅうしょうかい</rt></ruby>
+          </h2>
+          <p className="text-sm sm:text-base tracking-widest font-medium" style={{ color: `${accentColor}CC` }}>
+            日主「{nicchu}」── 四つの柱を読み解く
+          </p>
+          <div className="w-12 sm:w-16 h-[1px] mx-auto bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
+        </div>
+
+        <p className="text-center text-sm text-navy-300/70 leading-relaxed tracking-wide px-2">
+          年柱・月柱・日柱・時柱それぞれの<ruby>通変星<rt className="text-[0.5rem] opacity-60">つうへんせい</rt></ruby>・<ruby>十二運<rt className="text-[0.5rem] opacity-60">じゅうにうん</rt></ruby>・<ruby>蔵干<rt className="text-[0.5rem] opacity-60">ぞうかん</rt></ruby>から、人生の各領域を詳しく診断します。
+        </p>
+
+        <div className="space-y-3">
+          {pillarsData.map((p) => (
+            <div key={p.key} className="ornament-border rounded-2xl bg-navy-900/40 overflow-hidden">
+              <div className="h-[2px] w-full" style={{ background: `linear-gradient(90deg, transparent, ${p.color}60, transparent)` }} />
+              <div className="p-4 sm:p-5 space-y-3">
+                {/* 柱ヘッダー */}
+                <div className="flex items-center gap-3">
+                  <span className="text-xl font-black tracking-wider" style={{ color: p.color }}>{p.label}</span>
+                  <span className="text-xs text-navy-300/70 tracking-widest">{p.meaning}</span>
+                </div>
+
+                {/* 干支 */}
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs text-navy-400 tracking-wider">天干</span>
+                    <span className="text-lg font-bold text-navy-50">{p.kan}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs text-navy-400 tracking-wider">地支</span>
+                    <span className="text-lg font-bold text-navy-50">{p.shi}</span>
+                  </div>
+                  {p.tsuhensei && (
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs text-navy-400 tracking-wider">通変星</span>
+                      <span className="text-sm font-medium px-2 py-0.5 rounded-full border border-white/10 bg-white/5 text-navy-100">{p.tsuhensei}</span>
+                    </div>
+                  )}
+                  {p.key === 'day' && (
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs text-navy-400 tracking-wider">日主</span>
+                      <span className="text-sm font-medium px-2 py-0.5 rounded-full border border-purple-400/30 bg-purple-500/10 text-purple-200">{nicchu}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* 十二運 */}
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-navy-400 tracking-wider">十二運</span>
+                  <span className="text-sm font-medium px-2.5 py-0.5 rounded-full border text-navy-100" style={{ borderColor: `${p.color}40`, backgroundColor: `${p.color}10` }}>
+                    {p.juniunsei}
+                  </span>
+                </div>
+
+                {/* 蔵干 */}
+                <div className="rounded-xl bg-navy-800/30 p-3 space-y-1.5">
+                  <p className="text-xs text-gold-500/70 tracking-widest font-medium">蔵干（地支に内包される天干）</p>
+                  <div className="flex flex-wrap gap-2">
+                    <div className="flex items-center gap-1">
+                      <span className="text-[0.65rem] text-navy-400">本気</span>
+                      <span className="text-sm font-medium text-navy-100">{p.zokan.honki}</span>
+                      <span className="text-[0.65rem] text-navy-400 ml-0.5">→</span>
+                      <span className="text-[0.65rem] px-1.5 py-0.5 rounded-full bg-navy-700/40 text-navy-200">{p.zokan.tpiHonki}</span>
+                    </div>
+                    {p.zokan.chuki && (
+                      <div className="flex items-center gap-1">
+                        <span className="text-[0.65rem] text-navy-400">中気</span>
+                        <span className="text-sm font-medium text-navy-100">{p.zokan.chuki}</span>
+                        <span className="text-[0.65rem] text-navy-400 ml-0.5">→</span>
+                        <span className="text-[0.65rem] px-1.5 py-0.5 rounded-full bg-navy-700/40 text-navy-200">{p.zokan.tpiChuki}</span>
+                      </div>
+                    )}
+                    {p.zokan.yoki && (
+                      <div className="flex items-center gap-1">
+                        <span className="text-[0.65rem] text-navy-400">余気</span>
+                        <span className="text-sm font-medium text-navy-100">{p.zokan.yoki}</span>
+                        <span className="text-[0.65rem] text-navy-400 ml-0.5">→</span>
+                        <span className="text-[0.65rem] px-1.5 py-0.5 rounded-full bg-navy-700/40 text-navy-200">{p.zokan.tpiYoki}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
