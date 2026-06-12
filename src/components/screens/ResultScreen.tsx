@@ -1198,7 +1198,11 @@ function ChishiSlide({ chishiRelations }: { chishiRelations: ChishiRelationResul
 }
 
 // 大運スライド
-// 通変星の説明（大運用）
+// 通変星の読みと説明（大運用）
+const TSUHENSEI_YOMI: Record<string, string> = {
+  '比肩': 'ひけん', '劫財': 'ごうざい', '食神': 'しょくじん', '傷官': 'しょうかん', '偏財': 'へんざい',
+  '正財': 'せいざい', '偏官': 'へんかん', '正官': 'せいかん', '偏印': 'へんいん', '印綬': 'いんじゅ',
+};
 const TSUHENSEI_DESC: Record<string, string> = {
   '比肩': '自立心が高まり、独立や新しい挑戦に向く時期。競争意識が強まるが、孤立に注意。',
   '劫財': '人との関わりが増え、協力や共同事業に縁がある時期。散財や対人トラブルに注意。',
@@ -1212,7 +1216,11 @@ const TSUHENSEI_DESC: Record<string, string> = {
   '印綬': '知性と教養が深まり、資格取得や学問に最適な時期。目上からの引き立てに恵まれる。',
 };
 
-// 十二運の説明（大運用）
+// 十二運の読みと説明（大運用）
+const JUNIUNSEI_YOMI: Record<string, string> = {
+  '長生': 'ちょうせい', '沐浴': 'もくよく', '冠帯': 'かんたい', '建禄': 'けんろく', '帝旺': 'ていおう', '衰': 'すい',
+  '病': 'びょう', '死': 'し', '墓': 'ぼ', '絶': 'ぜつ', '胎': 'たい', '養': 'よう',
+};
 const JUNIUNSEI_DESC: Record<string, string> = {
   '長生': 'エネルギーが芽吹く時期。成長の始まりで、新しいことを始めるのに最適。',
   '沐浴': '感受性が高まり、変化の多い時期。迷いやすいが、自分磨きには好機。',
@@ -1278,14 +1286,18 @@ function DaiunSlide({ daiun }: { daiun: DaiunResult }) {
                 </div>
                 {/* 通変星の説明 */}
                 <div className="rounded-lg bg-purple-500/5 border border-purple-400/10 px-3 py-2">
-                  <p className="text-[0.65rem] sm:text-xs text-purple-300/80 tracking-wider mb-0.5 font-medium">通変星「{period.tsuhensei}」</p>
+                  <p className="text-[0.65rem] sm:text-xs text-purple-300/80 tracking-wider mb-0.5 font-medium">
+                    <ruby>通変星<rt className="text-[0.4rem] opacity-60">つうへんせい</rt></ruby>「<ruby>{period.tsuhensei}<rt className="text-[0.4rem] opacity-60">{TSUHENSEI_YOMI[period.tsuhensei]}</rt></ruby>」
+                  </p>
                   <p className="text-[0.65rem] sm:text-xs text-navy-100/80 leading-[1.7]">
                     {TSUHENSEI_DESC[period.tsuhensei] || ''}
                   </p>
                 </div>
                 {/* 十二運の説明 */}
                 <div className="rounded-lg bg-sky-500/5 border border-sky-400/10 px-3 py-2">
-                  <p className="text-[0.65rem] sm:text-xs text-sky-300/80 tracking-wider mb-0.5 font-medium">十二運「{period.juniunsei}」</p>
+                  <p className="text-[0.65rem] sm:text-xs text-sky-300/80 tracking-wider mb-0.5 font-medium">
+                    <ruby>十二運<rt className="text-[0.4rem] opacity-60">じゅうにうん</rt></ruby>「<ruby>{period.juniunsei}<rt className="text-[0.4rem] opacity-60">{JUNIUNSEI_YOMI[period.juniunsei]}</rt></ruby>」
+                  </p>
                   <p className="text-[0.65rem] sm:text-xs text-navy-100/80 leading-[1.7]">
                     {JUNIUNSEI_DESC[period.juniunsei] || ''}
                   </p>
