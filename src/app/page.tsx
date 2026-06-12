@@ -208,8 +208,6 @@ export default function App() {
     const params = parseHash(hash);
     if (!params) return;
 
-    // ハッシュを消す（履歴に残さない）
-    history.replaceState(null, "", window.location.pathname);
     setViewOnly(true);
 
     try {
