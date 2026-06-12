@@ -1221,15 +1221,28 @@ function DaiunSlide({ daiun }: { daiun: DaiunResult }) {
           10年ごとに巡る大きな運気の流れ。人生の転換期や好機を読み解きます。
         </p>
 
+        {/* 凡例 */}
+        <div className="ornament-border rounded-xl bg-navy-900/30 p-3 sm:p-4 space-y-2">
+          <p className="text-xs text-gold-500/70 tracking-widest font-medium text-center">各項目の見方</p>
+          <div className="grid grid-cols-1 gap-1.5 text-xs sm:text-sm">
+            <div className="flex items-start gap-2">
+              <span className="flex-shrink-0 font-bold text-navy-100 w-14 sm:w-16">干支</span>
+              <span className="text-navy-200/80">その年代を支配する天干・地支の組み合わせ</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="flex-shrink-0 px-1.5 py-0.5 rounded-full border border-purple-400/20 text-purple-200/90 bg-purple-500/10 text-[0.6rem]">通変星</span>
+              <span className="text-navy-200/80">その時期のテーマや運気の質を表す星</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="flex-shrink-0 px-1.5 py-0.5 rounded-full border border-sky-400/20 text-sky-200/90 bg-sky-500/10 text-[0.6rem]">十二運</span>
+              <span className="text-navy-200/80">その時期のエネルギーの強弱を表す指標</span>
+            </div>
+          </div>
+        </div>
+
         {/* 大運タイムライン */}
         <div className="space-y-1.5 sm:space-y-2">
-          {daiun.periods.map((period, i) => {
-            const isActive = (() => {
-              const currentYear = new Date().getFullYear();
-              // 大まかな年齢判定（正確な誕生日は不要）
-              return false; // 年齢が不明なため、アクティブ判定はしない
-            })();
-            return (
+          {daiun.periods.map((period, i) => (
               <div key={i} className="ornament-border rounded-xl bg-navy-900/30 p-2.5 sm:p-4">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className="flex-shrink-0 w-[4.5rem] sm:w-20 text-center">
@@ -1252,8 +1265,7 @@ function DaiunSlide({ daiun }: { daiun: DaiunResult }) {
                   </div>
                 </div>
               </div>
-            );
-          })}
+          ))}
         </div>
 
         {/* 鑑定文 */}
