@@ -12,6 +12,7 @@ import { ShichusuimeiAishoInputScreen } from "@/components/screens/ShichusuimeiA
 import { ShichusuimeiAishoResultScreen } from "@/components/screens/ShichusuimeiAishoResultScreen";
 import { SeimeiAishoInputScreen } from "@/components/screens/SeimeiAishoInputScreen";
 import { SeimeiAishoResultScreen } from "@/components/screens/SeimeiAishoResultScreen";
+import { LoginScreen } from "@/components/screens/LoginScreen";
 import { calculateFortune } from "@/lib/shichusuimei";
 import type { SeimeiResult } from "@/lib/seimei";
 import { calculateSeimei } from "@/lib/seimei";
@@ -35,6 +36,7 @@ type Screen =
   | "seimei-aisho-result";
 
 export default function App() {
+  const [authed, setAuthed] = useState(false);
   const [screen, setScreen] = useState<Screen>("top");
   const [result, setResult] = useState<FortuneResult | null>(null);
   const [seimeiResult, setSeimeiResult] = useState<SeimeiResult | null>(null);
@@ -46,6 +48,17 @@ export default function App() {
   const [seimeiCompatibility, setSeimeiCompatibility] = useState<SeimeiCompatibility | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [viewOnly, setViewOnly] = useState(false);
+
+  // ログイン状態の復元（sessionStorage）& URL共有時はログイン不要
+  useEffect(() => {
+    if (window.location.hash) {
+      setAuthed(true);
+      return;
+    }
+    if (sessionStorage.getItem("uranai-auth") === "1") {
+      setAuthed(true);
+    }
+  }, []);
 
   const handleSelect = useCallback((type: DivinationType) => {
     if (type === "shichusuimei") {
@@ -249,6 +262,14 @@ export default function App() {
   const myNameLabel = seimeiResult
     ? `${seimeiResult.sei} ${seimeiResult.mei}`
     : "";
+
+  if (!authed) {
+    return (
+      <div className="relative w-full min-h-screen bg-mystical touch-manipulation">
+        <LoginScreen onLogin={() => setAuthed(true)} />
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full min-h-screen bg-mystical touch-manipulation">
